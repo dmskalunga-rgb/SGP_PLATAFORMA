@@ -1,0 +1,3 @@
+postgres readOnly=true caps=["ALL"] security=["no-new-privileges:true"]
+node readOnly=true caps=["ALL"] security=["no-new-privileges:true"]
+101 readOnly=true caps=["ALL"] security=["no-new-privileges:true"]

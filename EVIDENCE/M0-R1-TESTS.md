@@ -1,7 +1,9 @@
-# M0-R1 tests
+# M0-R1 — evidência de testes
 
-Fresh remediation suite: build, lint and TypeScript strict checks passed. Local real PostgreSQL tests: 2 unit + 4 integration tests passed, including persisted/idempotent migration, checksum drift rejection, DDL rollback, missing-schema readiness, connection failure, headers, request size and sanitised response. Playwright with installed Chrome: 2 browser tests passed, real API/PostgreSQL ready state and real upstream outage/retry. No intercepted/mocked API route or fabricated operational data is used.
+Estado final validado: oito testes PASS localmente e no run remoto 43006790217, mais smoke de containers PASS. Não há skip, flaky ou retry mascarando falha de browser no run aceite.
 
-The test runtime database account has rolsuper=false, rolcreaterole=false, rolcreatedb=false and rolbypassrls=false. Test schemas and credentials are disposable, and cleanup runs in finally/trap handlers.
+2 testes unitários validam configuração fail-closed. 4 testes de integração usam PostgreSQL real e validam persistência, repetição idempotente, checksum, rollback deliberado de DDL/tracking, schema ausente, ready/live, limites/headers e sanitização. 2 testes reais de browser validam render/API/PostgreSQL e outage/retry sem mocks. O runtime técnico do banco tem superuser/createdb/createrole/bypassrls=false.
 
-Complete output: artifacts/{build,typecheck,lint,migration,tests,frontend,runtime-db-role}.log and artifacts/frontend-results.json locally; remote workflow artifacts supply the commit-bound results. Scripts/local-tests.ps1 reproduces the local suite. GitHub Actions repeats the checks on Linux with Chromium and Node from .nvmrc. Remote CI is mandatory and pending until M0-R1-CI.md records its actual result.
+O teste final local usou Chrome instalado; CI usou Chromium com Node 24.22.2. A suite local final com sgp-postgres:m0 passou após terminar os scans pesados; os resultados de diagnóstico anteriores não são reutilizados como se fossem o estado final. O smoke final local e remoto verificou UID 70/1000/101, readonly, no-new-privileges, cap-drop, ausência de npm/TypeScript/Vite/ESLint no API runtime, healthchecks e DB parado produzindo 503 sem derrubar live.
+
+Reprodução: npm ci, npm run build/lint/typecheck, scripts/local-tests.ps1, scripts/container-smoke.sh e workflow versionado. Evidência remota copiada em M0-R1/frontend-summary.json, container-smoke.log, container-runtime.log e metadata original guardada em artifacts/closure-preserved/ci-run.json e nos logs do run; logs locais detalhados em artifacts/.

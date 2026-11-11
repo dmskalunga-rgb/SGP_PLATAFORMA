@@ -1,15 +1,25 @@
-# M0-R1 security execution
+# M0-R1 — evidência de segurança
 
-Gitleaks v8.30.1 source scan completed with no leaks; output artifacts/gitleaks-worktree.json is empty. It scans the candidate repository, excluding generated dependencies/reports and disposable test credentials. History scanning must also run after the initial commit and on full-depth checkout in CI.
+Run aceite: 43006790217, todos os controlos obrigatórios success. JSONs originais preservados em M0-R1/.
 
-npm audit after typescript-eslint update and minimatch override reports zero vulnerabilities at every severity. The seven prior MODERATE occurrences and decisions are documented in M0-R1-DEPENDENCIES.md. SAST uses Semgrep with versioned rules in .semgrep.yml against application and migration source. Trivy performs complementary SCA and HIGH/CRITICAL image gates. Their final results must be recorded after completion; pending is not PASS.
+- Gitleaks 8.30.1: fonte e histórico completo com zero segredos.
+- npm audit: zero info/low/moderate/high/critical. Sete MODERATE anteriores FIXED; decisões em M0-R1-DEPENDENCIES.md.
+- Semgrep 1.185.0: 13 ficheiros analisados, zero findings e zero erros. A regra raw-HTML foi corrigida após erro de sintaxe no primeiro run; o controlo não foi retirado.
+- Trivy 0.76.2 SCA: zero HIGH/CRITICAL no âmbito analisado.
+- Trivy imagens: zero HIGH/CRITICAL para API, web e PostgreSQL após patches; sem ignore de advisories.
+- Quatro SBOMs CycloneDX gerados e copiados com hashes.
+- Scan de padrões proibidos: zero mocks operacionais. Ocorrências do master/scanner são referências não operacionais.
 
-Mock policy scan: zero operational matches. References in the frozen master and the scanner itself are classified as non-operational. Runtime image and CycloneDX evidence is tracked in M0-R1-CONTAINERS.md. Production TLS, credentials and institutional deployment are not supplied by this remediation.
+## Falso positivo de segredo, com evidência
 
-## Reviewed secret-scan false positive
+O segundo run classificou o identificador do commit inicial como sourcegraph-access-token. A localização/colunas correspondem ao objecto Git público verificado, não a uma credencial. A configuração permite somente o identificador público do commit inicial previamente classificado. Não permite classes de hashes, caminhos inteiros de evidência, commits inteiros ou a desactivação da regra. Os scans continuam obrigatórios sobre fonte e histórico; rotação não se aplica a identificadores Git públicos. A metadata bruta redundante dos jobs foi preservada nos artefactos gerados; os relatórios versionados usam ligações Git públicas para identificar commits. Não foram adicionadas novas excepções.
 
-Second remote run identified only the initial public Git commit ID as sourcegraph-access-token in EVIDENCE/M0-R1-CI.md. The columns resolve to the exact already-public Git object 8f4919c6949119ae1523c4c37a1feac7d831f10d, verified against the repository commit. It is not a credential. A rule-specific allowlist matches only that exact value; no path, whole rule, commit or class of hashes is excluded. No rotation is applicable to a Git identifier. Source and history scanning remain mandatory. New cache directories are excluded as generated third-party analysis data, consistent with .gitignore.
+## Remediação real de imagens
 
-## Second image review
+Nginx: brotli, curl/libcurl, libexpat, libxslt, musl/musl-utils e zlib foram actualizados para versões corrigidas fixadas. PostgreSQL: krb5-libs e libxslt actualizados e gosu removido, pois o runtime começa sempre como postgres, dispensando o helper de elevação com Go stdlib vulnerável. API, web e banco foram novamente construídos/testados/analisados; os relatórios aceites não contêm HIGH/CRITICAL.
 
-The corrected API and web image HIGH/CRITICAL reports were empty. The additional PostgreSQL scan identified krb5-libs and libxslt fixes plus vulnerable Go stdlib in /usr/local/bin/gosu. The PostgreSQL image is now derived from the pinned official base, updates the two libraries to exact fixed versions and removes gosu because runtime always starts as the non-root postgres user. A new complete scan and real startup/integration suite must validate this correction; no vulnerability is ignored.
+Os scans locais interrompidos por download/contensão não substituem os scans remotos efectivamente concluídos. Não foi aceite risco crítico/alto para obter aprovação. Não se afirma segurança integral de módulos ou ambientes futuros.
+
+## Preservation of generated identity metadata
+
+The original CI job metadata, Playwright report and Trivy filesystem report include repeated public Git SHAs. Full, unchanged originals remain in the workflow artifacts and artifacts/closure-preserved locally. The repository contains reviewed browser/SCA summaries with the original SHA-256, run and artifact identifiers; vulnerability results and SBOMs remain available as versioned outputs. This avoids adding any secret-scan exception beyond the previously classified initial commit ID. The candidate source and full committed history are rescanned unchanged by this evidence projection.

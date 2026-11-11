@@ -1,0 +1,16 @@
+{
+  "original_report": "frontend-results.json",
+  "original_sha256": "e7a64b1ea1250194be8a68439e239ceee3a3b61ba0e7b47646f2c59267ff49ec",
+  "workflow_run": 43006790217,
+  "original_preserved_at": "artifacts/closure-preserved/frontend-results.json",
+  "reason": "Reviewed projection omits redundant public Git identity metadata; original output remains in the workflow artifact.",
+  "stats": {
+    "startTime": "2026-11-11T10:50:07.018Z",
+    "duration": 3406.344,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "artifact_id": 13848288163
+}

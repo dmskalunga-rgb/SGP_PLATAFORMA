@@ -1,8 +1,11 @@
-# M0-R1 remaining acceptance work
+# M0-R1 — riscos residuais conhecidos
 
-- Complete local SAST/SCA and container runtime/image scans; generate and validate SBOMs.
-- Commit only reviewed source/evidence after secret scan, push official main, execute remote CI and capture exact SHA/run/jobs/artifacts.
-- Preserve all required reports and issue one final M0 gate decision; pending checks keep M0_GATE=FAIL and M1 blocked.
-- Branch protection is a recommendation pending repository configuration; it is not claimed active.
-- ESLint 9.39.1 emits an unsupported-version notice; no npm advisory is reported after remediation. Track toolchain upgrade before a future major change. Fastify 5 logs a deprecation notice for disableRequestLogging; it remains supported in this pinned major.
-- Production TLS, recovery targets, backup/restore and institutional deployment require the canonical later milestones and approval. These are not active production guarantees of M0.
+Não há gate crítico M0 aberto após o run validado e a revisão das evidências. M1 continua bloqueado por falta de nova autorização, mesmo com M0 aprovado.
+
+1. main ainda não está protegida. Consulta à API GitHub devolveu Branch not protected (404). A recomendação de checks obrigatórios, revisão de PR e bloqueio de force push está em docs/operations/BRANCH-PROTECTION.md; activação não é alegada.
+2. ESLint 9.39.1 emite aviso de versão sem suporte; Fastify 5 avisa de futura descontinuação de disableRequestLogging. São avisos da cadeia actual, com npm audit zero; planear actualização controlada sem alterar o gate retrospectivamente.
+3. O posto Windows apresentou contenção ao executar simultaneamente scanners, builds e browser; uma repetição excedeu o timeout de disponibilidade. A suite final sem scans concorrentes e a CI passaram. Dimensionamento/carga institucional não foram aprovados pelo M0.
+4. Scans representam a base de advisories no momento da execução. Repetir antes de novas promoções. Os pacotes Alpine fixados podem deixar de existir no mirror público; manter artefactos/digests e avaliar mirror institucional para reprodutibilidade.
+5. Os artefactos Actions têm retenção de 30 dias. Uma cópia dos JSONs e SBOMs do run técnico foi preservada no repositório e os ficheiros originais também estão em artifacts/ci-code localmente.
+6. Não houve revisão por um segundo modelo ou aprovação humana independente nesta sessão. A entrega inclui revisão técnica e validação automatizada em processos/runners separados; a decisão humana e autorização de M1 cabem ao operador.
+7. TLS, RPO/RTO, backup/restore, ambientes institucionais e o sistema operacional completo permanecem obrigações dos milestones canónicos apropriados. Não há implantação de produção nem declaração PRODUCTION_READY.

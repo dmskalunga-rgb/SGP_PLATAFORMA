@@ -1,0 +1,9 @@
+{
+  "original_report": "trivy-sca.json",
+  "original_sha256": "03d53b797277d19c3cec3b85b5367ffb443b43e0a3208c66b5792fb456f10bb2",
+  "workflow_run": 43006790217,
+  "original_preserved_at": "artifacts/closure-preserved/trivy-sca.json",
+  "reason": "Reviewed projection omits redundant public Git identity metadata; original output remains in the workflow artifact.",
+  "high_critical_findings": 0,
+  "artifact_id": 13848906430
+}

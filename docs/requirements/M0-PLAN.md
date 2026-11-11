@@ -25,3 +25,7 @@ Official structure: apps/api, apps/web, migrations, scripts, tests/{unit,integra
 Dependencies/risks: Docker/network/registry throughput, local Windows PowerShell compatibility, browser availability, vulnerability DB freshness, remote permissions and Actions availability. Test resources must be cleaned without touching other projects. Production TLS, backup/restore, institutional naming and later functionality remain subject to their canonical milestones.
 
 Model strategy: recommended L1 TERRA (mechanical docs/config), L2/L3 SOL (implementation/integration/CI), L4/L5 ASTRA or highest available capacity (review/gate). Actual execution uses the current single engineering agent and independent automated local/remote test processes; no claim of a separate model review. Exact credits/tokens are not exposed. No premium-model delegation was started for boilerplate.
+
+## Resultado M0-R1
+
+Todos os gaps foram corrigidos e verificados no run 43006790217 ligado ao commit técnico [d966c61](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/d966c61ec280cf0aeb1e6fe739771698e98ab623). Suite final local e remota PASS, três jobs CI success, scans e quatro SBOMs preservados. Matriz formal em MILESTONE_REPORT.md. M1 permanece bloqueado por autorização, sem implementação antecipada.
