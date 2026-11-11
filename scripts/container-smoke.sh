@@ -19,7 +19,7 @@ if [ "${GITHUB_ACTIONS:-}" = true ]; then
   echo "::add-mask::$RUNTIME_PASSWORD"
 fi
 docker network create "$network" >/dev/null
-docker run -d --name "$db" --network "$network" --user postgres --cap-drop ALL --security-opt no-new-privileges:true --read-only --tmpfs /tmp --tmpfs /var/run/postgresql --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55434:5432 postgres:17.7-alpine >/dev/null
+docker run -d --name "$db" --network "$network" --user postgres --cap-drop ALL --security-opt no-new-privileges:true --read-only --tmpfs /tmp --tmpfs /var/run/postgresql --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55434:5432 postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac >/dev/null
 for attempt in $(seq 1 60); do
   if docker exec "$db" pg_isready -h 127.0.0.1 -U sgp_owner -d sgp_test >/dev/null 2>&1; then break; fi
   sleep 1

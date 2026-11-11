@@ -8,6 +8,9 @@ COPY apps/web apps/web
 RUN npm run build -w @sgp/web
 
 FROM nginxinc/nginx-unprivileged:stable-alpine@sha256:f5116ed4606f3eb015dd4a8e28cb9b351476dc0ad4bc6e9f93b19cec130cdf03
+# Security patch versions from the blocking Trivy report; runtime returns to UID 101.
+USER 0
+RUN apk add --no-cache --upgrade brotli-libs=1.2.1-r0 curl=8.23.0-r0 libcurl=8.23.0-r0 libexpat=2.10.0-r0 libxslt=1.1.43-r4 musl=1.2.6-r3 musl-utils=1.2.6-r3 zlib=1.4-r0
 ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/conf.d API_UPSTREAM=http://api:3000
 COPY --chmod=755 infrastructure/nginx/19-create-config-dir.sh /docker-entrypoint.d/19-create-config-dir.sh
 COPY infrastructure/nginx/nginx.conf /etc/nginx/nginx.conf

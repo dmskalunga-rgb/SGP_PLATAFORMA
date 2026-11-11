@@ -16,10 +16,11 @@ rules:
       - pattern: spawn(...)
       - pattern: spawnSync(...)
   - id: sgp-no-raw-html
-    languages: [javascript, typescript]
+    languages: [generic]
     severity: ERROR
     message: Do not inject raw HTML.
-    pattern: <... dangerouslySetInnerHTML={...} ... />
+    pattern-regex: 'dangerouslySetInnerHTML\s*(=|:)'
+
   - id: sgp-no-sensitive-console
     languages: [javascript, typescript]
     severity: ERROR

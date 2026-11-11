@@ -1,7 +1,7 @@
 # Local baseline only. Production requires the institutional TLS/secrets/deployment review.
 services:
   db:
-    image: postgres:17.7-alpine@sha256:bb377b7239d2774ac8cc76f481596ce96c5a6b5e9d141f6d0a0ee371a6e7c0f2
+    image: postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
     user: postgres
     environment:
       POSTGRES_USER: sgp_owner

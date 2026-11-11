@@ -23,7 +23,7 @@ $env:POSTGRES_PASSWORD = New-TestSecret
 $env:RUNTIME_PASSWORD = New-TestSecret
 $env:DATABASE_URL = 'postgresql://sgp_owner:' + $env:POSTGRES_PASSWORD + '@127.0.0.1:55433/sgp_test'
 try {
-  & docker run --rm -d --name $testContainer --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55433:5432 postgres:17.7-alpine | Out-Null
+  & docker run --rm -d --name $testContainer --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55433:5432 postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac | Out-Null
   if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL failed to start' }
   $ready = $false
   for ($attempt=0; $attempt -lt 60; $attempt++) {
