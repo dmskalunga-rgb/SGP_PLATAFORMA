@@ -1,44 +1,1011 @@
-openapi: 3.0.3
-info:
-  title: SGP-DISPO foundation API
-  version: 0.0.1
-  description: M0 technical probes only; no institutional business API is available.
-paths:
-  /health/live:
-    get:
-      operationId: healthLive
-      responses:
-        '200':
-          description: The API process is alive, independently of PostgreSQL readiness.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Healthy'
-  /health/ready:
-    get:
-      operationId: healthReady
-      responses:
-        '200':
-          description: PostgreSQL is reachable and the M0 migration is applied.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Healthy'
-        '503':
-          description: Required database or schema is unavailable. No internal error details are exposed.
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [status]
-                additionalProperties: false
-                properties:
-                  status: {type: string, enum: [unavailable]}
-components:
-  schemas:
-    Healthy:
-      type: object
-      required: [status]
-      additionalProperties: false
-      properties:
-        status: {type: string, enum: [ok]}
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SGP-DISPO foundation and identity API",
+    "version": "0.1.0",
+    "description": "M1B identity/session only. HTTPS required for authentication. Exact configured Origin and X-CSRF-Token required on mutations; no business authorization engine."
+  },
+  "paths": {
+    "/health/live": {
+      "get": {
+        "operationId": "healthLive",
+        "responses": {
+          "200": {
+            "description": "Technical health",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Healthy"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "healthReady",
+        "responses": {
+          "200": {
+            "description": "Technical health",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Healthy"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Required database/schema unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "unavailable"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/csrf": {
+      "get": {
+        "operationId": "auth_csrf",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "csrf_token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "csrf_token"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "auth_login",
+        "security": [
+          {
+            "preauthCookie": [],
+            "csrf": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "authenticated": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "authenticated"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9._-]{3,64}$",
+                    "maxLength": 64
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "writeOnly": true
+                  }
+                },
+                "required": [
+                  "username",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must equal configured HTTPS origin"
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/session": {
+      "get": {
+        "operationId": "auth_session",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "auth_logout",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrf": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie"
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {},
+                "required": []
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must equal configured HTTPS origin"
+          }
+        ],
+        "description": "Idempotent when already logged out; an existing bearer requires its CSRF proof. Clears cookie after server revocation."
+      }
+    },
+    "/api/v1/auth/rotate": {
+      "post": {
+        "operationId": "auth_rotate",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrf": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "csrf_token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "csrf_token"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {},
+                "required": []
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must equal configured HTTPS origin"
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/change-password": {
+      "post": {
+        "operationId": "auth_change_password",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrf": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie"
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "current_password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "writeOnly": true
+                  },
+                  "new_password": {
+                    "type": "string",
+                    "minLength": 15,
+                    "maxLength": 128,
+                    "writeOnly": true
+                  }
+                },
+                "required": [
+                  "current_password",
+                  "new_password"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must equal configured HTTPS origin"
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/admin/account-command": {
+      "post": {
+        "operationId": "auth_admin_account_command",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrf": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Committed success; session bearer material only in protected Set-Cookie"
+          },
+          "400": {
+            "description": "Invalid schema, unexpected fields or password policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed or session invalid; account state is not enumerated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin, transport, CSRF or command authorization denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Payload exceeds limit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported content type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate or bounded hashing capacity exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Authority or audit unavailable; no protected success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "target_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "REVOKE_ONE",
+                      "REVOKE_ALL",
+                      "ACTIVE",
+                      "INACTIVE",
+                      "LOCKED",
+                      "DISABLED"
+                    ]
+                  },
+                  "session_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "required": [
+                  "target_id",
+                  "action"
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Must equal configured HTTPS origin"
+          }
+        ],
+        "description": "Minimum M1B security command only; exact IAM_GLOBAL grant required, no self-target; session_id required for REVOKE_ONE. No entitlement administration."
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-sgp_session"
+      },
+      "preauthCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-sgp_preauth"
+      },
+      "csrf": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "error",
+          "request_id"
+        ]
+      },
+      "Healthy": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "Session": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "username": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "username",
+              "display_name"
+            ]
+          },
+          "session": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "expires_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "idle_expires_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "authentication_strength": {
+                "type": "string",
+                "enum": [
+                  "PASSWORD"
+                ]
+              }
+            },
+            "required": [
+              "created_at",
+              "expires_at",
+              "idle_expires_at",
+              "authentication_strength"
+            ]
+          },
+          "csrf_token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "session",
+          "csrf_token"
+        ]
+      }
+    }
+  }
+}

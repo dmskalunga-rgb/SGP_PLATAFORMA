@@ -1,0 +1,52 @@
+{
+  "algorithm": "Argon2id",
+  "version": 19,
+  "memoryCost": 65536,
+  "timeCost": 3,
+  "parallelism": 1,
+  "minimum": 15,
+  "maximum": 128,
+  "concurrency": 2,
+  "hash_length_bytes": 32,
+  "salt_length_bytes": 16,
+  "measurements": [
+    {
+      "hash_ms": 256.5411,
+      "verify_ms": 251.37239999999997
+    },
+    {
+      "hash_ms": 266.5865,
+      "verify_ms": 285.0365999999999
+    },
+    {
+      "hash_ms": 272.1270999999999,
+      "verify_ms": 237.6069
+    },
+    {
+      "hash_ms": 261.163,
+      "verify_ms": 243.9928
+    },
+    {
+      "hash_ms": 244.47670000000016,
+      "verify_ms": 249.23880000000008
+    },
+    {
+      "hash_ms": 299.1783999999998,
+      "verify_ms": 277.90409999999974
+    },
+    {
+      "hash_ms": 288.24710000000005,
+      "verify_ms": 340.2813000000001
+    }
+  ],
+  "hash_median_ms": 266.5865,
+  "hash_max_ms": 299.1783999999998,
+  "node": "v24.14.0",
+  "platform": "win32",
+  "architecture": "x64",
+  "CPU": "Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz",
+  "logical_CPUs": 8,
+  "total_memory_bytes": 17018630144,
+  "measured_at_UTC": "2026-11-11T12:55:55.649Z",
+  "decision": "Keep frozen baseline; bounded concurrency=2, no silent weakening; validate institutional target hardware before production"
+}

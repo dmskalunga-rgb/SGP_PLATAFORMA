@@ -1,0 +1,42 @@
+{
+  "stats": {
+    "startTime": "2026-11-11T12:55:30.786Z",
+    "duration": 20562.762,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "one-time bootstrap → real TLS browser login → persistent session → logout → replay denied",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2906
+        }
+      ]
+    },
+    {
+      "title": "administrator revokes another real browser session → authenticated retry denied",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2513
+        }
+      ]
+    },
+    {
+      "title": "repeated invalid login locks account; valid credential remains denied and audit reconstructs sequence",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 6704
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "state": "READY_FOR_GATE_PENDING_REMOTE_CI",
+  "master_integrity": "PASS",
+  "M1A_frozen_integrity": "PASS (master + eleven hashes, pinned manifest, positive/negative guard test)",
+  "local_lint": "PASS",
+  "local_typecheck": "PASS",
+  "local_build": "PASS",
+  "local_tests": {
+    "unit": 4,
+    "integration_API_DB": 17,
+    "browser_M0": 2,
+    "browser_M1B_TLS": 3,
+    "failure": 0,
+    "skip": 0,
+    "flaky": 0
+  },
+  "PostgreSQL": "real, disposable TEST DBs; no operational mock",
+  "auth_roles": "separate app_runtime/auth_runtime, NOSUPERUSER/NOCREATEDB/NOCREATEROLE/NOBYPASSRLS; internal NOLOGIN owners",
+  "scope_confirmation": "operator explicitly authorized only internal RLS required by frozen M1A; business RBAC/ABAC/RLS remains blocked",
+  "argon2": "baseline calibrated, see ARGON2-CALIBRATION.json",
+  "npm_audit": "zero all-severity vulnerabilities",
+  "secret_scan": "PASS: complete candidate, Gitleaks exit 0, zero findings; CI also checks history",
+  "SAST": "local tracked-path scan 0 findings/errors; full candidate remote CI required",
+  "SCA_container_SBOM": "remote exact-commit gates required",
+  "M1B_gate": "PENDING_COMMIT_PUSH_REMOTE_CI",
+  "M1C": "BLOCKED",
+  "M2": "BLOCKED",
+  "final_record": "refs/notes/m1b-gate; see CI.md",
+  "native_Argon2_image": "PASS: real Alpine API image, UID node, read-only, cap-drop ALL, no-new-privileges, 512m",
+  "source_scope": "M1B only; no frozen contract modifications"
+}

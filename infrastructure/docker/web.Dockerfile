@@ -15,6 +15,7 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/conf.d API_UPSTREAM=http://api:3000
 COPY --chmod=755 infrastructure/nginx/19-create-config-dir.sh /docker-entrypoint.d/19-create-config-dir.sh
 COPY infrastructure/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY infrastructure/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+COPY infrastructure/nginx/auth-tls.conf.template /etc/nginx/auth-tls.conf.template
 COPY --from=build /app/apps/web/dist /usr/share/nginx/html
 USER 101
 EXPOSE 8080

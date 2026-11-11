@@ -1,16 +1,17 @@
-# M1 — riscos e pendências no checkpoint M1A
+# M1B — riscos residuais e limites
 
-O estado do gate arquitectural e dos findings da revisão está em EVIDENCE/M1/M1A/M1A-GATE.md e ASTRA-REVIEW.md. M1B/C/D não estão executados; isso não é aprovação parcial do M1-GATE final.
+Gate remoto e vulnerabilidades: registo final em EVIDENCE/M1/M1B/CI.md. Nenhum HIGH/CRITICAL aceite silenciosamente; scans pendentes não são PASS.
 
-| Risco / obrigação | Dono / fecho exigido |
+| Item | Tratamento/limite |
 |---|---|
-| Functions SECURITY DEFINER, RLS interno sem recursão e binding privado ainda sem implementação/prova | Engenharia M1C: PostgreSQL real, SQL directo/API, privilégios e adversarial suite antes do gate |
-| Lock global reduz paralelismo de mutações IAM; lock/statement/context timeouts são baseline | Engenharia M1B/C: medir carga, concorrência, latência; alteração só por ADR e revisão |
-| auth_runtime/processo auth constitui boundary confiável privilegiado | Operações/engenharia: secret isolation, grants mínimos, telemetria sanitizada e threat tests |
-| Hashing Argon2id e quotas precisam calibração em hardware alvo | Engenharia M1B: limites CPU/memória e DOS, sem degradar silenciosamente |
-| Classificações/sensibilidade/delegação requerem validação institucional | PNA antes de produção; parametrização e mudança auditada |
-| Bootstrap e recuperação requerem dois operadores reais e procedimento protegido | Operador institucional; sem seed de identidades fictícias, auto-aprovação ou backdoor |
-| Retenção de audit/sessões, off-host evidence e protecção contra DBA | Operações/PNA antes de produção; RLS não promete imutabilidade contra superuser |
-| Protecção de main não activa, herdado M0 | Governação do repositório; não modificado nesta entrega documental |
+| auth_runtime/processo auth é boundary confiável | Pools/grants separados; comprometimento total não neutralizado por RLS |
+| Contenção locks IAM | Corrida/deadline15s testados; dimensionar hardware sem reduzir coerência |
+| Argon2/memória | DEV e CI medem; reservar64MiB/hash, concorrência2/processo; validar alvo institucional |
+| Lista local de passwords pequena | Bloqueio funcional; ampliar corpus controlado antes de produção |
+| Ataque dirigido pode causar lock temporário | 15min sem extensão, quotas IP/nonce/hash; rede/monitorização institucionais |
+| TLS/CA/secrets/operadores | Templates/validação; sem deployment produção alegado; provisionamento externo obrigatório |
+| Recuperação/retenção/cópia audit/SIEM | Sem backdoor/reset remoto; procedimento e sign-off institucional posteriores |
+| Avisos Fastify/NO_COLOR | Depreciação, sem falha; não classificados como vulnerabilidade HIGH/CRITICAL |
+| Main protection herdada M0 inactiva | Não alterada; push autorizado sem force e CI obrigatória |
 
-Nenhuma destas obrigações futuras é tratada como teste passado. Nova autorização explícita é necessária para M1B mesmo após aprovação M1A. M2 permanece bloqueado.
+M1C/D/M2 bloqueados. RLS de negócio/classificação/compartimentos/SoD completo/admin entitlements são subfases não autorizadas, sem mocks a mascará-las. Não declarar M1 completo nem PRODUCTION_READY.

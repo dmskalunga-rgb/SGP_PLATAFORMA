@@ -1,22 +1,18 @@
-# M1 — rastreabilidade de desenho M1A
+# M1 — rastreabilidade M1B
 
-Cada linha cobre requisito → contrato → ADR → prova documental. Código/migration/API/teste executável = não implementados nesta subfase, bloqueados até autorização. Referências de testes são obrigações futuras, não resultados. Evidência comum: EVIDENCE/M1/M1A/{ASTRA-REVIEW.md,M1A-GATE.md,CHECKS.json,FREEZE-MANIFEST.json}.
+Desenho: contratos FROZEN/ADR007–010 exactos. DoR: docs/requirements/M1B-PLAN.md. Evidência: EVIDENCE/M1/M1B/{CHECKS.json,LOCAL-TESTS.json,M1B-GATE.md,CI.md}.
 
-| ID | Requisito / ordem M1 | Contrato (docs/security) | ADR | Teste futuro / subfase |
-|---|---|---|---|---|
-| SGP-IAM-001 | Identidade mínima, lifecycle, username não email (§4.1,9) | SECURITY-CONTEXT-CONTRACT, SESSION-MODEL | 007,009 | CTX-001, login status / B |
-| SGP-IAM-002 | Auth interna e adaptadores futuros (§10,15 master) | SESSION-MODEL | 009 | Argon2, lockout, rate-limit / B |
-| SGP-SES-001 | Sessão revogável, expiração, rotação (§11–13) | SESSION-MODEL, AUTHORIZATION-MODEL | 008,009 | Expiry/revocation/concurrency / B |
-| SGP-CTX-001 | Envelope explícito e origem DB (§4.2) | SECURITY-CONTEXT-CONTRACT | 007 | CTX-001/004/005 / C |
-| SGP-CTX-002 | Propagação Fastify/transacção/SET LOCAL (§4.3,22) | SECURITY-CONTEXT-CONTRACT, RLS-DESIGN | 007,010 | CTX-002/003, RLS-006/007 / C |
-| SGP-AUT-001 | authorize default deny e servidor (§4.4,21) | AUTHORIZATION-MODEL | 008 | AUTH-001–003 API/SQL / C |
-| SGP-RBA-001 | users/roles/permissions/vínculos (§4.5,19) | RBAC-ABAC-MODEL | 008 | Grants activos, scope-bound, role edits / C |
-| SGP-ABA-001 | Atributos conjuntivos sem M2 (§4.6,20) | RBAC-ABAC-MODEL | 007,008 | Retirar cada atributo; unknown deny / C |
-| SGP-CLS-001 | Classificação configurável e clearance (§4.7) | CLASSIFICATION-MODEL | 008 | CLS-001/003 / C |
-| SGP-CMP-001 | ALL compartments + need-to-know (§4.8) | CLASSIFICATION-MODEL | 008 | CLS-002 / C |
-| SGP-SOD-001 | Incompatibilidades e maker-checker (§4.9,32) | SEGREGATION-OF-DUTIES | 008 | SOD-001–006 / C,D |
-| SGP-RLS-001 | FORCE/RLS real, privilege/pool boundaries (§22–27) | RLS-DESIGN | 010 | RLS-001–012 SQL directo/API / C |
-| SGP-AUD-001 | Eventos IAM e negações, atomicidade (§13,34; master22) | SESSION-MODEL, AUTHORIZATION-MODEL | 008,009 | Falhas audit, reconstruct / B,D |
-| SGP-GOV-001 | M1A only, regressão M0, freeze/gate (§6,38,46–49) | M1A-PLAN, checkpoint reports | 007–010 | CHECKS + review; regressão completa futura |
+| Requisito | Código/migration/API | Teste/evidência |
+|---|---|---|
+| SGP-IAM-001 identity/lifecycle | 002 users/credentials; auth.ts; account-command | authentication.test.mjs lifecycle/status/self/últimos operadores; AUTH-TESTS |
+| SGP-IAM-002 password | password.ts; credentials; bootstrap CLI/change-password | password.test.mjs; PASSWORD-HASHING/ARGON2-CALIBRATION |
+| SGP-SES-001 sessões/revogação | sessions/bind/login/logout/rotate/change_password/account_command | expiry/replay/rotation/all/concurrency/deadline; SESSION-TESTS |
+| SGP-CTX-001/002 contexto | request.auth immutable; binding/SET LOCAL/finish; app/auth pools | A/B/poolmax1/GUC/rollback/rebind |
+| SGP-AUD-001 audit | authentication_events/event + transacções | audit rollback/log capture/browser sequência; AUDIT-EVIDENCE |
+| SGP-BOOT-001 bootstrap | stdin privado; bootstrap empty-only/dois operadores | replay/runtime deny, CLI real browser; BOOTSTRAP |
+| SGP-SEC-001 TLS/CSRF/rate | auth.ts/nonce/rate_buckets/gateway/ViteTLS | schemas/Origin/nonce/rate/flags/lockout |
+| SGP-FE-001 frontend real | AuthPages login/logout/expired/denied/profile | 3 TLS browser E2E, backend/DB reais |
+| SGP-GOV-001 integridade/regressão | frozen guard pinado/ci.yml/helpers DB isolado | cópia adulterada recusada; M0 suites/CI |
+| SGP-RLS-001 interno mínimo | 002 FORCE/privileges/NOLOGIN/commands | SQL app/auth deny; flags; sem RLS de negócio |
 
-M2 e workflows patrimoniais não têm código ou entregável nesta matriz. Referências opacas de scope não representam implementação de hierarquia organizacional.
+RBAC/ABAC/CLS/CMP/SoD completos continuam em desenho, sem motor/admin UI desta subfase. Metadados de suporte existem conforme M1B; não autorizam M1C. Migrations001+002 e OpenAPI de endpoints reais; sem M2.

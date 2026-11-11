@@ -8,8 +8,9 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "fastify": "5.12.8",
     "@fastify/helmet": "13.0.2",
+    "argon2": "0.45.2",
+    "fastify": "5.12.8",
     "pg": "8.16.3"
   },
   "devDependencies": {

@@ -1,0 +1,24 @@
+{
+  "findings": 0,
+  "errors": 0,
+  "scanned": [
+    "apps/api/package.json",
+    "apps/api/src/app.ts",
+    "apps/api/src/auth.ts",
+    "apps/api/src/config.ts",
+    "apps/api/src/index.ts",
+    "apps/api/src/password.ts",
+    "apps/api/tsconfig.json",
+    "apps/web/index.html",
+    "apps/web/package.json",
+    "apps/web/src/App.tsx",
+    "apps/web/src/AuthPages.tsx",
+    "apps/web/src/auth.css",
+    "apps/web/src/main.tsx",
+    "apps/web/src/vite-env.d.ts",
+    "apps/web/tsconfig.json",
+    "apps/web/vite.config.ts",
+    "scripts/migrate.mjs"
+  ],
+  "limitation": "Local scan before staging included tracked paths only; complete IAM source scan is mandatory in remote CI after commit. Not a substitute for final SAST gate."
+}

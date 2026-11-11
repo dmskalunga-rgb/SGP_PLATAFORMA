@@ -6,7 +6,8 @@ export async function withSchema(run) {
   await root.connect();
   const schema = 'test_' + randomUUID().replaceAll('-', '');
   const scoped = new URL(process.env.DATABASE_URL);
-  scoped.searchParams.set('options', '-c search_path=' + schema);
-  try { await root.query(`CREATE SCHEMA ${schema}`); await run(scoped.href); }
-  finally { await root.query(`DROP SCHEMA IF EXISTS ${schema} CASCADE`); await root.end(); }
+  scoped.pathname='/' + schema;
+  scoped.searchParams.delete('options');
+  try { await root.query(`CREATE DATABASE ${schema}`); await run(scoped.href); }
+  finally { await root.query(`DROP DATABASE IF EXISTS ${schema} WITH (FORCE)`); await root.end(); }
 }

@@ -1,0 +1,7 @@
+# Credenciais M1B
+
+Implementação: apps/api/src/password.ts, argon2 versão fixa0.45.2 no lockfile; PHC Argon2id v19 com salt CSPRNG16bytes/hash32bytes, parâmetros versionados por credencial. Baseline congelada m65536KiB/t3/p1. Configuração permite apenas elevar dentro de limites validados; não degrada silenciosamente. Password NFC, min15/max128 codepoints, sem truncamento e lista local inicial de valores públicos comuns. Lista inicial é pequena; ampliar por política institucional antes de produção. Sem SHA/bcrypt/encriptação reversível para credenciais; SHA-256 usado só em tokens/CSRF de alta entropia.
+
+Unit test: mesma senha gera hashes distintos; correct/incorrect verify; PHC metadata e needsRehash; Unicode NFC e comprimento/lista; limite de concorrência e rejeição de parâmetros inferiores. Verificação de senha fora de transacção longa; finalizar sob locks e revalidar credential_version/status. Username desconhecido verifica dummy hash do mesmo custo. Hash lookup só no pool auth; nenhum hash/token bruto em resposta, logger ou audit. Teste de logs serializados reais e respostas compara contra segredos efémeros e hashes sem os exportar.
+
+Calibração e limites: ARGON2-CALIBRATION.md e JSON associado. Rehash em login se parâmetros mudarem preserva a senha e sessão; mudança efectiva de password incrementa credential_version e revoga todas as sessões atomicamente. Reset remoto não é publicado nesta fase; não existe backdoor.

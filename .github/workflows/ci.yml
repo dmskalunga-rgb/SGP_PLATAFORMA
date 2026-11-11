@@ -28,18 +28,29 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build
+      - run: node scripts/check-frozen.mjs
       - run: npm run test:unit
       - run: docker build -f infrastructure/docker/postgres.Dockerfile -t sgp-postgres:m0 .
       - name: Start real disposable PostgreSQL
         run: bash scripts/ci-database.sh
       - run: npm run migrate
+      - run: node scripts/provision-auth-test.mjs
       - run: npm run test:integration
       - run: node scripts/provision-test-runtime.mjs
       - run: npx playwright install --with-deps chromium
       - name: Browser, API startup, web startup and health tests
         env:
           DATABASE_URL: ${{ env.RUNTIME_DATABASE_URL }}
+          AUTH_DATABASE_URL: ''
         run: npm run test:frontend
+      - name: M1B calibration and TLS identity/session browser E2E
+        run: |
+          node scripts/calibrate-argon2.mjs
+          mkdir -p .test-secrets
+          openssl req -x509 -newkey rsa:2048 -nodes -days 2 -keyout .test-secrets/test-tls.key -out .test-secrets/test-tls.crt -subj /CN=localhost -addext 'subjectAltName=IP:127.0.0.1,DNS:localhost'
+          node scripts/prepare-auth-browser.mjs
+          npx playwright test -c playwright.auth.config.mjs
+          node scripts/summarize-auth-browser.mjs
       - name: Test cleanup
         if: always()
         run: |

@@ -1,0 +1,12 @@
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+const sha = data => createHash('sha256').update(data).digest('hex').toUpperCase();
+const root = new URL('../', import.meta.url);
+const manifestText=await readFile(new URL('EVIDENCE/M1/M1A/FREEZE-MANIFEST.json', root),'utf8');
+assert.equal(sha(manifestText.replace(/\r\n/g,'\n')),'29C285116C5E8FAC447AE297DF66BB60F3E03933673A164EDD19954A44ECEFD3','Frozen manifest integrity');
+const manifest = JSON.parse(manifestText);
+assert.equal(manifest.files.length, 11);
+assert.equal(sha(await readFile(new URL('SGP-DISPO-MASTER-v1.0-FROZEN.md', root))), '7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667');
+for (const entry of manifest.files) assert.equal(sha(await readFile(new URL(entry.path, root))), entry.sha256, entry.path);
+console.log('Master + 11 M1A frozen artifacts: PASS (exact SHA-256)');

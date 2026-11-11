@@ -8,7 +8,7 @@ import { migrate } from '../../scripts/migrate.mjs';
 import { withSchema } from '../helpers.mjs';
 test('real PostgreSQL migration persists and repeat preserves its timestamp', async () => withSchema(async url => {
   await migrate(url); const db=new pg.Client({connectionString:url}); await db.connect();
-  try { const before=await db.query('SELECT * FROM schema_migrations'); await migrate(url); const after=await db.query('SELECT * FROM schema_migrations'); assert.deepEqual(after.rows,before.rows); assert.equal(after.rowCount,1); }
+  try { const before=await db.query('SELECT * FROM schema_migrations ORDER BY version'); await migrate(url); const after=await db.query('SELECT * FROM schema_migrations ORDER BY version'); assert.deepEqual(after.rows,before.rows); assert.deepEqual(after.rows.map(row=>row.version),['001','002']); }
   finally { await db.end(); }
 }));
 test('checksum drift is rejected and failed migration rolls back DDL and tracking rows', async () => withSchema(async url => {

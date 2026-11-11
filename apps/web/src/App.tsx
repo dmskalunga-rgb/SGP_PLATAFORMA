@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
+import { AuthPages } from './AuthPages';
 
 type State = 'loading' | 'ready' | 'unavailable';
-export function App() {
+function Foundation() {
   const [state, setState] = useState<State>('loading');
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
@@ -26,5 +27,7 @@ export function App() {
     <p role="status" aria-live="polite">{state === 'loading' ? 'A verificar a disponibilidade…' : state === 'ready' ? 'Serviço disponível.' : 'Serviço indisponível. Tente novamente.'}</p>
     {state === 'unavailable' && <button onClick={() => setAttempt(value => value + 1)}>Tentar novamente</button>}
     <p>Ainda não existem módulos operacionais disponíveis nesta fundação.</p>
+    <a href="/login">Iniciar sessão</a>
   </main>;
 }
+export function App(){return ['/login','/logout','/session-expired','/access-denied','/profile'].includes(window.location.pathname)?<AuthPages/>:<Foundation/>;}
