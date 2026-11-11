@@ -1,0 +1,59 @@
+# Local baseline only. Production requires the institutional TLS/secrets/deployment review.
+services:
+  db:
+    image: postgres:17.7-alpine@sha256:bb377b7239d2774ac8cc76f481596ce96c5a6b5e9d141f6d0a0ee371a6e7c0f2
+    user: postgres
+    environment:
+      POSTGRES_USER: sgp_owner
+      POSTGRES_DB: sgp
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Supply an owner secret externally}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    tmpfs: [/tmp, /var/run/postgresql]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1.0
+    pids_limit: 128
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -h 127.0.0.1 -U sgp_owner -d sgp"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks: [database]
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api.Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?Supply a separate least-privilege runtime connection}
+    depends_on:
+      db: {condition: service_healthy}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 256m
+    cpus: 1.0
+    pids_limit: 64
+    networks: [database, frontend]
+  web:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/web.Dockerfile
+    environment:
+      API_UPSTREAM: http://api:3000
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 64
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on: [api]
+    networks: [frontend]
+volumes:
+  pgdata:
+networks:
+  database: {internal: true}
+  frontend:

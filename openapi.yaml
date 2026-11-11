@@ -1,0 +1,44 @@
+openapi: 3.0.3
+info:
+  title: SGP-DISPO foundation API
+  version: 0.0.1
+  description: M0 technical probes only; no institutional business API is available.
+paths:
+  /health/live:
+    get:
+      operationId: healthLive
+      responses:
+        '200':
+          description: The API process is alive, independently of PostgreSQL readiness.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Healthy'
+  /health/ready:
+    get:
+      operationId: healthReady
+      responses:
+        '200':
+          description: PostgreSQL is reachable and the M0 migration is applied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Healthy'
+        '503':
+          description: Required database or schema is unavailable. No internal error details are exposed.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                additionalProperties: false
+                properties:
+                  status: {type: string, enum: [unavailable]}
+components:
+  schemas:
+    Healthy:
+      type: object
+      required: [status]
+      additionalProperties: false
+      properties:
+        status: {type: string, enum: [ok]}

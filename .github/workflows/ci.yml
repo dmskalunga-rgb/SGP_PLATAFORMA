@@ -1,0 +1,114 @@
+name: M0 Foundation Gate
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: m0-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  tests:
+    name: Foundation tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: mkdir -p artifacts && npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run test:unit
+      - name: Start real disposable PostgreSQL
+        run: bash scripts/ci-database.sh
+      - run: npm run migrate
+      - run: npm run test:integration
+      - run: node scripts/provision-test-runtime.mjs
+      - run: npx playwright install --with-deps chromium
+      - name: Browser, API startup, web startup and health tests
+        env:
+          DATABASE_URL: ${{ env.RUNTIME_DATABASE_URL }}
+        run: npm run test:frontend
+      - name: Test cleanup
+        if: always()
+        run: |
+          docker rm -f sgp-m0-test-db || true
+          docker network rm sgp-m0-test || true
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: m0-tests-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30
+  security:
+    name: Source security and SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: mkdir -p artifacts && npm ci
+      - run: npm run test:policy
+      - name: Dependency audit, all severity levels
+        run: npm audit --json > artifacts/npm-audit.json
+      - name: Secret scan of source and full history
+        run: |
+          docker run --rm -v "$PWD:/src" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /src --config /src/.gitleaks.toml --redact --report-format json --report-path /src/artifacts/gitleaks-worktree.json
+          docker run --rm -v "$PWD:/src" ghcr.io/gitleaks/gitleaks:v8.30.1 git /src --config /src/.gitleaks.toml --redact --report-format json --report-path /src/artifacts/gitleaks-history.json
+      - name: SAST
+        run: docker run --rm -v "$PWD:/src" -w /src semgrep/semgrep:1.185.0 semgrep scan --config .semgrep.yml --metrics off --error --json --output artifacts/semgrep.json apps scripts/migrate.mjs
+      - name: Complementary SCA
+        run: docker run --rm -v "$PWD:/src" aquasec/trivy:0.76.2 fs --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --skip-dirs /src/node_modules --skip-dirs /src/.git --skip-dirs /src/artifacts --format json --output /src/artifacts/trivy-sca.json /src
+      - name: CycloneDX production dependency SBOM
+        run: npm sbom --sbom-format cyclonedx --omit=dev > artifacts/dependencies.cdx.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: m0-source-security-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30
+  containers:
+    name: Container security
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: mkdir -p artifacts && npm ci
+      - run: docker build -f infrastructure/docker/api.Dockerfile -t sgp-api:m0 .
+      - run: docker build -f infrastructure/docker/web.Dockerfile -t sgp-web:m0 .
+      - name: Non-root, read-only, least privilege, runtime health and database failure
+        run: bash scripts/container-smoke.sh | tee artifacts/container-smoke.log
+      - name: Image vulnerability gates and CycloneDX SBOMs
+        run: |
+          for image in api web; do
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2 image --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --format json --output "/src/artifacts/$image-vulnerabilities.json" "sgp-$image:m0"
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2 image --no-progress --format cyclonedx --output "/src/artifacts/$image.cdx.json" "sgp-$image:m0"
+          done
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: m0-container-security-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30

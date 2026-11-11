@@ -1,0 +1,11 @@
+title = "SGP-DISPO secret scanning"
+[extend]
+useDefault = true
+[allowlist]
+description = "Generated dependencies, reports and disposable test secrets are excluded; tracked source and governance remain scanned."
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)artifacts/''',
+  '''(^|/)dist/''',
+  '''(^|/).test-secrets/'''
+]

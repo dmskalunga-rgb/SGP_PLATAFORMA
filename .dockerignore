@@ -1,0 +1,11 @@
+node_modules
+.git
+.env
+.env.*
+**/dist
+EVIDENCE
+artifacts
+.tools
+.test-secrets
+playwright-report
+test-results

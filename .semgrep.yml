@@ -1,0 +1,40 @@
+rules:
+  - id: sgp-no-dynamic-code
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Dynamic code execution is prohibited in the M0 application.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+  - id: sgp-no-command-shell
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Application code must not execute operating-system commands.
+    pattern-either:
+      - pattern: exec(...)
+      - pattern: execSync(...)
+      - pattern: spawn(...)
+      - pattern: spawnSync(...)
+  - id: sgp-no-raw-html
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Do not inject raw HTML.
+    pattern: <... dangerouslySetInnerHTML={...} ... />
+  - id: sgp-no-sensitive-console
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Never log environment secrets.
+    patterns:
+      - pattern-either:
+          - pattern: console.log(..., process.env.$KEY, ...)
+          - pattern: console.error(..., process.env.$KEY, ...)
+      - metavariable-regex:
+          metavariable: $KEY
+          regex: .*(PASSWORD|TOKEN|SECRET|DATABASE_URL|KEY).*
+  - id: sgp-no-concatenated-sql
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Use parameterised queries rather than concatenating SQL.
+    pattern-either:
+      - pattern: $DB.query($SQL + $INPUT, ...)
+      - pattern: $DB.query(`...${$INPUT}...`, ...)
