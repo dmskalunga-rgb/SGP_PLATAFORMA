@@ -1,0 +1,42 @@
+{
+  "phase": "M1A publication; existing M0 regression only",
+  "checked_at_UTC": "2026-11-11T12:18:10.646027+00:00",
+  "commands_exit_code": {
+    "npm run lint": 0,
+    "npm run typecheck": 0,
+    "npm run build": 0,
+    "npm run test:policy": 0,
+    "scripts/local-tests.ps1": 0
+  },
+  "tests": {
+    "unit_pass": 2,
+    "integration_real_PostgreSQL_pass": 4,
+    "browser_pass": 2,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "PostgreSQL": "sgp-postgres:m0 disposable TEST, cleaned by existing script",
+  "runtime_DB_role": "sgp_runtime NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE",
+  "operational_mocks": 0,
+  "IAM_M1_implementation": "NONE",
+  "logs": {
+    "m1a-publication-lint": "\n> sgp-dispo@0.0.1 lint\n> eslint .\n\n",
+    "m1a-publication-typecheck": "\n> sgp-dispo@0.0.1 typecheck\n> npm run typecheck --workspaces\n\n\n> @sgp/api@0.0.1 typecheck\n> tsc --noEmit -p tsconfig.json\n\n\n> @sgp/web@0.0.1 typecheck\n> tsc --noEmit\n\n",
+    "m1a-publication-build": "\n> sgp-dispo@0.0.1 build\n> npm run build --workspaces\n\n\n> @sgp/api@0.0.1 build\n> tsc -p tsconfig.json\n\n\n> @sgp/web@0.0.1 build\n> vite build\n\nvite v7.3.8 building client environment for production...\ntransforming...\n✓ 28 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                  0.28 kB │ gzip:  0.23 kB\ndist/assets/index-DY5CRw5S.js  194.32 kB │ gzip: 61.22 kB\n✓ built in 2.58s\n",
+    "m1a-publication-test-policy": "\n> sgp-dispo@0.0.1 test:policy\n> node scripts/check-policy.mjs\n\nREFERENCE / TEST / SCANNER scripts\\check-policy.mjs: mockData, fakeData, dummyData, sampleData, demoData, fakeDashboard, hardcodedUsers, hardcodedAssets, hardcodedDepartments, TODO button, placeholder submit\nREFERENCE / TEST / SCANNER SGP-DISPO-MASTER-v1.0-FROZEN.md: mockData, fakeData, dummyData, sampleData, demoData, fakeDashboard, hardcodedUsers, hardcodedAssets, hardcodedDepartments, Math.random, alert(\"Em breve, TODO button, placeholder submit\n{\"files\":97,\"operationalFindings\":0,\"nonOperationalReferences\":24}\n",
+    "migration": "\n> sgp-dispo@0.0.1 migrate\n> node scripts/migrate.mjs\n\nMigrations validated: 001\n",
+    "tests": "\n> sgp-dispo@0.0.1 test\n> npm run test:unit && npm run test:integration\n\n\n> sgp-dispo@0.0.1 test:unit\n> node --test tests/unit/*.test.mjs\n\n✔ configuration fails closed on absent, malformed or non-PostgreSQL connection (1.8296ms)\n✔ configuration rejects invalid ports and environment (0.4925ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 124.8812\n\n> sgp-dispo@0.0.1 test:integration\n> node --test --test-concurrency=1 tests/integration/*.test.mjs\n\n✔ real PostgreSQL migration persists and repeat preserves its timestamp (167.096ms)\n✔ checksum drift is rejected and failed migration rolls back DDL and tracking rows (139.9981ms)\n(node:9648) [FSTDEP023] FastifyDeprecation: disableRequestLogging option is deprecated. Use the logController option with disableRequestLogging or isLogDisabled override instead. The disableRequestLogging top-level option will be removed in `fastify@6`.\n(Use `node --trace-warnings ...` to show where the warning was created)\n(node:9648) [FSTDEP023] FastifyDeprecation: disableRequestLogging option is deprecated. Use the logController option with disableRequestLogging or isLogDisabled override instead. The disableRequestLogging top-level option will be removed in `fastify@6`.\n✔ real readiness requires migrated schema; live survives missing schema; headers and error disclosure (5876.2401ms)\n✔ real network failure returns 503 with sanitised body while liveness remains 200 (13.2285ms)\nℹ tests 4\nℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 8875.8907\n",
+    "test-runtime-role": "Disposable TEST runtime role provisioned without elevated privileges\n",
+    "frontend": "\n> sgp-dispo@0.0.1 test:frontend\n> playwright test\n\n[WebServer] (node:23496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:23496) [FSTDEP023] FastifyDeprecation: disableRequestLogging option is deprecated. Use the logController option with disableRequestLogging or isLogDisabled override instead. The disableRequestLogging top-level option will be removed in `fastify@6`.\n[WebServer] (node:26364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n[WebServer] (node:23520) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)\n\nRunning 2 tests using 1 worker\n\n(node:5752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ok 1 tests\\frontend\\baseline.spec.mjs:2:1 › browser renders baseline using the live API and real PostgreSQL without fatal errors (1.0s)\n[WebServer] 13:17:04 [vite] http proxy error: /health/ready\n[WebServer] Error: connect ECONNREFUSED 127.0.0.1:1\n[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)\n[WebServer] 13:17:04 [vite] http proxy error: /health/ready\n[WebServer] Error: connect ECONNREFUSED 127.0.0.1:1\n[WebServer]     at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1645:16)\n  ok 2 tests\\frontend\\baseline.spec.mjs:11:1 › real upstream outage displays error and functional retry without fabricated data (689ms)\n\n  2 passed (10.7s)\n",
+    "runtime-db-role": "   rolname   | rolsuper | rolcreaterole | rolcreatedb | rolbypassrls \n-------------+----------+---------------+-------------+--------------\n sgp_runtime | f        | f             | f           | f\n(1 row)\n\n"
+  },
+  "browser_stats": {
+    "startTime": "2026-11-11T12:16:55.567Z",
+    "duration": 10708.16,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

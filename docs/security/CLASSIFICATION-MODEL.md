@@ -1,0 +1,11 @@
+# Classification, clearance and compartment contract — CLS/1
+
+Estado: FROZEN/APPROVED M1A. security_classifications(id, code, label, rank, status, version) parametriza a classificação do recurso; security_clearances vincula habilitação a utilizador, validade e autoridade. Rank é ordenação controlada e única, não ordinal hardcoded em dezenas de locais. Nomenclatura inicial proposta USO_GERAL, USO_INTERNO, RESERVADO, CONFIDENCIAL, SECRETO carece de validação institucional antes de produção. Alterações exigem permission, SoD, auditoria e incremento de policy/subject version, nunca actualizar rótulos/ordem como se fossem decoração.
+
+Um recurso classificado exige clearance activa com rank suficiente, scope permitido, permission e need-to-know. Clearance não é role, não atribui permission nem compartment. Um recurso sem metadados obrigatórios não se torna público: DENY. Nenhum fallback assume USO_GERAL para metadados ausentes. Validade em UTC é avaliada na transacção.
+
+security_compartments(id, code, status); user_compartments(user_id, compartment_id, validity, authority); resource_compartments(resource_type, resource_id, compartment_id). Todos os compartimentos exigidos pelo recurso devem constar do sujeito; não basta intersecção parcial. Compartment inactivo em vínculo exigido impede acesso até reclassificação controlada; não remover exigência silenciosamente ao desactivar. Set vazio de compartimentos no recurso é permitido apenas quando explicitamente registado como sem compartimentação, não porque uma consulta falhou.
+
+Administração de labels/clearances/compartimentos fica sujeita a capacidade própria, delegation ceiling, proibição de auto-elevação e maker-checker para concessões privilegiadas. Um administrador IAM não recebe automaticamente habilitação máxima. Redução de clearance ou remoção de compartment invalida imediatamente novos bindings após commit de política, seguindo ADC/1; não manter claims antigos em token.
+
+Testes CLS-001: cada limiar de rank; clearance expirada/ausente/inactiva. CLS-002: múltiplos compartimentos exigidos, um ausente, vínculo revogado e compartment desactivado. CLS-003: alterar ordens/labels de modo controlado, self escalation negada e decisão idêntica API/RLS. São testes planeados para M1C/D.

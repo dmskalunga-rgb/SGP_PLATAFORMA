@@ -1,0 +1,16 @@
+{
+  "scope": "publication preflight; final decision only after remote CI",
+  "checked_at_UTC": "2026-11-11T12:18:10.740602+00:00",
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "master_integrity": "PASS",
+  "frozen_files_exact_hashes": "PASS (11/11)",
+  "reviewed_draft_identity": "PASS (11/11)",
+  "relative_report_links": "PASS",
+  "operational_M0_diff": "UNCHANGED",
+  "M0_regression": "PASS",
+  "operational_mocks": 0,
+  "ASTRA_review": "APPROVE; AR-01..04 CLOSED; preserved, not repeated",
+  "secret_scan": "PASS; Gitleaks v8.30.1 exit 0, zero findings",
+  "final_commit_CI_record": "refs/notes/m1a-publication; see PUBLICATION.md",
+  "M1B": "BLOCKED_PENDING_PUBLICATION"
+}

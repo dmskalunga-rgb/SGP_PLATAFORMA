@@ -1,0 +1,76 @@
+{
+  "scope": "M1A documentary verification only",
+  "checked_at_UTC": "2026-11-11T12:12:08.031486+00:00",
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "base_commit_link": "[8d8583c](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/8d8583cadd2d4ecf4b51a805a389b71a597e5330)",
+  "branch": "main",
+  "checks": {
+    "master_integrity": true,
+    "base_commit_unchanged": true,
+    "tracked_M0_content_unchanged_git_normalized": true,
+    "git_diff_check": true,
+    "only_authorized_M1A_documents_added": true,
+    "seven_contracts_four_ADRs": true,
+    "freeze_hashes_and_reviewed_semantic_identity": true,
+    "required_checkpoint_artifacts_present": true,
+    "M0_baseline_CI_record_success": true,
+    "secret_scan_zero_findings": true,
+    "operational_mock_policy": true,
+    "no_merge_markers_in_added_documents": true
+  },
+  "policy_summary": {
+    "files": 97,
+    "operationalFindings": 0,
+    "nonOperationalReferences": 24
+  },
+  "baseline_CI": {
+    "run": 43014470020,
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "Source security and SBOM",
+        "conclusion": "success"
+      },
+      {
+        "name": "Container security",
+        "conclusion": "success"
+      },
+      {
+        "name": "Foundation tests",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "new_documents": [
+    "EVIDENCE/M1/M1A/ASTRA-REVIEW.md",
+    "EVIDENCE/M1/M1A/BASELINE.md",
+    "EVIDENCE/M1/M1A/CHECKS.json",
+    "EVIDENCE/M1/M1A/COMMANDS.md",
+    "EVIDENCE/M1/M1A/FREEZE-MANIFEST.json",
+    "EVIDENCE/M1/M1A/GITLEAKS-INTERMEDIATE-REDACTED.json",
+    "EVIDENCE/M1/M1A/GITLEAKS-SOURCE.json",
+    "EVIDENCE/M1/M1A/M1A-GATE.md",
+    "EVIDENCE/M1/M1A/REVIEWED-DRAFT-HASHES.json",
+    "M1_KNOWN_ISSUES.md",
+    "M1_MILESTONE_REPORT.md",
+    "M1_SECURITY_REPORT.md",
+    "M1_TEST_REPORT.md",
+    "M1_TRACEABILITY_UPDATE.md",
+    "docs/adr/ADR-007-security-context-propagation.md",
+    "docs/adr/ADR-008-authorization-decision-model.md",
+    "docs/adr/ADR-009-session-architecture.md",
+    "docs/adr/ADR-010-postgresql-rls-context.md",
+    "docs/requirements/M1A-PLAN.md",
+    "docs/security/AUTHORIZATION-MODEL.md",
+    "docs/security/CLASSIFICATION-MODEL.md",
+    "docs/security/RBAC-ABAC-MODEL.md",
+    "docs/security/RLS-DESIGN.md",
+    "docs/security/SECURITY-CONTEXT-CONTRACT.md",
+    "docs/security/SEGREGATION-OF-DUTIES.md",
+    "docs/security/SESSION-MODEL.md"
+  ],
+  "all_automated_document_checks_pass": true,
+  "IAM_operational_tests": "NOT_RUN_NOT_IMPLEMENTED",
+  "new_M1_workflow": "NONE",
+  "independent_review": "ASTRA-REVIEW.md; technical architecture approval, four findings closed"
+}

@@ -1,0 +1,42 @@
+[
+ {
+  "RuleID": "sourcegraph-access-token",
+  "Description": "Sourcegraph is a code search and navigation engine.",
+  "StartLine": 5,
+  "EndLine": 5,
+  "StartColumn": 80,
+  "EndColumn": 120,
+  "Match": "REDACTED\"",
+  "Secret": "REDACTED",
+  "File": "/src/EVIDENCE/M1/M1A/CHECKS.json",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.741446,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "Fingerprint": "/src/EVIDENCE/M1/M1A/CHECKS.json:sourcegraph-access-token:5"
+ },
+ {
+  "RuleID": "sourcegraph-access-token",
+  "Description": "Sourcegraph is a code search and navigation engine.",
+  "StartLine": 32,
+  "EndLine": 32,
+  "StartColumn": 45,
+  "EndColumn": 85,
+  "Match": "REDACTED'",
+  "Secret": "REDACTED",
+  "File": "/src/EVIDENCE/M1/M1A/COMMANDS.md",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.741446,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "Fingerprint": "/src/EVIDENCE/M1/M1A/COMMANDS.md:sourcegraph-access-token:32"
+ }
+]
