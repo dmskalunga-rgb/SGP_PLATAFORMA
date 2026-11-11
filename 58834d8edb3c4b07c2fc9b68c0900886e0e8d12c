@@ -1,0 +1,116 @@
+{
+  "Repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
+  "Branch": "main",
+  "M1A Final Commit SHA": "58834d8edb3c4b07c2fc9b68c0900886e0e8d12c",
+  "Workflow Run ID": 43019324857,
+  "Workflow Run": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43019324857",
+  "Workflow Result": "success",
+  "Workflow headSha matches final commit": true,
+  "Workflow Jobs": [
+    {
+      "name": "Source security and SBOM",
+      "result": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43019324857/job/130518254216"
+    },
+    {
+      "name": "Foundation tests",
+      "result": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43019324857/job/130518254615"
+    },
+    {
+      "name": "Container security",
+      "result": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43019324857/job/130518254703"
+    }
+  ],
+  "Master SHA-256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "Master Integrity": "PASS",
+  "ASTRA Review Result": "APPROVE; initial AR-01..04 CLOSED on independent re-review, evidence preserved",
+  "Security Context Contract": "FROZEN; exact frozen blob SHA-256 verified",
+  "Frozen Contracts and ADRs": "11/11 exact hashes; no redesign or semantic change",
+  "Freeze Manifest": {
+    "algorithm": "SHA-256",
+    "scope": "M1A architecture only",
+    "status": "FROZEN/APPROVED",
+    "review": "ASTRA-REVIEW.md",
+    "files": [
+      {
+        "path": "docs/security/SECURITY-CONTEXT-CONTRACT.md",
+        "sha256": "62116341B2B61E2B9354E8BB601C2AE36A74CBAB2461EC413898D54A2AE0672E",
+        "reviewed_draft_sha256": "99F5DD63252F8DD4B28EC4EB99F792F57F8B45623F4D95BFCE370614C875CD4D",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/AUTHORIZATION-MODEL.md",
+        "sha256": "71261492F42E8AB28912071B99751B19756EABCEB01E9E006275215293B8006B",
+        "reviewed_draft_sha256": "831B0A56FC8B31F3567EE4A6A8124A276780367720D15A7255409EC3FA0609F0",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/RBAC-ABAC-MODEL.md",
+        "sha256": "D0261D579F916568B9571318BC8E0D55C818B2E0E1E4826B9F1B4DB26D9049B0",
+        "reviewed_draft_sha256": "8F40AC668B7ADB119E2DDCB2A92F0CBA7095F2C58FDDB1BC1B545D014B1B727A",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/RLS-DESIGN.md",
+        "sha256": "D510F57213675C061185822280E3769751A70D384E02676C030F38AD768D74A2",
+        "reviewed_draft_sha256": "53AB088661715DF5B798A2996E1C4A8C7A0E3BC1E93C736ACC6461D4D755A861",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/SESSION-MODEL.md",
+        "sha256": "F1438F80DF97AFC26EF647F402AA42B3F92EC2207662EA2C8DD1DF65E15C1CC8",
+        "reviewed_draft_sha256": "A92ACD200F28A88C72F2BD5E9D37BCFFD859151919DA9035E1CB807C3F799523",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/CLASSIFICATION-MODEL.md",
+        "sha256": "65A8D2216D93C71A397418CE99F98C59A3E394E3669F737596D8EA7837A2BBF5",
+        "reviewed_draft_sha256": "827873F484A7A9347B252E43BB3AD49213E09DDD714D79A1C8AD61B318288D41",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/SEGREGATION-OF-DUTIES.md",
+        "sha256": "0DC89AD5C9FC32324E47C976357942DE162A095E6C95BEAD52B98C4FA495A793",
+        "reviewed_draft_sha256": "4FC5556369F3562AFB051461F764439680A0544C99865546F2BE66F9E8493029",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-007-security-context-propagation.md",
+        "sha256": "B94DF9EF837D21321CEAF9281D3057EA2505D82408D27F90A6D72B866B7F3C97",
+        "reviewed_draft_sha256": "A7A2B530122A18843E5119043582D132E0F42649646CB8387541EAE893EE083B",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-008-authorization-decision-model.md",
+        "sha256": "5B9D509E9B9CB0F96529E652D5902FCE4E2DB88562380548CC5025ECEFF841BE",
+        "reviewed_draft_sha256": "F0619457FD55BEB6B57528CC2143175B7263FB3E01C33A2212CBADF6E5DD4D2C",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-009-session-architecture.md",
+        "sha256": "AFD539C8040894B7C4B2E62A81200D5C9A4220CCECDEB39853B1E04AFA534426",
+        "reviewed_draft_sha256": "408E5E3A269796067AECF36A3F1ADF48C4731179B98E9A099AEFCDA3E09D7EF0",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-010-postgresql-rls-context.md",
+        "sha256": "1DE668ECCE521313010BBF17952241AD75FB71E0691533A94F138E89902AB4FB",
+        "reviewed_draft_sha256": "E2A4BE877EF54C0A3B6C4A70D18B86D7A6D5B0DF291B6E986F5BF0DA6F95F3E8",
+        "change": "status words only"
+      }
+    ]
+  },
+  "M1A Evidence": "COMPLETE; committed directory plus this post-CI Git note",
+  "M0 Regression": "PASS; local lint/typecheck/build/unit2/integration4/browser2 and remote three jobs success",
+  "SECRET_SCAN": "PASS; final candidate zero findings and CI source/full history success",
+  "OPERATIONAL_MOCKS": 0,
+  "M1A_PUBLICATION_GATE": "PASS",
+  "M1A_GATE": "PASS",
+  "M1B": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+  "M2": "BLOCKED",
+  "Checked at UTC": "2026-11-11T12:22:10.534507+00:00",
+  "Record publication": "refs/notes/m1a-publication on final commit, pushed separately without modifying the CI-validated main tree",
+  "New IAM implementation": "NONE"
+}
