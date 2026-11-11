@@ -1,0 +1,182 @@
+{
+  "milestone": "M1C",
+  "stage": "LOCAL_VALIDATED_PENDING_PUBLICATION_CI_ASTRA",
+  "repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
+  "branch": "main",
+  "base_commit_link": "[f1b146b](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/f1b146b6fe128adb37271b08e419b1be1b3007c1)",
+  "measured_at_utc": "2026-11-11T19:59:31.260327+00:00",
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "frozen_guard": "PASS_MASTER_PLUS_11_EXACT_HASHES",
+  "local": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "M0_regression": "PASS",
+    "M1B_regression": "PASS",
+    "RBAC": "PASS",
+    "ABAC": "PASS",
+    "Effective_Grants": "PASS",
+    "scope": "PASS",
+    "location": "PASS",
+    "classification": "PASS",
+    "clearance": "PASS",
+    "compartments": "PASS",
+    "AuthorizationPort": "PASS",
+    "default_deny": "PASS",
+    "RLS_direct_SQL": "PASS",
+    "RLS_API": "PASS",
+    "FORCE_RLS": "PASS",
+    "USING": "PASS",
+    "WITH_CHECK": "PASS",
+    "DELETE_separate": "PASS",
+    "GUC_tamper": "PASS",
+    "binding": "PASS",
+    "pool": "PASS",
+    "savepoints": "PASS",
+    "SoD_static": "PASS",
+    "SoD_temporal": "PASS",
+    "SoD_dynamic": "PASS",
+    "delegation": "PASS",
+    "maker_checker": "PASS",
+    "approval_replay": "PASS",
+    "privilege_escalation": "PASS",
+    "concurrency": "PASS",
+    "audit_atomicity": "PASS",
+    "frontend_API_bypass": "PASS"
+  },
+  "test_counts": {
+    "unit": 4,
+    "integration": 36,
+    "M1C_integration_subset": 19,
+    "M1B_integration_subset": 13,
+    "M0_integration_subset": 4,
+    "M0_browser": 2,
+    "TLS_browser": 4,
+    "total": 46,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "security": {
+    "SAST": {
+      "result": "PASS",
+      "findings": 0,
+      "files": 18
+    },
+    "npm_audit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "secret_scan": {
+      "result": "PASS",
+      "worktree_findings": 0,
+      "main_full_history_findings": 0,
+      "all_refs_raw_findings": 4,
+      "all_refs_verified_public_metadata_false_positives": 4,
+      "unresolved": 0,
+      "credentials_found": 0,
+      "proof": "SECRET-SCAN.json; no scanner allowlist weakened"
+    },
+    "operational_mocks": 0,
+    "container_scans": "PENDING_REMOTE_CI",
+    "SBOM": "PENDING_REMOTE_CI"
+  },
+  "source_hashes_git_lf": [
+    {
+      "sha256": "5ee53366959fcb13a1b2c1d14d0ffe6322fc7bea5dc919c52bc50e01fb73c52a",
+      "path": "migrations/003_authorization.sql"
+    },
+    {
+      "sha256": "d6cc3e00e0fc83fe91b6ecd4f96f4d5f22fa2d3288bb937604e34e6ac8e77d5e",
+      "path": "apps/api/src/auth.ts"
+    },
+    {
+      "sha256": "250392e7880bebf9f63fcde8de40ae6f6a1df78cd9d22b12b783ae476fc5a797",
+      "path": "apps/api/src/authorization.ts"
+    },
+    {
+      "sha256": "53a4db05f4ec72d0845f909c1fc3b3fd3705ba57781b2c6b076e86b83c1ae547",
+      "path": "apps/api/src/app.ts"
+    },
+    {
+      "sha256": "03110ad0cd58221a1946a52ed6deb2597b626248464dbce0ede01b4f69e5c808",
+      "path": "apps/web/src/AuthPages.tsx"
+    },
+    {
+      "sha256": "b875611dd2c92ed0e6d36bc1fcf5c629bc57245a0683f455b325e62957c17971",
+      "path": "tests/integration/authorization.test.mjs"
+    },
+    {
+      "sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "path": "tests/integration/authentication.test.mjs"
+    },
+    {
+      "sha256": "425a51a187faf33a35040840721f401a9caef3897db6aabb601ecec787a7cf40",
+      "path": "tests/integration/database.test.mjs"
+    },
+    {
+      "sha256": "2ec1746df661427c988089fa03432a6caa0915e75fe0c801b83ce9afa458c506",
+      "path": "tests/auth-browser/identity.spec.mjs"
+    },
+    {
+      "sha256": "d260829505d4fcbb844fa0f75bd61328b0e914c246bcecfffef81c9571466cad",
+      "path": ".github/workflows/ci.yml"
+    },
+    {
+      "sha256": "dfeafed763142e6b8dc33d6a33db5a114a71bb8826c8897ed0166e3a804abf2f",
+      "path": "openapi.yaml"
+    }
+  ],
+  "local_report_hashes": [
+    {
+      "sha256": "9fea44ad9644afb350df3f8f9a36bcb04eb6ebe21f745cca9e69d5ed2fe120c7",
+      "path": "artifacts/tests.log"
+    },
+    {
+      "sha256": "e87785b1f999c7a14c582e384a9cede241ec54acb36e46fe9f917bfbf43d15c7",
+      "path": "artifacts/frontend.log"
+    },
+    {
+      "sha256": "aa4b1c6de18a084b865162505a998323864bf74df526f125652a9a905a806d73",
+      "path": "artifacts/auth-frontend.log"
+    },
+    {
+      "sha256": "686ec413d306f0fd19d9f240a83065a3c4855c0bbd51fc0951d9cf0deb809c2e",
+      "path": "artifacts/auth-browser-results.json"
+    },
+    {
+      "sha256": "e8fac8436be2d9f85944c2c3604c8578845774c61e19afa39c5d592a1d5a7484",
+      "path": "artifacts/m1c-semgrep.json"
+    },
+    {
+      "sha256": "8bb6125f092c48ed8041f30ea71403b61f9d5111982d5517d346f14a7273aafb",
+      "path": "artifacts/m1c-npm-audit.json"
+    },
+    {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "path": "artifacts/m1c-gitleaks-worktree.json"
+    },
+    {
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "path": "artifacts/m1c-gitleaks-main-history.json"
+    },
+    {
+      "sha256": "11413b0b8d64d87eea441a3c0baf3aeef097146b6ca8cc0ef53182ebbf1a1051",
+      "path": "artifacts/m1c-gitleaks-history.json"
+    },
+    {
+      "sha256": "7db2d16bee4d1f0d5a064385b955b013923bd6da3100d6007c009e8e9595a5a1",
+      "path": "artifacts/m1c-history-triage.json"
+    }
+  ],
+  "remote_CI": "PENDING",
+  "ASTRA_review": "PENDING",
+  "final_attestation": "refs/notes/m1c-gate attached to verified commit; see CI.md",
+  "M1C_GATE": "PENDING_REMOTE_CI_AND_INDEPENDENT_REVIEW",
+  "M1D": "BLOCKED",
+  "M2": "BLOCKED"
+}

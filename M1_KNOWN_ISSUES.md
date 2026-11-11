@@ -1,17 +1,19 @@
-# M1B — riscos residuais e limites
+# M1C — riscos residuais e limites
 
-Gate remoto e vulnerabilidades: registo final em EVIDENCE/M1/M1B/CI.md. Nenhum HIGH/CRITICAL aceite silenciosamente; scans pendentes não são PASS.
+A decisão verificável encontra-se em EVIDENCE/M1/M1C/CI.md/atestação final. Scans ou review pendentes nunca equivalem a PASS.
 
-| Item | Tratamento/limite |
+| Item | Tratamento / limite |
 |---|---|
-| auth_runtime/processo auth é boundary confiável | Pools/grants separados; comprometimento total não neutralizado por RLS |
-| Contenção locks IAM | Corrida/deadline15s testados; dimensionar hardware sem reduzir coerência |
-| Argon2/memória | DEV e CI medem; reservar64MiB/hash, concorrência2/processo; validar alvo institucional |
-| Lista local de passwords pequena | Bloqueio funcional; ampliar corpus controlado antes de produção |
-| Ataque dirigido pode causar lock temporário | 15min sem extensão, quotas IP/nonce/hash; rede/monitorização institucionais |
-| TLS/CA/secrets/operadores | Templates/validação; sem deployment produção alegado; provisionamento externo obrigatório |
-| Recuperação/retenção/cópia audit/SIEM | Sem backdoor/reset remoto; procedimento e sign-off institucional posteriores |
-| Avisos Fastify/NO_COLOR | Depreciação, sem falha; não classificados como vulnerabilidade HIGH/CRITICAL |
-| Main protection herdada M0 inactiva | Não alterada; push autorizado sem force e CI obrigatória |
+| auth_runtime/processo auth privilegiado | Boundary M1B separado; RLS não neutraliza comprometimento total do processo |
+| Migração/DBA | Fora da defesa runtime; sem garantia de imutabilidade contra superuser |
+| Enrollment M1B existente | Deploy valida dois operadores reais e executa inscrição privada uma única vez; metadados ausentes negam |
+| Classificação/delegação/scopes institucionais | Configuração controlada; bootstrap só nível mínimo explícito, sem clearance máxima automática |
+| Roles administrativas já atribuídas | Conteúdo privilegiado não é alterado por este baseline; configurar role vazia e aprovar atribuição distinta |
+| Revogação de assignment administrativo | Comando conservador recusa; protege capacidade enquanto administração completa permanece M1D |
+| Contenção IAM | Serialização global deliberada, timeouts limitados; medir hardware/latência antes de optimizar por ADR |
+| Argon2/lista de passwords | Baseline M1B preservada; validar hardware e ampliar corpus institucional antes de produção |
+| TLS/secrets/recuperação/retenção/SIEM | Provisionamento institucional externo; sem backdoor e sem deployment produção alegado |
+| Fastify/NO_COLOR | Avisos não bloqueantes herdados; sem falha de testes |
+| Main branch protection | Configuração herdada de M0; push autorizado sem force, CI obrigatória por SHA |
 
-M1C/D/M2 bloqueados. RLS de negócio/classificação/compartimentos/SoD completo/admin entitlements são subfases não autorizadas, sem mocks a mascará-las. Não declarar M1 completo nem PRODUCTION_READY.
+Não há autorização para M1D/M2. PASS M1C não fecha M1 completo nem autoriza próxima fase. Qualquer finding crítico/HIGH não resolvido da revisão/CI mantém gate FAIL e fases seguintes bloqueadas.

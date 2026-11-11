@@ -7,5 +7,5 @@ const walk=suite=>{
 };
 for(const suite of raw.suites||[])walk(suite);
 await writeFile('artifacts/auth-browser-results.json',JSON.stringify({stats:raw.stats,tests},null,2)+'\n');
-if(raw.stats.unexpected||raw.stats.skipped||raw.stats.flaky||raw.stats.expected!==3)process.exitCode=1;
+if(raw.stats.unexpected||raw.stats.skipped||raw.stats.flaky||raw.stats.expected!==4)process.exitCode=1;
 console.log(JSON.stringify({browser_auth_tests:raw.stats.expected,failed:raw.stats.unexpected,skipped:raw.stats.skipped,flaky:raw.stats.flaky}));

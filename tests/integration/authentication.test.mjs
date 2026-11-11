@@ -33,6 +33,9 @@ before(async()=>{
  await db.query('SELECT iam.bootstrap($1,$2,$3,$4,$5)',[...identities,'127.0.0.1',randomUUID(),randomUUID()]);
  const third=await db.query("INSERT INTO iam.users(username,display_name,status) VALUES($1,$2,'ACTIVE') RETURNING id",[people[2].username,people[2].display_name]);
  await db.query('INSERT INTO iam.user_credentials(user_id,password_hash) VALUES($1,$2)',[third.rows[0].id,await passwords.hash(people[2].password)]);
+ // Explicit metadata for this TEST-only identity; production never invents it.
+ await db.query("INSERT INTO iam.user_security_attributes VALUES($1,'ACTIVE')",[third.rows[0].id]);
+ await db.query("INSERT INTO iam.resource_security SELECT 'IAM_IDENTITY',$1,'IAM_GLOBAL',NULL,NULL,id,true,'PASSWORD' FROM iam.security_classifications ORDER BY rank LIMIT 1",[third.rows[0].id]);
  for(const p of people)p.id=(await db.query('SELECT id FROM iam.users WHERE username=$1',[p.username])).rows[0].id;
  app=await createApp({databaseUrl:bootstrap.runtime,host:'127.0.0.1',port:3100,logging:true,logStream:{write:message=>actualLogs.push(message)},trustedProxyIPs:['127.0.0.1'],auth:{databaseUrl:bootstrap.auth,origin,passwordPolicy:baselinePasswordPolicy,poolSize:1}});
  app.addHook('onSend',async(req)=>{if(req.auth){assert.ok(Object.isFrozen(req.auth));assert.ok(Object.isFrozen(req.auth.effective_grants));}});

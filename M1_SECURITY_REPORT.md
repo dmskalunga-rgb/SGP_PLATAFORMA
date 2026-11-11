@@ -1,11 +1,11 @@
-# M1 — segurança M1B
+# M1 — segurança M1C
 
-Contratos M1A exactos e clarificação de scope preservados. [Hashing](EVIDENCE/M1/M1B/PASSWORD-HASHING.md), [calibração](EVIDENCE/M1/M1B/ARGON2-CALIBRATION.md), [bootstrap](EVIDENCE/M1/M1B/BOOTSTRAP.md), [audit](EVIDENCE/M1/M1B/AUDIT-EVIDENCE.md), [runbook](docs/operations/M1B-IDENTITY-RUNBOOK.md).
+Master e onze contratos M1A permanecem sujeitos ao guard SHA-256 exacto. Default deny: session/binding privado, versions, permission e scope/location do mesmo effective_grant, clearance, todos os compartimentos, strength e SoD. GUCs apenas propagam atributos derivados; não são credenciais.
 
-Argon2id/salt único/PHC e versionamento; sem credencial reversível. Token opaco256bit, só hash DB/cookie HttpOnly/Secure/Strict, sem localStorage/JWT. TLS e Origin exacto, CSRF e nonce5min de uso único. Sem bypass de Secure/CSRF para produção ou browser TEST. Rate budget DB, hashing bounded, lock AUTO15min não prolongável e lock MANUAL controlado.
+Runtimes sem superuser/BYPASSRLS/CREATEDB/CREATEROLE/membership/ownership. Sem INSERT/UPDATE/DELETE/TRUNCATE IAM directo. Funções tipadas têm owners NOLOGIN, search_path fixo, tabelas qualificadas e EXECUTE específico sem PUBLIC/LEAKPROOF. Mutação escolhe lock policy EXCLUSIVE antes dos subjects/sessions ordenados; leituras SHARE, sem upgrade. Audit e mudança são atómicos.
 
-App/auth separados e sem superuser/createdb/createrole/bypass, ownership ou DML IAM. FORCE RLS interno, SECURITY DEFINER mínimo/NOLOGIN/search_path seguro/nomes qualificados, EXECUTE PUBLIC revogado, sem SQL dinâmico nos comandos expostos. Hash lookup só auth pool, fronteira confiável declarada M1A. Binding backend+xid8, objecto request imutável, locks/deadlines; GUC isolado não autentica. Sem grant-all ou administração de entitlements.
+Delegação é configuração explícita, não inferida de permissions. Nenhum self grant ou edição de role própria; role administrativa atribuída não recebe mudança indirecta de permissions. Aprovação revalida maker, sessão original, atributos actuais, policy, payload e checker distinto; consumo único. Dois operadores utilizáveis e permanentes são protegidos contra remoções/agendamentos administrativos previsíveis. Lockout/expiração reais continuam fail-closed.
 
-Audit+mutação atómicos, failure rollback/503. Logs sanitizados testados contra secrets efémeros; outputs não exportam configuração secreta de fixtures. Bootstrap privado de deployment, duas identidades distintas, vazio/one-time; replay/runtime recusados. Migrations/checksums e hashes congelados protegidos em CI.
+SAST/SCA/secrets/container/SBOM: resultados medidos em EVIDENCE/M1/M1C/CHECKS.json e CI.md. Nenhum scan pendente significa PASS; nenhum HIGH/CRITICAL não resolvido pode ser aceite pelo gate. Revisão ASTRA independente posterior à CI é obrigatória.
 
-Npm audit/secret scan locais PASS; SAST/SCA/imagens/SBOM obrigatórios na CI final. Não declarar zero vulnerabilidades remotas antes da execução. Riscos auth service/DBA/recuperação/retencão/hardware/rede não são neutralizados por RLS. Sem PRODUCTION_READY ou avanço M1C/D/M2.
+Limites: auth process e migration/DBA são boundaries privilegiados; TLS/CA/provisionamento institucional, configuração de classificação/delegação, capacidade de hardware, recuperação, retenção e cópia externa de audit continuam responsabilidades de deployment. M1D/M2 não iniciados.

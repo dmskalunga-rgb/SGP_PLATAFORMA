@@ -1,0 +1,52 @@
+{
+  "stats": {
+    "startTime": "2026-11-11T19:58:24.897Z",
+    "duration": 13887.871000000001,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "one-time bootstrap → real TLS browser login → persistent session → logout → replay denied",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1664
+        }
+      ]
+    },
+    {
+      "title": "administrator revokes another real browser session → authenticated retry denied",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2028
+        }
+      ]
+    },
+    {
+      "title": "repeated invalid login locks account; valid credential remains denied and audit reconstructs sequence",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 3084
+        }
+      ]
+    },
+    {
+      "title": "M1C frontend hides unavailable action while direct API independently denies",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 1078
+        }
+      ]
+    }
+  ]
+}

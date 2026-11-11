@@ -35,7 +35,8 @@ jobs:
         run: bash scripts/ci-database.sh
       - run: npm run migrate
       - run: node scripts/provision-auth-test.mjs
-      - run: npm run test:integration
+      - name: M0 and M1B regression; M1C RBAC ABAC RLS SoD delegation and concurrency
+        run: npm run test:integration | tee artifacts/integration-tests.log
       - run: node scripts/provision-test-runtime.mjs
       - run: npx playwright install --with-deps chromium
       - name: Browser, API startup, web startup and health tests
@@ -43,7 +44,7 @@ jobs:
           DATABASE_URL: ${{ env.RUNTIME_DATABASE_URL }}
           AUTH_DATABASE_URL: ''
         run: npm run test:frontend
-      - name: M1B calibration and TLS identity/session browser E2E
+      - name: M1B calibration and TLS browser E2E; M1C frontend and API authorization
         run: |
           node scripts/calibrate-argon2.mjs
           mkdir -p .test-secrets

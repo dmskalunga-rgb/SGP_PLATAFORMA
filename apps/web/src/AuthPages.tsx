@@ -12,6 +12,7 @@ function errorMessage(error:unknown){return error instanceof Error?error.message
 export function AuthPages() {
   const path=window.location.pathname;
   const [csrf,setCsrf]=useState(''),[session,setSession]=useState<Session|null>(null),[pending,setPending]=useState(true),[error,setError]=useState('');
+  const [actions,setActions]=useState<string[]>([]),[roles,setRoles]=useState<{code:string}[]|null>(null);
   const initialRequest=useRef<ReturnType<typeof api>|null>(null);
   useEffect(()=>{
     let active=true;
@@ -21,6 +22,8 @@ export function AuthPages() {
     void request.catch(e=>{if(!active)return;if(path!=='/login'&&e.status===401)window.location.replace('/session-expired');else setError(errorMessage(e));}).finally(()=>{if(active)setPending(false);});
     return()=>{active=false;};
   },[path]);
+  useEffect(()=>{let active=true;if(path==='/profile')void fetch('/api/v1/security/capabilities',{credentials:'same-origin',cache:'no-store'}).then(async response=>{if(!response.ok)throw new Error('Autorização indisponível');return response.json();}).then(data=>{if(active)setActions(data.actions);}).catch(()=>{if(active)setActions([]);});return()=>{active=false;};},[path]);
+  async function viewRoles(){setPending(true);setError('');try{const response=await fetch('/api/v1/security/roles?limit=25&offset=0',{credentials:'same-origin',cache:'no-store'});if(!response.ok)throw new Error('Não foi possível consultar as funções autorizadas.');const data=await response.json();setRoles(data.items);}catch(e){setError(errorMessage(e));}finally{setPending(false);}}
   async function login(event:FormEvent<HTMLFormElement>) {
     event.preventDefault();const form=event.currentTarget;const data=new FormData(form);setPending(true);setError('');
     try {await api('login',{username:String(data.get('username')),password:String(data.get('password'))},csrf);form.reset();await api('session');window.location.replace('/profile');}
@@ -39,5 +42,6 @@ export function AuthPages() {
     {path==='/access-denied'&&<><h1>Acesso recusado</h1><p>Este pedido não está autorizado. Contacte o operador responsável se precisar de acesso.</p><a href="/login">Voltar à autenticação</a></>}
     {path==='/logout'&&<><h1>Terminar sessão</h1><p>A sessão será revogada no servidor antes de sair.</p>{session&&<button disabled={pending} onClick={()=>void logout()}>Confirmar saída</button>}</>}
     {path==='/profile'&&session&&<><h1>A minha sessão</h1><dl><dt>Nome</dt><dd>{session.user.display_name}</dd><dt>Utilizador</dt><dd>{session.user.username}</dd><dt>Autenticação</dt><dd>Palavra-passe</dd><dt>Expiração absoluta</dt><dd>{new Date(session.session.expires_at).toLocaleString('pt-AO')}</dd></dl><a href="/logout">Terminar sessão</a><h2>Alterar palavra-passe</h2><p>Entre 15 e 128 caracteres. A alteração termina todas as suas sessões.</p><form onSubmit={event=>void changePassword(event)}><label>Palavra-passe actual<input name="current" type="password" autoComplete="current-password" required maxLength={128} disabled={pending}/></label><label>Nova palavra-passe<input name="replacement" type="password" autoComplete="new-password" required minLength={15} maxLength={128} disabled={pending}/></label><button disabled={pending}>Alterar e terminar sessões</button></form></>}
+    {path==='/profile'&&session&&actions.includes('security.roles.read')&&<section aria-label="Consulta autorizada"><h2>Funções acessíveis</h2><button disabled={pending} onClick={()=>void viewRoles()}>Consultar funções autorizadas</button>{roles&&<ul>{roles.map(role=><li key={role.code}>{role.code}</li>)}</ul>}</section>}
   </main>;
 }

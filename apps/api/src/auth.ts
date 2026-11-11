@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import pg from 'pg';
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from 'node:crypto';
 import { PasswordService, HashCapacityError, type PasswordPolicy } from './password.js';
+import { PostgreSQLAuthorization } from './authorization.js';
 
 export type AuthConfig = { databaseUrl: string; origin: string; passwordPolicy: PasswordPolicy; poolSize?: number };
 declare module 'fastify' { interface FastifyRequest { auth: Readonly<Record<string, unknown>> | null } }
@@ -131,6 +132,78 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
     const result=await command(appPool,'SELECT iam.account_command($1,$2,$3,$4,$5,$6,$7,$8) AS ok',[raw,proof,input.target_id,input.action,input.session_id??null,...meta(req)]);
     if(!result[0].ok)throw new AuthError(403,'access_denied');
     return reply.status(204).send();
+  }));
+
+  // Minimal M1C proof surface. The complete IAM administration UI is M1D.
+  const uuid={type:'string',format:'uuid'},nullableUuid={anyOf:[uuid,{type:'null'}]};
+  const timestamp={type:'string',format:'date-time'},nullableTime={anyOf:[timestamp,{type:'null'}]};
+  const scoped={scope_kind:{type:'string',enum:['IAM_GLOBAL','SCOPED']},scope_id:nullableUuid};
+  const period={valid_from:timestamp,valid_to:nullableTime};
+  async function bound<T>(req:FastifyRequest,run:(client:pg.PoolClient,ctx:Readonly<Record<string,unknown>>)=>Promise<T>) {
+    transport(req,false);const raw=cookieValue(req,'__Host-sgp_session');if(!raw)throw new AuthError(401,'session_invalid');
+    return transaction(appPool,async client=>{
+      const ctx=(await client.query('SELECT iam.bind_request($1,false,$2,$3,$4) AS context',[raw,...meta(req)])).rows[0].context;
+      if(!ctx)throw new AuthError(401,'session_invalid');req.auth=freezeDeep(ctx);
+      const value=await run(client,req.auth!);await client.query('SELECT iam.finish_request()');return value;
+    });
+  }
+  app.get('/api/v1/security/capabilities',{schema:{response:{200:body({actions:{type:'array',items:string}}),...errors}}},safe(async req=>bound(req,async client=>({actions:(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions}))));
+  const lists=[['users','security.users.read','IAM_IDENTITY'],['roles','security.roles.read','IAM_ROLE'],['permissions','security.permissions.read','IAM_PERMISSION']] as const;
+  for(const [path,permission,list,count] of [
+    ['audit','security.audit.read','SELECT id,actor_id,target_id,action,occurred_at,result,session_id,request_id,correlation_id,policy_version,decision_id,before_state,after_state FROM iam.authorization_events ORDER BY occurred_at DESC,id LIMIT $1 OFFSET $2','SELECT count(*)::int AS total FROM iam.authorization_events'],
+    ['sessions','security.sessions.read','SELECT id,user_id,created_at,expires_at,idle_expires_at,revoked_at,authentication_strength FROM iam.sessions ORDER BY id LIMIT $1 OFFSET $2','SELECT count(*)::int AS total FROM iam.sessions'],
+  ])app.get('/api/v1/security/'+path,{schema:{querystring:{type:'object',additionalProperties:false,properties:{limit:{type:'string',pattern:'^[1-9][0-9]?$|^100$'},offset:{type:'string',pattern:'^[0-9]{1,6}$'}}}}},safe(async req=>bound(req,async client=>{
+    const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!actions.includes(permission))throw new AuthError(403,'access_denied');
+    const q=req.query as {limit?:string;offset?:string};return {items:(await client.query(list,[Number(q.limit??25),Number(q.offset??0)])).rows,total:(await client.query(count)).rows[0].total};
+  })));
+  const queries={
+    users:{list:'SELECT id,username,display_name,status FROM iam.users ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.users',one:'SELECT id,username,display_name,status FROM iam.users WHERE id=$1'},
+    roles:{list:'SELECT id,code,status,version FROM iam.roles ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.roles',one:'SELECT id,code,status,version FROM iam.roles WHERE id=$1'},
+    permissions:{list:'SELECT id,code,action,resource_type,status FROM iam.permissions ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.permissions',one:'SELECT id,code,action,resource_type,status FROM iam.permissions WHERE id=$1'},
+  };
+  for(const [name,permission,type] of lists) {
+    app.get('/api/v1/security/'+name,{schema:{querystring:{type:'object',additionalProperties:false,properties:{limit:{type:'string',pattern:'^[1-9][0-9]?$|^100$'},offset:{type:'string',pattern:'^[0-9]{1,6}$'}}}}},safe(async req=>bound(req,async client=>{
+      const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];
+      if(!actions.includes(permission))throw new AuthError(403,'access_denied');
+      const query=req.query as {limit?:string;offset?:string};
+      const rows=await client.query(queries[name].list,[Number(query.limit??25),Number(query.offset??0)]);
+      const count=await client.query(queries[name].count);
+      return {items:rows.rows,total:count.rows[0].total};
+    })));
+    app.get('/api/v1/security/'+name+'/:id',{schema:{params:body({id:uuid})}},safe(async req=>{
+      const row=await bound(req,async(client,ctx)=>{
+        const id=(req.params as {id:string}).id;
+        // Lookup is already under RLS; hidden and absent objects are identical.
+        const found=(await client.query(queries[name].one,[id])).rows[0];
+        const decision=await new PostgreSQLAuthorization(client).authorize(String(ctx.user_id),permission,{type,id},ctx);
+        return decision.decision==='ALLOW'?found:null;
+      });
+      // Commit a read-only denial audit before returning the public 404.
+      if(!row)throw new AuthError(404,'not_found');return row;
+    }));
+  }
+  const mutations:[string,Record<string,unknown>,string,(input:Record<string,unknown>)=>unknown[]][]=[
+    ['roles', {code:{type:'string',pattern:'^[A-Z][A-Z0-9_]{2,63}$'},...scoped,classification_id:uuid,compartments:{type:'array',items:uuid,maxItems:32,uniqueItems:true},privileged:{type:'boolean'}},'SELECT iam.create_role($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) AS id',v=>[v.code,v.scope_kind,v.scope_id,v.classification_id,v.compartments,v.privileged]],
+    ['role-permissions',{role_id:uuid,permission_id:uuid,enabled:{type:'boolean'}},'SELECT iam.set_role_permission($1,$2,$3,$4,$5,$6,$7,$8)',v=>[v.role_id,v.permission_id,v.enabled]],
+    ['approvals',{target_id:uuid,operation:{type:'string',enum:['ROLE_GRANT','CLEARANCE_GRANT','COMPARTMENT_GRANT']},payload:{type:'object',maxProperties:5},idempotency_key:uuid},'SELECT iam.request_approval($1,$2,$3,$4,$5,$6,$7,$8,$9) AS id',v=>[v.target_id,v.operation,v.payload,v.idempotency_key]],
+    ['assignments',{target_id:uuid,role_id:uuid,...scoped,...period,approval_id:nullableUuid},'SELECT iam.assign_role($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) AS id',v=>[v.target_id,v.role_id,v.scope_kind,v.scope_id,v.valid_from,v.valid_to,v.approval_id]],
+    ['clearances',{target_id:uuid,classification_id:uuid,...period,approval_id:nullableUuid},'SELECT iam.grant_clearance($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',v=>[v.target_id,v.classification_id,v.valid_from,v.valid_to,v.approval_id]],
+    ['compartments',{target_id:uuid,compartment_id:uuid,...period,approval_id:nullableUuid},'SELECT iam.grant_compartment($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',v=>[v.target_id,v.compartment_id,v.valid_from,v.valid_to,v.approval_id]],
+    ['assignment-revocations',{assignment_id:uuid},'SELECT iam.revoke_assignment($1,$2,$3,$4,$5,$6)',v=>[v.assignment_id]],
+  ];
+  for(const [path,properties,sql,args] of mutations)app.post('/api/v1/security/'+path,{bodyLimit:8192,schema:{body:body(properties),response:{200:body({completed:{type:'boolean'},id:nullableUuid}),...errors}}},safe(async(req)=>{
+    transport(req,true);const raw=cookieValue(req,'__Host-sgp_session');if(!raw)throw new AuthError(401,'session_invalid');const proof=csrf(req,raw);
+    try {const rows=await command(appPool,sql,[raw,proof,...args(req.body as Record<string,unknown>),...meta(req)]);return {completed:true,id:rows[0].id??null};}
+    catch(error){
+      if(error&&typeof error==='object'&&'code' in error&&(error.code==='PT403'||error.code==='PT401')){
+        if(error.code==='PT403'){
+          const input=req.body as Record<string,unknown>;
+          await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.target_id??null,...meta(req)]);
+        }
+        throw new AuthError(error.code==='PT401'?401:403,error.code==='PT401'?'session_invalid':'access_denied');
+      }
+      throw error;
+    }
   }));
 }
 

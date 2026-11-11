@@ -22,3 +22,14 @@ test('repeated invalid login locks account; valid credential remains denied and 
  await page.goto('/login');await page.getByLabel('Utilizador',{exact:true}).fill(fixture.people[1].username);await page.getByLabel('Palavra-passe',{exact:true}).fill(fixture.people[1].password);await page.getByRole('button',{name:'Entrar',exact:true}).click();await expect(page.getByRole('alert')).toContainText('Não foi possível autenticar');
  const db=new pg.Client({connectionString:fixture.connections.owner});await db.connect();try{const result=await db.query('SELECT event FROM iam.authentication_events WHERE target_id=$1 ORDER BY occurred_at',[fixture.people[1].id]);expect(result.rows.filter(r=>r.event==='LOGIN_FAILURE').length).toBeGreaterThanOrEqual(6);expect(result.rows.some(r=>r.event==='ACCOUNT_LOCKED')).toBeTruthy();}finally{await db.end();}
 });
+
+test('M1C frontend hides unavailable action while direct API independently denies',async({page})=>{
+ await login(page,fixture.people[0]);
+ const action=page.getByRole('button',{name:'Consultar funções autorizadas'});await expect(action).toBeVisible();await action.click();await expect(page.getByText('SECURITY_BOOTSTRAP_OPERATOR',{exact:true})).toBeVisible();
+ const db=new pg.Client({connectionString:fixture.connections.owner});await db.connect();
+ try{
+  await db.query("DELETE FROM iam.role_permissions WHERE role_id=(SELECT id FROM iam.roles WHERE code='SECURITY_BOOTSTRAP_OPERATOR') AND permission_id=(SELECT id FROM iam.permissions WHERE code='security.roles.read')");
+  await page.reload();await expect(page.getByRole('heading',{name:'A minha sessão'})).toBeVisible();await expect(action).toHaveCount(0);
+  expect((await page.request.get('/api/v1/security/roles')).status()).toBe(403);
+ }finally{await db.query("INSERT INTO iam.role_permissions SELECT r.id,p.id FROM iam.roles r CROSS JOIN iam.permissions p WHERE r.code='SECURITY_BOOTSTRAP_OPERATOR' AND p.code='security.roles.read' ON CONFLICT DO NOTHING");await db.end();}
+});

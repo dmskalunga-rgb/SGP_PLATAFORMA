@@ -1,18 +1,17 @@
-# M1 — rastreabilidade M1B
+# M1C — rastreabilidade
 
-Desenho: contratos FROZEN/ADR007–010 exactos. DoR: docs/requirements/M1B-PLAN.md. Evidência: EVIDENCE/M1/M1B/{CHECKS.json,LOCAL-TESTS.json,M1B-GATE.md,CI.md}.
+| Ordem canónica | Implementação / prova |
+|---|---|
+| §§1–4, 14–16 | DoR M1C-PLAN; AuthorizationPort PostgreSQL, default deny e HTTP 401/403/404/503 |
+| §§5–8 | Catálogo exacto, effective_grants vinculados e scopes IAM_SCOPE; testes RBAC |
+| §§9–13 | user_security_attributes, scope/location, classifications/clearances e compartments; matriz API/SQL e limiares |
+| §§17–25 | FORCE RLS, binding privado (pid,xid8), GUCs derivados, ACL sem DML, executores tipados/search_path |
+| §§26–30 | policy locks, subject_version, UUID order, revogação linearizada e timeouts M1B |
+| §§31–38 | SoD estática/temporal/dinâmica, grantable_set/ceiling, approvals/hash/session/version/idempotency e capacidade de dois operadores |
+| §§39–54 | Matriz comum, USING/WITH CHECK/DELETE, paginação/count/ID protegido, audit atomicity, SQL bypass, pool/savepoints |
+| §§55–56 | Perfil com consulta mínima autorizada; browser/API prova UX; fixtures apenas TEST |
+| §§57–62 | CI integra regressões, 19 testes M1C, negativos por executor e três E2Es PostgreSQL reais |
+| §§63–67 | Evidências M1C, CI por SHA, Git note final e revisão independente ASTRA |
+| §§68–72 | Escopo M1C; ASTRA só revisão; STOP antes de M1D/M2 |
 
-| Requisito | Código/migration/API | Teste/evidência |
-|---|---|---|
-| SGP-IAM-001 identity/lifecycle | 002 users/credentials; auth.ts; account-command | authentication.test.mjs lifecycle/status/self/últimos operadores; AUTH-TESTS |
-| SGP-IAM-002 password | password.ts; credentials; bootstrap CLI/change-password | password.test.mjs; PASSWORD-HASHING/ARGON2-CALIBRATION |
-| SGP-SES-001 sessões/revogação | sessions/bind/login/logout/rotate/change_password/account_command | expiry/replay/rotation/all/concurrency/deadline; SESSION-TESTS |
-| SGP-CTX-001/002 contexto | request.auth immutable; binding/SET LOCAL/finish; app/auth pools | A/B/poolmax1/GUC/rollback/rebind |
-| SGP-AUD-001 audit | authentication_events/event + transacções | audit rollback/log capture/browser sequência; AUDIT-EVIDENCE |
-| SGP-BOOT-001 bootstrap | stdin privado; bootstrap empty-only/dois operadores | replay/runtime deny, CLI real browser; BOOTSTRAP |
-| SGP-SEC-001 TLS/CSRF/rate | auth.ts/nonce/rate_buckets/gateway/ViteTLS | schemas/Origin/nonce/rate/flags/lockout |
-| SGP-FE-001 frontend real | AuthPages login/logout/expired/denied/profile | 3 TLS browser E2E, backend/DB reais |
-| SGP-GOV-001 integridade/regressão | frozen guard pinado/ci.yml/helpers DB isolado | cópia adulterada recusada; M0 suites/CI |
-| SGP-RLS-001 interno mínimo | 002 FORCE/privileges/NOLOGIN/commands | SQL app/auth deny; flags; sem RLS de negócio |
-
-RBAC/ABAC/CLS/CMP/SoD completos continuam em desenho, sem motor/admin UI desta subfase. Metadados de suporte existem conforme M1B; não autorizam M1C. Migrations001+002 e OpenAPI de endpoints reais; sem M2.
+Evidências por controlo: EVIDENCE/M1/M1C/. Contratos FROZEN e master não modificados. M1B continua em migration 002, sem drift de checksum; migration 003 é incremental.
