@@ -7,5 +7,15 @@ paths = [
   '''(^|/)node_modules/''',
   '''(^|/)artifacts/''',
   '''(^|/)dist/''',
-  '''(^|/).test-secrets/'''
+  '''(^|/)\.test-secrets/''',
+  '''(^|/)\.tools/'''
 ]
+
+# Verified public Git object ID, not a Sourcegraph credential.
+# https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/8f4919c6949119ae1523c4c37a1feac7d831f10d
+[[rules]]
+id = "sourcegraph-access-token"
+[[rules.allowlists]]
+description = "Exact initial public Git commit identifier, independently verified by git rev-parse and GitHub"
+regexTarget = "secret"
+regexes = ['''^8f4919c6949119ae1523c4c37a1feac7d831f10d$''']

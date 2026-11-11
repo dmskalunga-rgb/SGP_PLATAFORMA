@@ -1,7 +1,10 @@
 # Local baseline only. Production requires the institutional TLS/secrets/deployment review.
 services:
   db:
-    image: postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
+    build:
+      context: .
+      dockerfile: infrastructure/docker/postgres.Dockerfile
+    image: sgp-postgres:m0
     user: postgres
     environment:
       POSTGRES_USER: sgp_owner

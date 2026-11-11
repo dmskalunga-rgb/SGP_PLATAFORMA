@@ -29,6 +29,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: npm run test:unit
+      - run: docker build -f infrastructure/docker/postgres.Dockerfile -t sgp-postgres:m0 .
       - name: Start real disposable PostgreSQL
         run: bash scripts/ci-database.sh
       - run: npm run migrate
@@ -96,6 +97,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: mkdir -p artifacts && npm ci
+      - run: docker build -f infrastructure/docker/postgres.Dockerfile -t sgp-postgres:m0 .
       - run: docker build -f infrastructure/docker/api.Dockerfile -t sgp-api:m0 .
       - run: docker build -f infrastructure/docker/web.Dockerfile -t sgp-web:m0 .
       - name: Non-root, read-only, least privilege, runtime health and database failure
@@ -106,9 +108,8 @@ jobs:
             docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --format json --output "/src/artifacts/$image-vulnerabilities.json" "sgp-$image:m0"
             docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --format cyclonedx --output "/src/artifacts/$image.cdx.json" "sgp-$image:m0"
           done
-          docker pull postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --format json --output /src/artifacts/postgres-vulnerabilities.json postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --format cyclonedx --output /src/artifacts/postgres.cdx.json postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --scanners vuln --severity HIGH,CRITICAL --exit-code 1 --format json --output /src/artifacts/postgres-vulnerabilities.json sgp-postgres:m0
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/src" aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb image --timeout 20m --no-progress --format cyclonedx --output /src/artifacts/postgres.cdx.json sgp-postgres:m0
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:

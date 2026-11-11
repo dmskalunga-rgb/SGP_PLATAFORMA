@@ -10,7 +10,7 @@ echo "DATABASE_URL=postgresql://sgp_owner:$POSTGRES_PASSWORD@127.0.0.1:55433/sgp
 echo "RUNTIME_DATABASE_URL=postgresql://sgp_runtime:$RUNTIME_PASSWORD@127.0.0.1:55433/sgp_test" >> "$GITHUB_ENV"
 docker network create sgp-m0-test
 # TEST only; random credentials are generated per run and discarded with the container.
-docker run -d --name sgp-m0-test-db --network sgp-m0-test --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55433:5432 postgres:17-alpine@sha256:3540c0362c809df084ffac0ae69fe794515f9de92692f02178bcdce0ef0302ac
+docker run -d --name sgp-m0-test-db --network sgp-m0-test --env POSTGRES_PASSWORD --env POSTGRES_USER=sgp_owner --env POSTGRES_DB=sgp_test -p 127.0.0.1:55433:5432 sgp-postgres:m0
 for attempt in $(seq 1 60); do
   if docker exec sgp-m0-test-db pg_isready -h 127.0.0.1 -U sgp_owner -d sgp_test; then exit 0; fi
   sleep 1
