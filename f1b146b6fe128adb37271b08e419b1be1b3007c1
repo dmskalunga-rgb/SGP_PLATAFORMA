@@ -1,0 +1,293 @@
+{
+  "Repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
+  "Branch": "main",
+  "Base Commit": "58834d8edb3c4b07c2fc9b68c0900886e0e8d12c",
+  "Final Commit": "f1b146b6fe128adb37271b08e419b1be1b3007c1",
+  "Workflow Run": 43026166195,
+  "Workflow URL": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43026166195",
+  "Workflow Result": "success",
+  "Workflow Jobs": [
+    {
+      "name": "Container security",
+      "conclusion": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43026166195/job/130541292240"
+    },
+    {
+      "name": "Foundation tests",
+      "conclusion": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43026166195/job/130541292528"
+    },
+    {
+      "name": "Source security and SBOM",
+      "conclusion": "success",
+      "url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43026166195/job/130541292573"
+    }
+  ],
+  "Master SHA-256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "M1A Integrity": "PASS; 11 exact frozen hashes, protected manifest, no contract change",
+  "Frozen Manifest": {
+    "algorithm": "SHA-256",
+    "scope": "M1A architecture only",
+    "status": "FROZEN/APPROVED",
+    "review": "ASTRA-REVIEW.md",
+    "files": [
+      {
+        "path": "docs/security/SECURITY-CONTEXT-CONTRACT.md",
+        "sha256": "62116341B2B61E2B9354E8BB601C2AE36A74CBAB2461EC413898D54A2AE0672E",
+        "reviewed_draft_sha256": "99F5DD63252F8DD4B28EC4EB99F792F57F8B45623F4D95BFCE370614C875CD4D",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/AUTHORIZATION-MODEL.md",
+        "sha256": "71261492F42E8AB28912071B99751B19756EABCEB01E9E006275215293B8006B",
+        "reviewed_draft_sha256": "831B0A56FC8B31F3567EE4A6A8124A276780367720D15A7255409EC3FA0609F0",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/RBAC-ABAC-MODEL.md",
+        "sha256": "D0261D579F916568B9571318BC8E0D55C818B2E0E1E4826B9F1B4DB26D9049B0",
+        "reviewed_draft_sha256": "8F40AC668B7ADB119E2DDCB2A92F0CBA7095F2C58FDDB1BC1B545D014B1B727A",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/RLS-DESIGN.md",
+        "sha256": "D510F57213675C061185822280E3769751A70D384E02676C030F38AD768D74A2",
+        "reviewed_draft_sha256": "53AB088661715DF5B798A2996E1C4A8C7A0E3BC1E93C736ACC6461D4D755A861",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/SESSION-MODEL.md",
+        "sha256": "F1438F80DF97AFC26EF647F402AA42B3F92EC2207662EA2C8DD1DF65E15C1CC8",
+        "reviewed_draft_sha256": "A92ACD200F28A88C72F2BD5E9D37BCFFD859151919DA9035E1CB807C3F799523",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/CLASSIFICATION-MODEL.md",
+        "sha256": "65A8D2216D93C71A397418CE99F98C59A3E394E3669F737596D8EA7837A2BBF5",
+        "reviewed_draft_sha256": "827873F484A7A9347B252E43BB3AD49213E09DDD714D79A1C8AD61B318288D41",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/security/SEGREGATION-OF-DUTIES.md",
+        "sha256": "0DC89AD5C9FC32324E47C976357942DE162A095E6C95BEAD52B98C4FA495A793",
+        "reviewed_draft_sha256": "4FC5556369F3562AFB051461F764439680A0544C99865546F2BE66F9E8493029",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-007-security-context-propagation.md",
+        "sha256": "B94DF9EF837D21321CEAF9281D3057EA2505D82408D27F90A6D72B866B7F3C97",
+        "reviewed_draft_sha256": "A7A2B530122A18843E5119043582D132E0F42649646CB8387541EAE893EE083B",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-008-authorization-decision-model.md",
+        "sha256": "5B9D509E9B9CB0F96529E652D5902FCE4E2DB88562380548CC5025ECEFF841BE",
+        "reviewed_draft_sha256": "F0619457FD55BEB6B57528CC2143175B7263FB3E01C33A2212CBADF6E5DD4D2C",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-009-session-architecture.md",
+        "sha256": "AFD539C8040894B7C4B2E62A81200D5C9A4220CCECDEB39853B1E04AFA534426",
+        "reviewed_draft_sha256": "408E5E3A269796067AECF36A3F1ADF48C4731179B98E9A099AEFCDA3E09D7EF0",
+        "change": "status words only"
+      },
+      {
+        "path": "docs/adr/ADR-010-postgresql-rls-context.md",
+        "sha256": "1DE668ECCE521313010BBF17952241AD75FB71E0691533A94F138E89902AB4FB",
+        "reviewed_draft_sha256": "E2A4BE877EF54C0A3B6C4A70D18B86D7A6D5B0DF291B6E986F5BF0DA6F95F3E8",
+        "change": "status words only"
+      }
+    ]
+  },
+  "Gate Matrix": {
+    "PostgreSQL schema": "PASS",
+    "Migrations": "PASS",
+    "Users lifecycle": "PASS",
+    "Authentication": "PASS",
+    "Credential Security": "PASS",
+    "Argon2": "PASS",
+    "Password policy": "PASS",
+    "Failure handling": "PASS",
+    "Lockout": "PASS",
+    "Sessions": "PASS",
+    "Session persistence": "PASS",
+    "Session expiration": "PASS",
+    "Revocation": "PASS",
+    "Logout": "PASS",
+    "Context isolation": "PASS",
+    "Audit": "PASS",
+    "Bootstrap": "PASS",
+    "Frontend": "PASS",
+    "Browser E2E": "PASS",
+    "API tests": "PASS",
+    "Database tests": "PASS",
+    "Security tests": "PASS",
+    "M0 Regression": "PASS",
+    "M1A integrity": "PASS",
+    "CI": "PASS",
+    "SAST": "PASS",
+    "SCA": "PASS",
+    "Secret scan": "PASS",
+    "Container scan": "PASS",
+    "SBOM": "PASS",
+    "No operational mocks": "PASS"
+  },
+  "Tests": {
+    "unit": 4,
+    "integration_API_DB": 17,
+    "M0_browser": 2,
+    "M1B_TLS_browser": 3,
+    "total": 26,
+    "fail": 0,
+    "skip": 0,
+    "flaky": 0,
+    "evidence": "local complete suite, affected command retest, all remote Foundation steps success, raw browser reports verified"
+  },
+  "Security Scans": {
+    "npm_audit_total_vulnerabilities": 0,
+    "Gitleaks_source": 0,
+    "Gitleaks_history": 0,
+    "Semgrep_findings": 0,
+    "Semgrep_errors": 0,
+    "Semgrep_scanned_files": [
+      "apps/api/package.json",
+      "apps/api/src/app.ts",
+      "apps/api/src/auth.ts",
+      "apps/api/src/config.ts",
+      "apps/api/src/index.ts",
+      "apps/api/src/password.ts",
+      "apps/api/tsconfig.json",
+      "apps/web/index.html",
+      "apps/web/package.json",
+      "apps/web/src/App.tsx",
+      "apps/web/src/AuthPages.tsx",
+      "apps/web/src/auth.css",
+      "apps/web/src/main.tsx",
+      "apps/web/src/vite-env.d.ts",
+      "apps/web/tsconfig.json",
+      "apps/web/vite.config.ts",
+      "scripts/migrate.mjs"
+    ],
+    "Trivy": {
+      "trivy-sca.json": {
+        "HIGH": 0,
+        "CRITICAL": 0
+      },
+      "api-vulnerabilities.json": {
+        "HIGH": 0,
+        "CRITICAL": 0
+      },
+      "web-vulnerabilities.json": {
+        "HIGH": 0,
+        "CRITICAL": 0
+      },
+      "postgres-vulnerabilities.json": {
+        "HIGH": 0,
+        "CRITICAL": 0
+      }
+    },
+    "SBOMs": {
+      "dependencies.cdx.json": {
+        "components": 65,
+        "sha256": "07B6A9EBA3104159B7E5FC025D13EE63D79DBFCA20C43831E71FD4E6CB1403F0"
+      },
+      "api.cdx.json": {
+        "components": 111,
+        "sha256": "481A9D547A544A73B7F6C1909A0E0B60BA9B64B56E50E67C98DF0CFB1401E389"
+      },
+      "web.cdx.json": {
+        "components": 71,
+        "sha256": "4B0D0163FC0FCBC8698F12BEC370B57453150B9F4B2EC95668EF0842A937F4CB"
+      },
+      "postgres.cdx.json": {
+        "components": 46,
+        "sha256": "D076F37F30C96A7E51B28ADF6A9978652C08B15FE5577D3DAEB4CE5FE4EC7770"
+      }
+    }
+  },
+  "Argon2 CI Calibration": {
+    "algorithm": "Argon2id",
+    "version": 19,
+    "memoryCost": 65536,
+    "timeCost": 3,
+    "parallelism": 1,
+    "minimum": 15,
+    "maximum": 128,
+    "concurrency": 2,
+    "hash_length_bytes": 32,
+    "salt_length_bytes": 16,
+    "measurements": [
+      {
+        "hash_ms": 149.674949,
+        "verify_ms": 151.40387599999997
+      },
+      {
+        "hash_ms": 149.97925700000002,
+        "verify_ms": 147.665705
+      },
+      {
+        "hash_ms": 147.57507599999997,
+        "verify_ms": 145.74165900000003
+      },
+      {
+        "hash_ms": 148.69387099999994,
+        "verify_ms": 147.15423099999998
+      },
+      {
+        "hash_ms": 145.16373199999998,
+        "verify_ms": 143.929531
+      },
+      {
+        "hash_ms": 145.57167200000004,
+        "verify_ms": 147.97899899999993
+      },
+      {
+        "hash_ms": 147.69135300000016,
+        "verify_ms": 144.97437899999977
+      }
+    ],
+    "hash_median_ms": 147.69135300000016,
+    "hash_max_ms": 149.97925700000002,
+    "node": "v24.22.2",
+    "platform": "linux",
+    "architecture": "x64",
+    "CPU": "AMD EPYC 7763 64-Core Processor",
+    "logical_CPUs": 4,
+    "total_memory_bytes": 16759439360,
+    "measured_at_UTC": "2026-11-11T13:07:55.495Z",
+    "decision": "Keep frozen baseline; bounded concurrency=2, no silent weakening; validate institutional target hardware before production"
+  },
+  "CI report hashes": {
+    "api-vulnerabilities.json": "88419DD428DF2672A0F1D17EEFD4FAA19C1267A38B28039EC7DEEBCD6D3832A5",
+    "api.cdx.json": "481A9D547A544A73B7F6C1909A0E0B60BA9B64B56E50E67C98DF0CFB1401E389",
+    "container-ready-unavailable.json": "774A5957E1E1B76E5BA7D6A9B803E215B28D31AC0FAE1DF873A96758E7FB35EF",
+    "container-ready.json": "A29EE2B15C494311C52521766E44AF56A3AD2248E7A8AB465E5206463C13D288",
+    "postgres-vulnerabilities.json": "513BFE3FD26B0E8FD75C8AD085981916AE8A93CA97E48600E6E033B5303C13CF",
+    "postgres.cdx.json": "D076F37F30C96A7E51B28ADF6A9978652C08B15FE5577D3DAEB4CE5FE4EC7770",
+    "web-vulnerabilities.json": "C4DD344396DDF7CE9C1F9DED48DF3070AD1C26CDDB0E94E68CA4E5FCF5BE8DC1",
+    "web.cdx.json": "4B0D0163FC0FCBC8698F12BEC370B57453150B9F4B2EC95668EF0842A937F4CB",
+    "dependencies.cdx.json": "07B6A9EBA3104159B7E5FC025D13EE63D79DBFCA20C43831E71FD4E6CB1403F0",
+    "gitleaks-history.json": "37517E5F3DC66819F61F5A7BB8ACE1921282415F10551D2DEFA5C3EB0985B570",
+    "gitleaks-worktree.json": "37517E5F3DC66819F61F5A7BB8ACE1921282415F10551D2DEFA5C3EB0985B570",
+    "npm-audit.json": "D961D63156955FD0C1AD708F40B66874D26CE4F410CD81B92AAC16A92C8268D4",
+    "semgrep.json": "BC4E72B20EA169664FA84F2998CFBEA2E3D34E47D00C818012B09DED75D432F7",
+    "trivy-sca.json": "EFCCAAB7B7246A031DB655EDCBC812F415555F275A0701DAC5A40272AAFF6966",
+    "argon2-calibration.json": "62B5E4E7344C1E5E3A224ABFCA303B232A966D86AF04AE461EABBCBAF25B3792",
+    "auth-browser-results.json": "AF9E8345D76EEA07B13431B60DF2347AD9A295A3B1EB302C5632CFB782F23DEF",
+    "frontend-results.json": "51A2F12737D0633533515D31248792EB7BD9CCBE5325D02EA36CEDA6E785B7E9"
+  },
+  "M1B_GATE": "PASS",
+  "M1C": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+  "M1D": "BLOCKED",
+  "M2": "BLOCKED",
+  "Scope": "M1B only; operator explicitly authorized internal FORCE RLS required by M1A, no business RBAC/ABAC/RLS engine or complete administration",
+  "Operational mocks": 0,
+  "Residual Risks": [
+    "Auth service and DBA remain trusted privileged boundaries; secrets/TLS/CA and recovery/retention require institutional operations",
+    "Validate Argon2 resource sizing and expand controlled common-password corpus on institutional hardware before production",
+    "GitHub CI artifacts have retention; raw verified copies preserved locally in artifacts/M1B-CI; this durable Git note preserves report hashes and gate summaries"
+  ],
+  "Evidence Record": "refs/notes/m1b-gate published on this exact CI-validated commit; local artifacts/M1B-FINAL-GATE.json",
+  "Checked at UTC": "2026-11-11T19:07:58.303893+00:00",
+  "Recommended Next Action": "Human review of evidence; explicit new authorization before M1C. STOP."
+}
