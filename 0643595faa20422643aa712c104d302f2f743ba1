@@ -1,0 +1,98 @@
+{
+  "repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
+  "branch": "main",
+  "base_sha": "eb24736e5d857a3c82ffa6123d1905a3dddc04de",
+  "technical_sha": "0643595faa20422643aa712c104d302f2f743ba1",
+  "closure_sha": "7ee4db8c987c4a73e6330be1441ec228ae3f8e0c",
+  "workflows": [
+    {
+      "run_id": 43205905235,
+      "sha": "0643595faa20422643aa712c104d302f2f743ba1",
+      "result": "PASS",
+      "jobs": {
+        "Foundation tests": "success",
+        "Source security and SBOM": "success",
+        "Container security": "success"
+      }
+    },
+    {
+      "run_id": 43206752397,
+      "sha": "7ee4db8c987c4a73e6330be1441ec228ae3f8e0c",
+      "result": "PASS",
+      "jobs": {
+        "Container security": "success",
+        "Foundation tests": "success",
+        "Source security and SBOM": "success"
+      }
+    }
+  ],
+  "artifacts": {
+    "technical": [
+      {
+        "id": 13938091321,
+        "name": "m0-tests-0643595faa20422643aa712c104d302f2f743ba1",
+        "digest": "sha256:d9ec7b7ebf7ec4fb595861816c3eb2afe74e5a20bbe96eb1450c9423c85ecb41"
+      },
+      {
+        "id": 13937806854,
+        "name": "m0-source-security-0643595faa20422643aa712c104d302f2f743ba1",
+        "digest": "sha256:33162d8efe7c38a94066f1a1997f8cf7542c6c32ba6cc37c4b4faba31690ab68"
+      },
+      {
+        "id": 13937482704,
+        "name": "m0-container-security-0643595faa20422643aa712c104d302f2f743ba1",
+        "digest": "sha256:decf170eb032f13a26baddb584baf4f596138cce76f6b252de5e3c1afde6a910"
+      }
+    ],
+    "closure": [
+      {
+        "id": 13938831304,
+        "name": "m0-source-security-7ee4db8c987c4a73e6330be1441ec228ae3f8e0c",
+        "digest": "sha256:0294d004450330dfa6b445334ebb0fbbe5bf284f53dc7252df0df431ed153b86"
+      },
+      {
+        "id": 13936454324,
+        "name": "m0-tests-7ee4db8c987c4a73e6330be1441ec228ae3f8e0c",
+        "digest": "sha256:792645ae6b67eed16db5c75d07e792a54c3755bb72de860f6ea83419913fb9f8"
+      },
+      {
+        "id": 13936219951,
+        "name": "m0-container-security-7ee4db8c987c4a73e6330be1441ec228ae3f8e0c",
+        "digest": "sha256:940df175036dd14b2a76e994863a171ce4b83c40cb83062437483dca8a48c186"
+      }
+    ]
+  },
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "frozen_guard": "PASS_MASTER_PLUS_11",
+  "normal_tests": 48,
+  "failures": 0,
+  "skips": 0,
+  "proof": {
+    "negative": 23,
+    "positive": 0,
+    "controlled_node_test_failure": 1
+  },
+  "security_scans": "PASS_ZERO_BLOCKING_FINDINGS_4_SBOMS",
+  "independent_reviewer": {
+    "agent": "/root/medium_final_review",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "fork_turns": "none",
+    "read_only": true,
+    "result": "PASS_8_OF_8"
+  },
+  "findings": {
+    "M1C-ASTRA-HIGH-001": "CLOSED",
+    "M1C-SUB-MEDIUM-001": "CLOSED",
+    "new_blocking": 0
+  },
+  "limits": [
+    "Controlled failing test is temporary node:test, not PostgreSQL; normal PostgreSQL regression passed",
+    "Policy checker guards current workflow format and inventory, not arbitrary YAML/Shell"
+  ],
+  "decision": {
+    "M1C_GATE": "PASS",
+    "M1D": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+    "M2": "BLOCKED"
+  }
+}
