@@ -26,3 +26,5 @@ Evidências por controlo: EVIDENCE/M1/M1C/. Contratos FROZEN e master não modif
 Migrações 001–003 e contratos FROZEN permanecem inalterados.
 
 Fecho H1: CI do commit técnico corrigido no [run 43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976) PASS. A etapa independente ASTRA foi recusada automaticamente antes da execução; §32–34 da ordem H1 continuam insatisfeitos. HIGH-001 OPEN, M1C_GATE FAIL, M1D/M2 BLOCKED.
+
+`CR-M1C-REVIEW-001` substituiu apenas a identidade do reviewer. Parecer independente em `EVIDENCE/M1/M1C/INDEPENDENT-REVIEW-H1.md`: H1-01–17 PASS; matriz original 39 PASS, ponto 37 FAIL devido a `M1C-SUB-MEDIUM-001` na CI. Parecer final FAIL; nenhuma alteração técnica implementada nesta revisão. HIGH-001 OPEN para governação, M1C_GATE FAIL.

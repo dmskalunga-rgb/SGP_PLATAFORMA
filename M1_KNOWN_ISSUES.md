@@ -21,3 +21,5 @@ Não há autorização para M1D/M2. PASS M1C não fecha M1 completo nem autoriza
 Finding activo: `M1C-ASTRA-HIGH-001` — extensão temporal de clearance sem maker-checker no SHA original. Corrigido na candidatura local via migration 004, mas ainda OPEN para governação até CI remota e ASTRA re-review do novo commit. `M1C_GATE = FAIL`; M1D/M2 bloqueados.
 
 Actualização: a CI remota da correcção passou no [run 43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976). A re-review ASTRA do SHA corrigido não ocorreu: a revisão automática rejeitou a tarefa por possível risco de cibersegurança. Finding OPEN para closure formal; M1C_GATE FAIL. Não há autorização para M1D/M2.
+
+`CR-M1C-REVIEW-001`: revisor substituto independente confirmou HIGH-001 FIXED tecnicamente, mas registou `M1C-SUB-MEDIUM-001` OPEN/BLOCKING em `.github/workflows/ci.yml:39`: `npm run test:integration | tee` sem `pipefail` pode mascarar falhas futuras. Os 48 testes observados passaram realmente. É necessária correcção focal do workflow, prova de falha controlada, nova CI e revisão independente antes de reavaliar o gate. M1C_GATE FAIL; M1D/M2 BLOCKED.

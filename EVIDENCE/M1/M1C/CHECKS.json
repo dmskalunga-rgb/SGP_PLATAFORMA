@@ -203,6 +203,22 @@
     "finding_status": "OPEN",
     "M1C_GATE": "FAIL",
     "M1D": "BLOCKED",
-    "M2": "BLOCKED"
+    "M2": "BLOCKED",
+    "CR_M1C_REVIEW_001": {
+      "reviewer": "independent_gpt_6_1_sol_high",
+      "reviewed_technical_commit_link": "[161e246](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e)",
+      "H1_checks_passed": 17,
+      "original_review_points_passed": 39,
+      "original_review_points_failed": 1,
+      "original_review_points_not_verified": 0,
+      "new_finding": "M1C-SUB-MEDIUM-001",
+      "new_finding_severity": "MEDIUM",
+      "new_finding_status": "OPEN_BLOCKING",
+      "independent_review": "FAIL",
+      "original_HIGH_001": "FIXED_TECHNICALLY_OPEN_FOR_GOVERNANCE",
+      "M1C_GATE": "FAIL",
+      "M1D": "BLOCKED",
+      "M2": "BLOCKED"
+    }
   }
 }

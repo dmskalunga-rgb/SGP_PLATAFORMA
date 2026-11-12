@@ -11,3 +11,5 @@ Resultados locais e hashes em EVIDENCE/M1/M1C/CHECKS.json. CI e revisão indepen
 Actualização H1: dois testes PostgreSQL TEST adicionais cobrem extensão finita → ilimitada/finita, redução, rank, maker/checker, payload, versão, expiração, replay, API/SQL e auditoria. Foco 2/2; regressão completa local 4 unit + 38 integração + 2 browser M0 + 4 browser TLS = 48/48, zero falhas/skips. A CI do novo SHA é obrigatória.
 
 CI do SHA técnico corrigido: [run 43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976), mesmos 48 testes PASS, zero falhas/skips. Isto não substitui a re-review independente ASTRA requerida para o gate.
+
+O revisor substituto confirmou independentemente 21/21 hashes de relatórios e 48/48 testes realmente aprovados. Identificou porém que `.github/workflows/ci.yml` não propaga necessariamente o exit code de `npm run test:integration` através de `tee`. A execução deste SHA é válida; o enforcement de falha futura na CI está aberto como `M1C-SUB-MEDIUM-001` e bloqueia o gate.
