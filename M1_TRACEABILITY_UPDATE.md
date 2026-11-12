@@ -15,3 +15,12 @@
 | §§68–72 | Escopo M1C; ASTRA só revisão; STOP antes de M1D/M2 |
 
 Evidências por controlo: EVIDENCE/M1/M1C/. Contratos FROZEN e master não modificados. M1B continua em migration 002, sem drift de checksum; migration 003 é incremental.
+
+| Ordem H1 | Prova |
+|---|---|
+| §§2–7, 14–18 | migration 004, comparador multirange e testes de extensão/redução/rank |
+| §§8–13, 19–24 | payload ligado ao estado antigo/proposto, maker/checker, expiração, policy version e replay |
+| §§25–28 | DML directo negado, API directa negada, auditoria de sucesso/negação; testes H1 PostgreSQL reais |
+| §§29–34 | regressão local 48/48; CI e re-review do novo SHA pendentes antes de closure |
+
+Migrações 001–003 e contratos FROZEN permanecem inalterados.

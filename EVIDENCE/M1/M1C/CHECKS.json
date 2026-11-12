@@ -178,5 +178,28 @@
   "final_attestation": "refs/notes/m1c-gate attached to verified commit; see CI.md",
   "M1C_GATE": "PENDING_REMOTE_CI_AND_INDEPENDENT_REVIEW",
   "M1D": "BLOCKED",
-  "M2": "BLOCKED"
+  "M2": "BLOCKED",
+  "H1_remediation_candidate": {
+    "finding": "M1C-ASTRA-HIGH-001",
+    "base_technical_commit": "[cca2b2b](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/cca2b2b4ce9605b9344099b59d17ea70fac63160)",
+    "migration_added": "004_clearance_temporal_approval_hardening.sql",
+    "published_migrations_modified": false,
+    "focused_real_PostgreSQL_tests": {"passed": 2, "failed": 0},
+    "full_local_regression": {"unit": 4, "integration": 38, "M0_browser": 2, "TLS_browser": 4, "total": 48, "failed": 0, "skipped": 0},
+    "build": "PASS",
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "policy_operational_mocks": 0,
+    "local_SAST_findings": 0,
+    "local_SAST_errors": 0,
+    "local_npm_audit_vulnerabilities": 0,
+    "local_gitleaks_worktree_findings": 0,
+    "master_and_M1A_frozen_guard": "PASS",
+    "new_remote_CI": "PENDING",
+    "ASTRA_re_review": "PENDING",
+    "finding_status": "OPEN",
+    "M1C_GATE": "FAIL",
+    "M1D": "BLOCKED",
+    "M2": "BLOCKED"
+  }
 }

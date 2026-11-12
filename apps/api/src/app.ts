@@ -32,7 +32,7 @@ export async function createApp(config: Config) {
     try {
       const result = await pool.query("SELECT version FROM schema_migrations WHERE version = '001'");
       if (result.rowCount !== 1) throw new Error('Schema unavailable');
-      if(config.auth) {const authSchema=await pool.query("SELECT version FROM schema_migrations WHERE version IN('002','003')");if(authSchema.rowCount!==2)throw new Error('Authentication schema unavailable');}
+      if(config.auth) {const authSchema=await pool.query("SELECT version FROM schema_migrations WHERE version IN('002','003','004')");if(authSchema.rowCount!==3)throw new Error('Authentication schema unavailable');}
       return { status: 'ok' };
     } catch { return reply.status(503).send({ status: 'unavailable' }); }
   });

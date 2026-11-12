@@ -198,7 +198,8 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
       if(error&&typeof error==='object'&&'code' in error&&(error.code==='PT403'||error.code==='PT401')){
         if(error.code==='PT403'){
           const input=req.body as Record<string,unknown>;
-          await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.target_id??null,...meta(req)]);
+          if(path==='clearances')await command(appPool,'SELECT iam.record_clearance_rejection($1,$2,$3,$4,$5,$6,$7,$8,$9)',[raw,input.target_id,input.classification_id,input.valid_from,input.valid_to,input.approval_id,...meta(req)]);
+          else await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.target_id??null,...meta(req)]);
         }
         throw new AuthError(error.code==='PT401'?401:403,error.code==='PT401'?'session_invalid':'access_denied');
       }

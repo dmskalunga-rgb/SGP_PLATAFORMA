@@ -7,3 +7,5 @@ A suite M1C compara API/SQL, grants não cartesianos, scope/location, todos os l
 Frontend: botão indisponível ocultado após retirada real de permission; API directa continua a negar. Regressão M1B preserva TLS/cookie/CSRF/password/lockout/sessões/pool/deadline real.
 
 Resultados locais e hashes em EVIDENCE/M1/M1C/CHECKS.json. CI e revisão independente são condições separadas; ver CI.md nessa pasta e atestação final do commit. Não confundir execução local com gate remoto.
+
+Actualização H1: dois testes PostgreSQL TEST adicionais cobrem extensão finita → ilimitada/finita, redução, rank, maker/checker, payload, versão, expiração, replay, API/SQL e auditoria. Foco 2/2; regressão completa local 4 unit + 38 integração + 2 browser M0 + 4 browser TLS = 48/48, zero falhas/skips. A CI do novo SHA é obrigatória.

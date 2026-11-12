@@ -290,3 +290,72 @@ test('M1C every classification threshold is parametrized; inactive employment an
  await db.query("UPDATE iam.user_security_attributes SET employment_status='INACTIVE' WHERE user_id=$1",[users[2].id]);try{const d=await matrix(users[2].token,resources[0],false,'employment inactive');assert.equal(d.internal_reason,'USER_INACTIVE');}finally{await db.query("UPDATE iam.user_security_attributes SET employment_status='ACTIVE' WHERE user_id=$1",[users[2].id]);}
  await db.query("UPDATE iam.users SET status='DISABLED',subject_version=subject_version+1 WHERE id=$1",[users[2].id]);assert.equal((await api(users[2].token,'roles')).statusCode,401);
 });
+
+test('M1C HIGH-001: temporal clearance expansion requires exact maker/checker approval',async()=>{
+ const target=users[4].id,rank1=classes[1].id;
+ const finite1=new Date(Date.now()+3600000).toISOString(),finite2=new Date(Date.now()+7200000).toISOString();
+ const read=async(id=rank1)=>(await db.query('SELECT valid_from,valid_to FROM iam.security_clearances WHERE user_id=$1 AND classification_id=$2',[target,id])).rows[0];
+ const grant=(person,classification_id,valid_to,approval_id=null,valid_from=time)=>command(person,'clearances',{target_id:target,classification_id,valid_from,valid_to,approval_id});
+ const approve=async(classification_id,valid_to,valid_from=time)=>{
+  const request=await command(users[0],'approvals',{target_id:target,operation:'CLEARANCE_GRANT',payload:{classification_id,valid_from,valid_to},idempotency_key:randomUUID()});
+  assert.equal(request.statusCode,200,request.body);return request.json().id;
+ };
+ await db.query('UPDATE iam.security_clearances SET valid_from=$3,valid_to=$4 WHERE user_id=$1 AND classification_id=$2',[target,rank1,time,finite1]);
+ const old=await read();assert.ok(old.valid_to,'finite TEST starting state');
+ const version=async()=>(await db.query('SELECT version FROM iam.security_policy_state WHERE id')).rows[0].version;
+ const baselineVersion=await version();
+ assert.equal((await grant(users[0],rank1,null)).statusCode,403,'finite to unbounded direct API must deny');
+ assert.equal((await read()).valid_to.toISOString(),old.valid_to.toISOString());assert.equal(await version(),baselineVersion);
+ const direct=new pg.Client({connectionString:urls.app});await direct.connect();
+ try{await assert.rejects(direct.query('SELECT iam.grant_clearance($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[users[0].token,csrfFor(users[0].token),target,rank1,time,null,null,...meta()]),error=>error.code==='PT403','direct SQL executor cannot bypass approval');}finally{await direct.end();}
+ const rejection=(await db.query("SELECT actor_id,target_id,action,result,reason,request_id,correlation_id,policy_version,after_state FROM iam.authorization_events WHERE target_id=$1 AND action='security.clearances.manage' AND result='DENY' ORDER BY occurred_at DESC LIMIT 1",[target])).rows[0];
+ assert.equal(rejection.actor_id,users[0].id);assert.equal(rejection.target_id,target);assert.ok(rejection.request_id&&rejection.correlation_id&&rejection.policy_version);assert.equal(rejection.result,'DENY');assert.equal(rejection.after_state.requested_change.classification_id,rank1);assert.equal(rejection.after_state.requested_change.valid_to,null);
+ const aid=await approve(rank1,null);
+ const stored=(await db.query('SELECT payload,policy_version FROM iam.approvals WHERE id=$1',[aid])).rows[0];
+ assert.equal(stored.payload.target_user,target);assert.equal(Date.parse(stored.payload.old_clearance.valid_to),Date.parse(finite1));assert.equal(stored.payload.new_clearance.valid_to,null);assert.equal(stored.payload.policy_version,Number(stored.policy_version));
+ assert.equal((await grant(users[0],rank1,null,aid)).statusCode,403,'maker is not checker');
+ assert.equal((await grant(users[1],rank1,finite2,aid)).statusCode,403,'approval binds new interval');
+ assert.equal((await grant(users[1],rank1,null,aid)).statusCode,200,'distinct checker executes exact approval');
+ assert.equal((await read()).valid_to,null);assert.equal((await db.query('SELECT state FROM iam.approvals WHERE id=$1',[aid])).rows[0].state,'CONSUMED');assert.equal(Number(await version()),Number(baselineVersion)+1);
+ const allowed=(await db.query("SELECT before_state,after_state,decision_id,request_id,correlation_id FROM iam.authorization_events WHERE target_id=$1 AND action='security.clearances.manage' AND result='ALLOW' ORDER BY occurred_at DESC LIMIT 1",[target])).rows[0];
+ assert.equal(Date.parse(allowed.before_state.valid_to),Date.parse(finite1));assert.equal(allowed.after_state.approval_id,aid);assert.equal(allowed.after_state.maker_id,users[0].id);assert.equal(allowed.after_state.checker_id,users[1].id);assert.ok(allowed.decision_id&&allowed.request_id&&allowed.correlation_id);
+ assert.equal((await grant(users[1],rank1,null,aid)).statusCode,403,'consumed approval cannot replay even when state matches');
+ await db.query('UPDATE iam.security_clearances SET valid_to=$3 WHERE user_id=$1 AND classification_id=$2',[target,rank1,finite1]);
+ assert.equal((await grant(users[0],rank1,finite2)).statusCode,403,'finite to later finite is elevation');
+ const laterApproval=await approve(rank1,finite2);assert.equal((await grant(users[1],rank1,finite2,laterApproval)).statusCode,200);
+ assert.equal((await read()).valid_to.toISOString(),new Date(finite2).toISOString());
+ assert.equal((await grant(users[0],rank1,finite1)).statusCode,200,'shorter interval is reduction');
+ assert.equal((await read()).valid_to.toISOString(),new Date(finite1).toISOString());
+ const earlier=new Date(Date.parse(time)-3600000).toISOString();assert.equal((await grant(users[0],rank1,finite1,null,earlier)).statusCode,403,'earlier start expands authority');
+ const higher=classes[2].id;assert.equal((await grant(users[0],higher,null)).statusCode,403,'rank and time expansion');
+ const higherApproval=await approve(higher,null);assert.equal((await grant(users[1],higher,null,higherApproval)).statusCode,200);
+ assert.equal((await grant(users[0],higher,null,null)).statusCode,200,'already covered interval is not new authority');
+ assert.equal((await command(users[0],'clearances',{target_id:users[0].id,classification_id:classes[3].id,valid_from:time,valid_to:null,approval_id:null})).statusCode,403,'self grant');
+ for(const url of [urls.app,urls.auth]){
+  const c=new pg.Client({connectionString:url});await c.connect();try{await assert.rejects(c.query('UPDATE iam.security_clearances SET valid_to=NULL WHERE user_id=$1 AND classification_id=$2',[target,rank1]));}finally{await c.end();}
+ }
+});
+
+test('M1C HIGH-001: approval rejects expired maker/checker authority, stale policy and old-state drift',async()=>{
+ const target=users[4].id,classification_id=classes[3].id;
+ const payload={classification_id,valid_from:time,valid_to:null};
+ const request=async()=>{
+  const r=await command(users[0],'approvals',{target_id:target,operation:'CLEARANCE_GRANT',payload,idempotency_key:randomUUID()});assert.equal(r.statusCode,200,r.body);return r.json().id;
+ };
+ const execute=aid=>command(users[1],'clearances',{target_id:target,...payload,approval_id:aid});
+ const aid=await request();
+ await db.query("UPDATE iam.security_clearances SET valid_to=clock_timestamp()-interval '1 second' WHERE user_id=$1 AND classification_id=$2",[users[0].id,classes[4].id]);
+ try{assert.equal((await execute(aid)).statusCode,403,'maker authority expired');}finally{await db.query('UPDATE iam.security_clearances SET valid_to=NULL WHERE user_id=$1 AND classification_id=$2',[users[0].id,classes[4].id]);}
+ await db.query("UPDATE iam.security_clearances SET valid_to=clock_timestamp()-interval '1 second' WHERE user_id=$1 AND classification_id=$2",[users[1].id,classes[4].id]);
+ try{assert.equal((await execute(aid)).statusCode,403,'checker authority expired');}finally{await db.query('UPDATE iam.security_clearances SET valid_to=NULL WHERE user_id=$1 AND classification_id=$2',[users[1].id,classes[4].id]);}
+ await db.query('UPDATE iam.security_policy_state SET version=version+1 WHERE id');
+ assert.equal((await execute(aid)).statusCode,403,'approval policy version stale');
+ const freshApproval=await request();
+ await db.query('INSERT INTO iam.security_clearances VALUES($1,$2,$3,$4,$5)',[target,classification_id,time,new Date(Date.now()+3600000).toISOString(),users[0].id]);
+ assert.equal((await execute(freshApproval)).statusCode,403,'old clearance changed after request');
+ assert.equal((await db.query('SELECT state FROM iam.approvals WHERE id=$1',[freshApproval])).rows[0].state,'PENDING');
+ await db.query('DELETE FROM iam.security_clearances WHERE user_id=$1 AND classification_id=$2',[target,classification_id]);
+ const concurrentApproval=await request();const outcomes=await Promise.all([execute(concurrentApproval),execute(concurrentApproval)]);
+ assert.deepEqual(outcomes.map(r=>r.statusCode).sort(),[200,403],'concurrent attempts consume approval once');
+ assert.equal((await db.query('SELECT state FROM iam.approvals WHERE id=$1',[concurrentApproval])).rows[0].state,'CONSUMED');
+});

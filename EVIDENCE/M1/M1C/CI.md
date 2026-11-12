@@ -9,3 +9,7 @@ Workflow: `.github/workflows/ci.yml`, jobs Foundation tests / Source security an
 A evidência versionada é a candidatura anterior ao commit/CI. O SHA final e o resultado da CI desse mesmo SHA não podem ser inscritos recursivamente dentro do seu próprio commit. A atestação final, incluindo workflow/run/job/artifact IDs, hashes, revisão ASTRA e gate, será publicada numa Git note `refs/notes/m1c-gate` anexada ao commit verificado, seguindo o mecanismo M1A/M1B. Consultar com `git fetch origin refs/notes/m1c-gate:refs/notes/m1c-gate` e `git notes --ref=m1c-gate show <commit>`.
 
 Antes dessa atestação: PENDING_REMOTE_CI_AND_INDEPENDENT_REVIEW. A existência destes documentos não declara PASS. Logs locais e downloads CI ficam em `artifacts/`, sem credenciais e fora do source publicado; logs remotos e artefactos são fornecidos pelo workflow.
+
+## Remediação HIGH-001
+
+O run [43093293944](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43093293944) concluiu os três jobs com sucesso para o SHA técnico original, mas ASTRA encontrou o finding HIGH-001 nesse SHA. Portanto esse run não valida a correcção. A migration incremental 004, API e testes novos exigem commit novo, CI completa no novo SHA, scans/SBOM correspondentes e re-review independente. A decisão final será atestada em `refs/notes/m1c-gate`; até então `M1C_GATE = FAIL`, M1D/M2 bloqueados.

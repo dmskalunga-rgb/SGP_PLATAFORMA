@@ -9,3 +9,5 @@ Delegação é configuração explícita, não inferida de permissions. Nenhum s
 SAST/SCA/secrets/container/SBOM: resultados medidos em EVIDENCE/M1/M1C/CHECKS.json e CI.md. Nenhum scan pendente significa PASS; nenhum HIGH/CRITICAL não resolvido pode ser aceite pelo gate. Revisão ASTRA independente posterior à CI é obrigatória.
 
 Limites: auth process e migration/DBA são boundaries privilegiados; TLS/CA/provisionamento institucional, configuração de classificação/delegação, capacidade de hardware, recuperação, retenção e cópia externa de audit continuam responsabilidades de deployment. M1D/M2 não iniciados.
+
+Actualização H1: o comparador temporal na migration 004 considera `valid_to=NULL` ilimitado e exige aprovação distinta para qualquer expansão de autoridade não coberta. O payload guarda estado anterior, proposta e versão; execução relê o PostgreSQL sob lock e consumo único. O finding HIGH-001 segue OPEN até scans, CI e re-review ASTRA do novo SHA; nenhum resultado antigo fecha essa condição.
