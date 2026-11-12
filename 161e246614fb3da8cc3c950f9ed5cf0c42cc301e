@@ -1,0 +1,123 @@
+{
+  "repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
+  "branch": "main",
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "M1A_frozen_master_plus_11": "PASS",
+  "base_commit": "cca2b2b4ce9605b9344099b59d17ea70fac63160",
+  "technical_commit_sha": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+  "documentation_closure_sha": "2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+  "technical_workflow_run": 43167843976,
+  "technical_workflow_result": "PASS",
+  "technical_workflow_jobs": {
+    "Source security and SBOM": "success",
+    "Foundation tests": "success",
+    "Container security": "success"
+  },
+  "technical_artifacts": [
+    {
+      "id": 13920842394,
+      "name": "m0-tests-161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "digest": "sha256:d8134e18d699a2a159e86195b4c9ce3ebd6ba58cec145ce2593315a3cdb5f264"
+    },
+    {
+      "id": 13920817461,
+      "name": "m0-container-security-161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "digest": "sha256:3f4a9905da84468f5eca0f267898da49fc8c40d738e40095477cca71ff681264"
+    },
+    {
+      "id": 13920498330,
+      "name": "m0-source-security-161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "digest": "sha256:761aa7a9f7c8c1d492fd3645763e0dd6973a80d0ea6754994d4c5b0cb9c5376b"
+    }
+  ],
+  "documentation_workflow_run": 43168641555,
+  "documentation_workflow_result": "PASS",
+  "documentation_workflow_jobs": {
+    "Container security": "success",
+    "Source security and SBOM": "success",
+    "Foundation tests": "success"
+  },
+  "documentation_artifacts": [
+    {
+      "id": 13920973127,
+      "name": "m0-tests-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+      "digest": "sha256:2bbb78fb973ce8dc68000f8520ab8db6eee47963815e519e62310c3a3739e7a6"
+    },
+    {
+      "id": 13920848418,
+      "name": "m0-source-security-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+      "digest": "sha256:ae999a384dae92faa729ef63fa89ebca0aef6369b5958f2a6ba82acf06a79fc9"
+    },
+    {
+      "id": 13920469163,
+      "name": "m0-container-security-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+      "digest": "sha256:6690d096797dd368a4904b0a8be41efb55e94ea6b021dd23f1e2f47aea8b328b"
+    }
+  ],
+  "technical_tests": {
+    "unit": 4,
+    "integration": 38,
+    "M1C_H1": 2,
+    "M0_browser": 2,
+    "TLS_browser": 4,
+    "total": 48,
+    "failed": 0,
+    "skipped": 0
+  },
+  "technical_security_scans": {
+    "semgrep_findings": 0,
+    "semgrep_errors": 0,
+    "npm_audit_total": 0,
+    "gitleaks_source": 0,
+    "gitleaks_history": 0,
+    "trivy_vulnerabilities": {
+      "trivy-sca.json": 0,
+      "api-vulnerabilities.json": 0,
+      "web-vulnerabilities.json": 0,
+      "postgres-vulnerabilities.json": 0
+    },
+    "SBOM_components": {
+      "dependencies.cdx.json": 65,
+      "api.cdx.json": 111,
+      "web.cdx.json": 71,
+      "postgres.cdx.json": 46
+    }
+  },
+  "gate_matrix": {
+    "M0_regression": "PASS",
+    "M1A_integrity": "PASS",
+    "M1B_regression": "PASS",
+    "RBAC": "PASS",
+    "ABAC": "PASS",
+    "effective_grants": "PASS",
+    "classification": "PASS",
+    "compartments": "PASS",
+    "RLS": "PASS",
+    "API_DB_consistency": "PASS",
+    "SoD": "PASS",
+    "delegation": "PASS",
+    "privilege_escalation_regression": "PASS",
+    "concurrency": "PASS",
+    "audit": "PASS",
+    "security_scans": "PASS",
+    "operational_mocks": 0,
+    "ASTRA_re_review": "FAIL_NOT_EXECUTED_AUTOMATIC_CYBERSECURITY_REJECTION",
+    "HIGH_CRITICAL_unresolved": 1
+  },
+  "finding": {
+    "id": "M1C-ASTRA-HIGH-001",
+    "severity": "HIGH",
+    "reproduction_before_fix": "CONFIRMED_REAL_API_POSTGRESQL",
+    "technical_fix": "migration 004; 2 focused PostgreSQL tests; 48 full CI tests",
+    "status": "OPEN_FOR_GATE_PENDING_INDEPENDENT_REVIEW"
+  },
+  "residual_risks": [
+    "ASTRA review of corrected technical SHA was rejected automatically as possible cybersecurity risk; no independent approval or complete M1C boundary assessment exists",
+    "One confirmed HIGH finding remains open for formal closure despite passing technical tests and CI"
+  ],
+  "decision": {
+    "M1C_GATE": "FAIL",
+    "M1D": "BLOCKED",
+    "M2": "BLOCKED"
+  }
+}
