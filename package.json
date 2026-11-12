@@ -15,7 +15,7 @@
     "test:unit": "node --test tests/unit/*.test.mjs",
     "test:integration": "node --test --test-concurrency=1 tests/integration/*.test.mjs",
     "test:frontend": "playwright test",
-    "test:policy": "node scripts/check-policy.mjs",
+    "test:policy": "node scripts/check-policy.mjs && node scripts/check-ci-pipelines.mjs",
     "sbom": "npm sbom --sbom-format cyclonedx --omit=dev"
   },
   "devDependencies": {

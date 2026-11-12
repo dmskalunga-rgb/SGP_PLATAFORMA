@@ -29,6 +29,9 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - run: node scripts/check-frozen.mjs
+      - name: Prove pipeline failure propagation
+        shell: bash
+        run: bash scripts/prove-pipefail.sh
       - run: npm run test:unit
       - run: docker build -f infrastructure/docker/postgres.Dockerfile -t sgp-postgres:m0 .
       - name: Start real disposable PostgreSQL
@@ -36,7 +39,10 @@ jobs:
       - run: npm run migrate
       - run: node scripts/provision-auth-test.mjs
       - name: M0 and M1B regression; M1C RBAC ABAC RLS SoD delegation and concurrency
-        run: npm run test:integration | tee artifacts/integration-tests.log
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run test:integration | tee artifacts/integration-tests.log
       - run: node scripts/provision-test-runtime.mjs
       - run: npx playwright install --with-deps chromium
       - name: Browser, API startup, web startup and health tests
@@ -113,7 +119,10 @@ jobs:
       - run: docker build -f infrastructure/docker/api.Dockerfile -t sgp-api:m0 .
       - run: docker build -f infrastructure/docker/web.Dockerfile -t sgp-web:m0 .
       - name: Non-root, read-only, least privilege, runtime health and database failure
-        run: bash scripts/container-smoke.sh | tee artifacts/container-smoke.log
+        shell: bash
+        run: |
+          set -o pipefail
+          bash scripts/container-smoke.sh | tee artifacts/container-smoke.log
       - name: Image vulnerability gates and CycloneDX SBOMs
         run: |
           for image in api web; do
