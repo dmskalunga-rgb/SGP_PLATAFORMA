@@ -184,8 +184,19 @@
     "base_technical_commit": "[cca2b2b](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/cca2b2b4ce9605b9344099b59d17ea70fac63160)",
     "migration_added": "004_clearance_temporal_approval_hardening.sql",
     "published_migrations_modified": false,
-    "focused_real_PostgreSQL_tests": {"passed": 2, "failed": 0},
-    "full_local_regression": {"unit": 4, "integration": 38, "M0_browser": 2, "TLS_browser": 4, "total": 48, "failed": 0, "skipped": 0},
+    "focused_real_PostgreSQL_tests": {
+      "passed": 2,
+      "failed": 0
+    },
+    "full_local_regression": {
+      "unit": 4,
+      "integration": 38,
+      "M0_browser": 2,
+      "TLS_browser": 4,
+      "total": 48,
+      "failed": 0,
+      "skipped": 0
+    },
     "build": "PASS",
     "typecheck": "PASS",
     "lint": "PASS",
@@ -197,8 +208,24 @@
     "master_and_M1A_frozen_guard": "PASS",
     "technical_commit_link": "[161e246](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e)",
     "new_remote_CI": "PASS_RUN_43167843976_ALL_THREE_JOBS",
-    "new_remote_CI_tests": {"unit": 4, "integration": 38, "M0_browser": 2, "TLS_browser": 4, "total": 48, "failed": 0, "skipped": 0},
-    "new_remote_security": {"SAST_findings": 0, "SAST_errors": 0, "npm_audit_vulnerabilities": 0, "gitleaks_source": 0, "gitleaks_history": 0, "trivy_HIGH_CRITICAL": 0, "SBOMs": 4},
+    "new_remote_CI_tests": {
+      "unit": 4,
+      "integration": 38,
+      "M0_browser": 2,
+      "TLS_browser": 4,
+      "total": 48,
+      "failed": 0,
+      "skipped": 0
+    },
+    "new_remote_security": {
+      "SAST_findings": 0,
+      "SAST_errors": 0,
+      "npm_audit_vulnerabilities": 0,
+      "gitleaks_source": 0,
+      "gitleaks_history": 0,
+      "trivy_HIGH_CRITICAL": 0,
+      "SBOMs": 4
+    },
     "ASTRA_re_review": "FAIL_NOT_EXECUTED_AUTOMATIC_CYBERSECURITY_REJECTION",
     "finding_status": "OPEN",
     "M1C_GATE": "FAIL",
@@ -220,5 +247,25 @@
       "M1D": "BLOCKED",
       "M2": "BLOCKED"
     }
+  },
+  "final_medium_remediation": {
+    "fixed_commit_link": "[0643595](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1)",
+    "workflow_run": 43205905235,
+    "jobs": "ALL_3_PASS",
+    "normal_tests": 48,
+    "failures": 0,
+    "skips": 0,
+    "negative_pipeline": 23,
+    "positive_pipeline": 0,
+    "controlled_real_node_test_pipeline": 1,
+    "scans": "PASS",
+    "SBOMs": 4,
+    "reviewer": "independent_gpt_6_1_sol_high",
+    "review": "PASS_8_OF_8",
+    "HIGH_001": "CLOSED",
+    "MEDIUM_001": "CLOSED",
+    "M1C_GATE": "PASS",
+    "M1D": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
+    "M2": "BLOCKED"
   }
 }
