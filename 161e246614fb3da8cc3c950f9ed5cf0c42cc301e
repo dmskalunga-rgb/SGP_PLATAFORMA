@@ -5,7 +5,7 @@
   "M1A_frozen_master_plus_11": "PASS",
   "base_commit": "cca2b2b4ce9605b9344099b59d17ea70fac63160",
   "technical_commit_sha": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
-  "documentation_closure_sha": "2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+  "documentation_closure_sha": "eb24736e5d857a3c82ffa6123d1905a3dddc04de",
   "technical_workflow_run": 43167843976,
   "technical_workflow_result": "PASS",
   "technical_workflow_jobs": {
@@ -30,28 +30,28 @@
       "digest": "sha256:761aa7a9f7c8c1d492fd3645763e0dd6973a80d0ea6754994d4c5b0cb9c5376b"
     }
   ],
-  "documentation_workflow_run": 43168641555,
+  "documentation_workflow_run": 43204327125,
   "documentation_workflow_result": "PASS",
   "documentation_workflow_jobs": {
     "Container security": "success",
-    "Source security and SBOM": "success",
-    "Foundation tests": "success"
+    "Foundation tests": "success",
+    "Source security and SBOM": "success"
   },
   "documentation_artifacts": [
     {
-      "id": 13920973127,
-      "name": "m0-tests-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
-      "digest": "sha256:2bbb78fb973ce8dc68000f8520ab8db6eee47963815e519e62310c3a3739e7a6"
+      "id": 13936741669,
+      "name": "m0-source-security-eb24736e5d857a3c82ffa6123d1905a3dddc04de",
+      "digest": "sha256:9ece69b907c9b889d4509399aea9b1d682f17e6ff7cd670f8992c492050e5ef4"
     },
     {
-      "id": 13920848418,
-      "name": "m0-source-security-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
-      "digest": "sha256:ae999a384dae92faa729ef63fa89ebca0aef6369b5958f2a6ba82acf06a79fc9"
+      "id": 13936198970,
+      "name": "m0-container-security-eb24736e5d857a3c82ffa6123d1905a3dddc04de",
+      "digest": "sha256:585517177772b5520702eb6eb5600b6239966600891f119743c8dfccd9d2e5bd"
     },
     {
-      "id": 13920469163,
-      "name": "m0-container-security-2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
-      "digest": "sha256:6690d096797dd368a4904b0a8be41efb55e94ea6b021dd23f1e2f47aea8b328b"
+      "id": 13936074012,
+      "name": "m0-tests-eb24736e5d857a3c82ffa6123d1905a3dddc04de",
+      "digest": "sha256:61496af26a36e6d0b09feb5d0f587394f3e941ba64c9885d09e06241a35fe22a"
     }
   ],
   "technical_tests": {
@@ -102,22 +102,55 @@
     "security_scans": "PASS",
     "operational_mocks": 0,
     "ASTRA_re_review": "FAIL_NOT_EXECUTED_AUTOMATIC_CYBERSECURITY_REJECTION",
-    "HIGH_CRITICAL_unresolved": 1
+    "HIGH_CRITICAL_unresolved": 1,
+    "independent_substitute_review": "FAIL",
+    "negative_authorization_CI_failure_enforcement": "FAIL",
+    "MEDIUM_open_blocking": 1
   },
   "finding": {
     "id": "M1C-ASTRA-HIGH-001",
     "severity": "HIGH",
     "reproduction_before_fix": "CONFIRMED_REAL_API_POSTGRESQL",
     "technical_fix": "migration 004; 2 focused PostgreSQL tests; 48 full CI tests",
-    "status": "OPEN_FOR_GATE_PENDING_INDEPENDENT_REVIEW"
+    "status": "TECHNICALLY_FIXED_OPEN_FOR_GOVERNANCE"
   },
   "residual_risks": [
-    "ASTRA review of corrected technical SHA was rejected automatically as possible cybersecurity risk; no independent approval or complete M1C boundary assessment exists",
-    "One confirmed HIGH finding remains open for formal closure despite passing technical tests and CI"
+    "M1C-SUB-MEDIUM-001: integration-test failures can be masked by tee without pipefail; CI gate enforcement requires correction",
+    "M1C-ASTRA-HIGH-001 is technically fixed but remains open for governance under the FAIL branch of CR-M1C-REVIEW-001"
   ],
   "decision": {
     "M1C_GATE": "FAIL",
     "M1D": "BLOCKED",
     "M2": "BLOCKED"
+  },
+  "previous_documentation_closure_sha": "2aaf4a3f39ee9f152eb12450226f4a39b9c10699",
+  "approved_review_substitution": {
+    "change_request": "CR-M1C-REVIEW-001",
+    "original_reviewer": "ASTRA",
+    "original_re_review": "UNAVAILABLE_AUTOMATIC_SAFETY_REFUSAL",
+    "independent_reviewer": "/root/m1c_h1_substitute_review",
+    "dispatch_model": "gpt-6.1-sol",
+    "dispatch_reasoning_effort": "high",
+    "dispatch_fork_turns": "none",
+    "reviewed_technical_commit_sha": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+    "H1_01_through_17": "PASS",
+    "original_40_point_review": {
+      "PASS": 39,
+      "FAIL": 1,
+      "NOT_VERIFIED": 0
+    },
+    "initial_focal_conclusion": "PASS_SUPERSEDED_BY_40_POINT_ADDENDUM",
+    "final_conclusion": "FAIL",
+    "report": "EVIDENCE/M1/M1C/INDEPENDENT-REVIEW-H1.md"
+  },
+  "new_finding": {
+    "id": "M1C-SUB-MEDIUM-001",
+    "severity": "MEDIUM",
+    "status": "OPEN_BLOCKING",
+    "component": ".github/workflows/ci.yml:39",
+    "evidence": "npm run test:integration | tee artifacts/integration-tests.log without pipefail in /usr/bin/bash -e {0}",
+    "impact": "A failed integration test may be masked by successful tee; exact reviewed SHA raw logs show 38/38 passed",
+    "required_remediation": "Propagate test failure, prove controlled failure blocks CI, rerun CI on new SHA and independent focal review",
+    "gate_impact": "BLOCKING"
   }
 }
