@@ -1,6 +1,6 @@
 # M1C — independent ASTRA review
 
-Reviewed technical commit: `cca2b2b4ce9605b9344099b59d17ea70fac63160`.
+Reviewed technical commit: [cca2b2b](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/cca2b2b4ce9605b9344099b59d17ea70fac63160).
 Reviewed CI run: `43093293944` (all three jobs successful).
 Reviewed authority: M1C authorization and M1A FROZEN security contracts.
 
@@ -14,3 +14,9 @@ Reviewed authority: M1C authorization and M1A FROZEN security contracts.
 - Gate impact: `M1C_GATE = FAIL` while open. M1D and M2 remain blocked.
 
 ASTRA stopped the review at the first confirmed HIGH as required by the review order. Its workspace then ran out of credits before it could finish and write its own report. This file records the finding and proof communicated by the independent reviewer; it does **not** claim a complete ASTRA review or PASS. A separate suspicion about `set_role_permission` was not confirmed and is not counted as a finding. A new review of the corrected SHA and remaining boundaries is required.
+
+## Re-review attempt of corrected SHA
+
+Technical commit: [161e246](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e); CI run [43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976), all three jobs successful. The root requested independent ASTRA review only after this CI and supplied the H1 order, exact SHA, contracts and evidence. Automatic review rejected the ASTRA task as **possible cybersecurity risk**, suggesting rephrasing or Daybreak access. No ASTRA assessment of the corrected SHA was produced. This rejection is not a security finding in the code and cannot be treated as independent approval.
+
+Independent conclusion for corrected SHA: **NOT REVIEWED / FAIL for the required gate**. `M1C-ASTRA-HIGH-001` remains **OPEN for governance** despite the code fix and passing tests/CI. Other findings on the corrected SHA are unknown; no claim of zero unresolved HIGH/CRITICAL is made. M1C gate FAIL, M1D and M2 blocked.

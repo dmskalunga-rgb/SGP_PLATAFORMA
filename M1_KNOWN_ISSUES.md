@@ -19,3 +19,5 @@ A decisão verificável encontra-se em EVIDENCE/M1/M1C/CI.md/atestação final. 
 Não há autorização para M1D/M2. PASS M1C não fecha M1 completo nem autoriza próxima fase. Qualquer finding crítico/HIGH não resolvido da revisão/CI mantém gate FAIL e fases seguintes bloqueadas.
 
 Finding activo: `M1C-ASTRA-HIGH-001` — extensão temporal de clearance sem maker-checker no SHA original. Corrigido na candidatura local via migration 004, mas ainda OPEN para governação até CI remota e ASTRA re-review do novo commit. `M1C_GATE = FAIL`; M1D/M2 bloqueados.
+
+Actualização: a CI remota da correcção passou no [run 43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976). A re-review ASTRA do SHA corrigido não ocorreu: a revisão automática rejeitou a tarefa por possível risco de cibersegurança. Finding OPEN para closure formal; M1C_GATE FAIL. Não há autorização para M1D/M2.

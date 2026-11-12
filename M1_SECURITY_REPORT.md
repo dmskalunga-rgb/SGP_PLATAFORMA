@@ -11,3 +11,5 @@ SAST/SCA/secrets/container/SBOM: resultados medidos em EVIDENCE/M1/M1C/CHECKS.js
 Limites: auth process e migration/DBA são boundaries privilegiados; TLS/CA/provisionamento institucional, configuração de classificação/delegação, capacidade de hardware, recuperação, retenção e cópia externa de audit continuam responsabilidades de deployment. M1D/M2 não iniciados.
 
 Actualização H1: o comparador temporal na migration 004 considera `valid_to=NULL` ilimitado e exige aprovação distinta para qualquer expansão de autoridade não coberta. O payload guarda estado anterior, proposta e versão; execução relê o PostgreSQL sob lock e consumo único. O finding HIGH-001 segue OPEN até scans, CI e re-review ASTRA do novo SHA; nenhum resultado antigo fecha essa condição.
+
+Scans remotos do [run 43167843976](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/actions/runs/43167843976) passaram com zero findings SAST/secrets/npm audit e zero vulnerabilidades Trivy HIGH/CRITICAL, quatro SBOM. A revisão automática recusou a tarefa ASTRA por possível risco de cibersegurança; a correcção não recebeu parecer independente. HIGH-001 OPEN para governação; M1C_GATE FAIL.
