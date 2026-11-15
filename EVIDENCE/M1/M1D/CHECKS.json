@@ -245,6 +245,29 @@
     "new_SHA_review": "PENDING",
     "audit_503": "Cause unconfirmed; no recurrence in strict final local and parent remote integration",
     "M1D_GATE": "NOT_APPROVED",
-    "M2": "BLOCKED"
+    "M2": "BLOCKED",
+    "intermediate_CI": {
+      "commit_link": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/e4800368acbb8ea2a64bc1e829acc15030ee6557",
+      "PR_run": 43768401374,
+      "direct_run": 43768417090,
+      "result": "FAILURE",
+      "baseline_browser": "2_PASS",
+      "TLS_browser": "4_PASS_1_FAIL_SECOND_OPERATOR_APPROVAL",
+      "secret_scan": "FALSE_POSITIVE_PARENT_PUBLIC_GIT_OBJECT_ID",
+      "SAST_SCA": "SKIPPED_AFTER_SECRET_SCAN_FAILURE",
+      "container_gate": "PASS"
+    },
+    "secret_scan_followup": {
+      "human_authorization": "Explicit authorization received for exact public Git object ID exception and publication after automatic review rejection",
+      "change": "Exact Sourcegraph-rule allowlist for verified parent Git object ID only; no path or general rule exclusions",
+      "worktree": "PASS_ZERO",
+      "published_ancestral_history": "PASS_ZERO_16_COMMITS",
+      "local_all_refs": "24_FINDINGS_IN_LOCAL_GIT_NOTES_NOT_PUBLISHED; NOT_DECLARED_PASS",
+      "reports": [
+        "artifacts/m1d-ci-followup-gitleaks-worktree.json",
+        "artifacts/m1d-ci-followup-gitleaks-published-history.json",
+        "artifacts/m1d-ci-followup-gitleaks-history.json"
+      ]
+    }
   }
 }

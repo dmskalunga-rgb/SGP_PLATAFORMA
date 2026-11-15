@@ -19,3 +19,8 @@ id = "sourcegraph-access-token"
 description = "Exact initial public Git commit identifier, independently verified by git rev-parse and GitHub"
 regexTarget = "secret"
 regexes = ['''^8f4919c6949119ae1523c4c37a1feac7d831f10d$''']
+
+[[rules.allowlists]]
+description = "Exact published M1D Git commit ID verified by git rev-parse and GitHub PR1; not a credential"
+regexTarget = "secret"
+regexes = ['''^f839ad5d5500df9fd602512d1ce187c64fa692e6$''']
