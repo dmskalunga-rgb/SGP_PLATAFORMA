@@ -1,6 +1,6 @@
 {
   "milestone": "M1D",
-  "stage": "REMEDIATED_LOCAL_VALIDATED_PENDING_TECHNICAL_COMMIT",
+  "stage": "PR1_BASELINE_CORRECTION_LOCAL_PASS_PENDING_NEW_SHA_CI_REVIEW",
   "base_commit_link": "[0408117](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/04081170bca5ac1a062cabc89a3888dbe2760fbe)",
   "M1C_closure_integrity": "PASS",
   "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
@@ -197,6 +197,54 @@
     "commit_created": false,
     "push_performed": false,
     "M1D_GATE": "PENDING_CI_AND_INDEPENDENT_REVIEW",
+    "M2": "BLOCKED"
+  },
+  "PR1_validation_followup": {
+    "parent_technical_sha": "f839ad5d5500df9fd602512d1ce187c64fa692e6",
+    "PR": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/pull/1",
+    "prior_exact_sha_CI": {
+      "run_id": 43725371145,
+      "conclusion": "FAILURE",
+      "unit_pass": 4,
+      "integration_pass": 42,
+      "M0_browser_pass": 1,
+      "M0_browser_fail": 1,
+      "TLS_browser": "STEP_SKIPPED"
+    },
+    "correction": "Only baseline homepage text assertion; existing health, real PostgreSQL, outage, retry and fatal-error assertions preserved",
+    "focal_local": {
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0,
+      "database": "real disposable PostgreSQL TEST; migrations001-005 validated"
+    },
+    "reports": [
+      {
+        "path": "artifacts/m1d-ci-fix-frontend-results.json",
+        "sha256": "d7c7092f37041d03fc23a5d52dde309163ed3264da16fdba0910b765023cad96"
+      },
+      {
+        "path": "artifacts/m1d-ci-fix-frontend.log",
+        "sha256": "716d91d2eeba143e907dbe957d4dec0830bdad5ed084c866f987abb4e7219f13"
+      }
+    ],
+    "independent_review_parent": "INDEPENDENT-REVIEW-f839ad5.md",
+    "open_findings": [
+      {
+        "id": "M1D-REVIEW-IDENTITY-DENY",
+        "severity": "HIGH",
+        "status": "OPEN_STATIC_FINDING"
+      },
+      {
+        "id": "M1D-REVIEW-ROLE-STATUS-DENY",
+        "severity": "MEDIUM",
+        "status": "OPEN_STATIC_FINDING"
+      }
+    ],
+    "new_SHA_CI": "PENDING_PUBLICATION",
+    "new_SHA_review": "PENDING",
+    "audit_503": "Cause unconfirmed; no recurrence in strict final local and parent remote integration",
+    "M1D_GATE": "NOT_APPROVED",
     "M2": "BLOCKED"
   }
 }
