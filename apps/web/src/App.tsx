@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AuthPages } from './AuthPages';
+import { Administration } from './Administration';
 
 type State = 'loading' | 'ready' | 'unavailable';
 function Foundation() {
@@ -26,8 +27,8 @@ function Foundation() {
     <p>Fundação do sistema</p>
     <p role="status" aria-live="polite">{state === 'loading' ? 'A verificar a disponibilidade…' : state === 'ready' ? 'Serviço disponível.' : 'Serviço indisponível. Tente novamente.'}</p>
     {state === 'unavailable' && <button onClick={() => setAttempt(value => value + 1)}>Tentar novamente</button>}
-    <p>Ainda não existem módulos operacionais disponíveis nesta fundação.</p>
+    <p>Administração de identidade e segurança disponível após autenticação.</p>
     <a href="/login">Iniciar sessão</a>
   </main>;
 }
-export function App(){return ['/login','/logout','/session-expired','/access-denied','/profile'].includes(window.location.pathname)?<AuthPages/>:<Foundation/>;}
+export function App(){if(window.location.pathname.startsWith('/security/'))return <Administration/>;return ['/login','/logout','/session-expired','/access-denied','/profile'].includes(window.location.pathname)?<AuthPages/>:<Foundation/>;}

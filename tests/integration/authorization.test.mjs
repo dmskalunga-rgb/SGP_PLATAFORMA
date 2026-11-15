@@ -359,3 +359,87 @@ test('M1C HIGH-001: approval rejects expired maker/checker authority, stale poli
  assert.deepEqual(outcomes.map(r=>r.statusCode).sort(),[200,403],'concurrent attempts consume approval once');
  assert.equal((await db.query('SELECT state FROM iam.approvals WHERE id=$1',[concurrentApproval])).rows[0].state,'CONSUMED');
 });
+
+test('M1D real administration: create, activate, grant, inbox approve/reject, login, revoke and filtered audit',async()=>{
+ const person={username:'test_admin_'+randomUUID().slice(0,8),display_name:'TEST M1D identity',password:fresh()};
+ const created=await command(users[0],'users',{...person,scope_kind:'SCOPED',scope_id:scopes[0],classification_id:classes[0].id});assert.equal(created.statusCode,200,created.body);const target=created.json().id;
+ assert.equal((await db.query('SELECT status FROM iam.users WHERE id=$1',[target])).rows[0].status,'INACTIVE');
+ const account=async(action,session_id)=>app.inject({method:'POST',url:'/api/v1/auth/admin/account-command',headers:{origin,'x-forwarded-proto':'https',cookie:'__Host-sgp_session='+users[0].token,'x-csrf-token':csrfFor(users[0].token)},payload:{target_id:target,action,...(session_id?{session_id}:{})}});
+ assert.equal((await account('ACTIVE')).statusCode,204);
+ const roleCreated=await command(users[0],'roles',{code:'TEST_M1D_READER',scope_kind:'SCOPED',scope_id:scopes[0],classification_id:classes[0].id,compartments:[],privileged:false});assert.equal(roleCreated.statusCode,200,roleCreated.body);const rid=roleCreated.json().id;
+ assert.equal((await command(users[0],'role-permissions',{role_id:rid,permission_id:permission,enabled:true})).statusCode,200);
+ assert.equal((await command(users[0],'role-status',{role_id:rid,status:'INACTIVE'})).statusCode,200);
+ assert.equal((await command(users[0],'role-status',{role_id:rid,status:'ACTIVE'})).statusCode,200);
+ const assigned=await command(users[0],'assignments',{target_id:target,role_id:rid,scope_kind:'SCOPED',scope_id:scopes[0],valid_from:time,valid_to:null,approval_id:null});assert.equal(assigned.statusCode,200,assigned.body);
+ const payload={classification_id:classes[1].id,valid_from:time,valid_to:new Date(Date.now()+3600000).toISOString()};
+ const requested=await command(users[0],'approvals',{target_id:target,operation:'CLEARANCE_GRANT',payload,idempotency_key:randomUUID()});assert.equal(requested.statusCode,200,requested.body);const aid=requested.json().id;
+ const inbox=await api(users[1].token,'administration/approvals?subject_id='+target);assert.equal(inbox.statusCode,200,inbox.body);assert.ok(inbox.json().items.some(a=>a.id===aid&&a.status==='PENDING'));
+ assert.equal((await command(users[0],'approval-executions',{approval_id:aid})).statusCode,403);
+ const approved=await command(users[1],'approval-executions',{approval_id:aid});assert.equal(approved.statusCode,200,approved.body);assert.equal((await command(users[1],'approval-executions',{approval_id:aid})).statusCode,403);
+ assert.equal((await command(users[0],'clearances',{target_id:target,...payload,valid_to:null,approval_id:null})).statusCode,403,'HIGH-001 through admin API');
+ assert.equal((await command(users[0],'compartments',{target_id:target,compartment_id:compartments[0],valid_from:time,valid_to:null,approval_id:null})).statusCode,200);
+ const raw=await login(person);await matrix(raw,resources[0],true,'M1D created identity');await matrix(raw,resources[1],false,'M1D scope denial');
+ for(const name of ['assignments','clearances','memberships']){const r=await api(users[0].token,'administration/'+name+'?subject_id='+target+'&limit=1&offset=0');assert.equal(r.statusCode,200,r.body);assert.equal(r.json().items.length,1);assert.ok(r.json().total>=1);}
+ const rrequest=await command(users[0],'approvals',{target_id:target,operation:'CLEARANCE_GRANT',payload:{...payload,valid_to:null},idempotency_key:randomUUID()});assert.equal(rrequest.statusCode,200,rrequest.body);
+ const rejected=await command(users[1],'approval-rejections',{approval_id:rrequest.json().id,reason:'TEST change rejected'});assert.equal(rejected.statusCode,200,rejected.body);assert.equal((await command(users[1],'approval-executions',{approval_id:rrequest.json().id})).statusCode,403);
+ assert.equal((await command(users[0],'compartment-revocations',{target_id:target,compartment_id:compartments[0]})).statusCode,200);
+ const events=await api(users[0].token,'audit?target='+target+'&action=security.clearances.manage&result=ALLOW&limit=100');assert.equal(events.statusCode,200,events.body);assert.ok(events.json().total>=1);assert.ok(events.json().items.every(e=>e.target_id===target&&e.action==='security.clearances.manage'&&e.result==='ALLOW'));assert.ok(events.json().items.every(e=>e.request_id&&e.correlation_id&&e.decision_id));
+ assert.equal((await command(users[0],'assignment-revocations',{assignment_id:assigned.json().id})).statusCode,200);await matrix(raw,resources[0],false,'M1D entitlement revocation');
+ const session=(await db.query("SELECT id FROM iam.sessions WHERE token_hash=iam_crypto.digest($1,'sha256')",[raw])).rows[0].id;const sessions=await api(users[0].token,'sessions?limit=100');assert.equal(sessions.statusCode,200);assert.ok(sessions.json().items.some(s=>s.id===session));assert.ok(!sessions.body.includes('token_hash'));
+ assert.equal((await account('REVOKE_ONE',session)).statusCode,204);assert.equal((await api(raw,'roles')).statusCode,401);
+ assert.equal((await command(users[0],'clearance-revocations',{target_id:target,classification_id:classes[1].id})).statusCode,200);
+ for(const [path,body] of [['role-status',{role_id:rid,status:'INACTIVE'}],['clearance-revocations',{target_id:target,classification_id:classes[1].id}],['compartment-revocations',{target_id:target,compartment_id:compartments[0]}],['approval-executions',{approval_id:aid}],['approval-rejections',{approval_id:aid,reason:'TEST forbidden'}]])assert.equal((await command(users[3],path,body)).statusCode,403,path+' direct API denial');
+});
+
+test('M1D boundaries: own-role, self attributes, direct SQL, two operators and audit rollback',async()=>{
+ const bootstrap=(await db.query("SELECT id FROM iam.roles WHERE code='SECURITY_BOOTSTRAP_OPERATOR'")).rows[0].id;
+ assert.equal((await command(users[0],'role-status',{role_id:bootstrap,status:'INACTIVE'})).statusCode,403,'own role');
+ for(const [path,extra] of [['clearance-revocations',{classification_id:classes[0].id}],['compartment-revocations',{compartment_id:compartments[0]}]])assert.equal((await command(users[0],path,{target_id:users[0].id,...extra})).statusCode,403,'self attribute mutation');
+ const before=(await db.query('SELECT count(*)::int AS n FROM iam.users')).rows[0].n;
+ const newUser={username:'test_audit_'+randomUUID().slice(0,8),display_name:'TEST rollback',password:fresh(),scope_kind:'SCOPED',scope_id:scopes[0],classification_id:classes[0].id};
+ await db.query('REVOKE INSERT ON iam.authorization_events FROM sgp_audit_writer');try{assert.equal((await command(users[0],'users',newUser)).statusCode,503);assert.equal((await db.query('SELECT count(*)::int AS n FROM iam.users')).rows[0].n,before);}finally{await db.query('GRANT INSERT ON iam.authorization_events TO sgp_audit_writer');}
+ assert.equal((await command(users[3],'users',newUser)).statusCode,403,'unauthorized creation');
+ assert.equal((await command(users[0],'users',{...newUser,actor_id:users[1].id})).statusCode,400,'caller actor claim');
+ assert.equal((await command(users[0],'assignments',{target_id:users[0].id,role_id:role,scope_kind:'SCOPED',scope_id:scopes[1],valid_from:time,valid_to:null,approval_id:null})).statusCode,403,'self scope expansion');
+ assert.equal((await api(users[3].token,'administration/approvals')).statusCode,403);
+ assert.equal((await api(users[3].token,'audit')).statusCode,403);
+ const r=await api(users[0].token,'users/'+users[4].id+'/detail');assert.equal(r.statusCode,200,r.body);assert.ok(r.json().identity&&r.json().account_state&&r.json().roles&&r.json().scopes&&r.json().clearance&&r.json().compartments&&r.json().sessions&&r.json().security_events);assert.ok(!r.body.includes('password_hash')&&!r.body.includes('token_hash'));
+ const detail=await api(users[0].token,'roles/'+resources[0]+'/detail');assert.equal(detail.statusCode,200,detail.body);assert.ok(Array.isArray(detail.json().conflicts));
+ for(const url of [urls.app,urls.auth]){const c=new pg.Client({connectionString:url});await c.connect();try{await assert.rejects(c.query('UPDATE iam.approvals SET state=$1',['CONSUMED']));await assert.rejects(c.query('DELETE FROM iam.authorization_events'));await assert.rejects(c.query('UPDATE iam.delegation_authority SET ceiling_rank=100'));}finally{await c.end();}}
+ // Removing the last permanent clearance of either of the two operators must rollback.
+ await db.query('UPDATE iam.security_clearances SET valid_to=clock_timestamp()+interval \'1 hour\' WHERE user_id=$1 AND classification_id<>$2',[users[1].id,classes[0].id]);
+ try{assert.equal((await command(users[0],'clearance-revocations',{target_id:users[1].id,classification_id:classes[0].id})).statusCode,403);assert.equal((await db.query('SELECT count(*)::int AS n FROM iam.security_clearances WHERE user_id=$1 AND classification_id=$2',[users[1].id,classes[0].id])).rows[0].n,1);}finally{await db.query('UPDATE iam.security_clearances SET valid_to=NULL WHERE user_id=$1',[users[1].id]);}
+});
+
+test('M1D-VERIFY-001 denied approval actions preserve real action, target and approval in existing audit',async()=>{
+ const target=users[4].id;
+ await db.query("INSERT INTO iam.resource_security VALUES('IAM_ROLE',$1,'SCOPED',$2,NULL,$3,true,'PASSWORD') ON CONFLICT DO NOTHING",[role,scopes[0],classes[0].id]);
+ const cases=[
+  ['ROLE_GRANT','security.assignments.manage','IAM_ASSIGNMENT',{role_id:role,scope_kind:'SCOPED',scope_id:scopes[0],valid_from:time,valid_to:null}],
+  ['CLEARANCE_GRANT','security.clearances.manage','IAM_CLEARANCE',{classification_id:classes[2].id,valid_from:time,valid_to:null}],
+  ['COMPARTMENT_GRANT','security.compartments.manage','IAM_COMPARTMENT',{compartment_id:compartments[0],valid_from:time,valid_to:null}],
+ ];
+ for(const [operation,action,type,payload] of cases){
+  const request=await command(users[0],'approvals',{target_id:target,operation,payload,idempotency_key:randomUUID()});assert.equal(request.statusCode,200,request.body);const aid=request.json().id;
+  for(const route of ['approval-executions','approval-rejections']){
+   const response=await command(users[0],route,{approval_id:aid,...(route==='approval-rejections'?{reason:'TEST maker denial'}:{})});assert.equal(response.statusCode,403,response.body);
+   const rows=(await db.query('SELECT * FROM iam.authorization_events WHERE request_id=$1 AND result=$2',[response.json().request_id,'DENY'])).rows;assert.equal(rows.length,1);
+   const e=rows[0];assert.equal(e.actor_id,users[0].id);assert.equal(e.target_id,target);assert.equal(e.action,action);assert.equal(e.resource_type,type);assert.equal(e.resource_id,aid);assert.equal(e.after_state.approval_id,aid);assert.equal(e.after_state.requested_operation,route);assert.equal(e.after_state.approval_operation,operation);assert.equal(e.reason,'COMMAND_REJECTED');assert.ok(e.occurred_at&&e.session_id&&e.correlation_id&&e.decision_id);assert.equal(e.correlation_id,response.json().request_id);
+   const visible=await api(users[1].token,'audit?request_id='+response.json().request_id);assert.equal(visible.statusCode,200,visible.body);assert.ok(visible.json().items.some(x=>x.id===e.id));
+  }
+  assert.equal((await db.query('SELECT state FROM iam.approvals WHERE id=$1',[aid])).rows[0].state,'PENDING');
+ }
+ const absent=randomUUID();const response=await command(users[0],'approval-executions',{approval_id:absent});assert.equal(response.statusCode,403);
+ const unknown=(await db.query('SELECT * FROM iam.authorization_events WHERE request_id=$1',[response.json().request_id])).rows[0];assert.equal(unknown.target_id,null);assert.equal(unknown.action,'approval-executions');assert.equal(unknown.after_state.approval_id,null);assert.equal(unknown.after_state.requested_approval_id,absent);assert.equal(unknown.after_state.approval_found,false);
+});
+
+test('M1D-VERIFY-001 authentication audit_view SQL read is authorized, RLS filtered and immutable',async()=>{
+ const event=(await db.query("SELECT id,target_id,request_id FROM iam.authentication_events WHERE target_id=$1 ORDER BY occurred_at DESC LIMIT 1",[users[4].id])).rows[0];assert.ok(event);
+ const allowed=await tx(users[0].token,async c=>(await c.query('SELECT id,action,result FROM iam.audit_view WHERE id=$1',[event.id])).rows);assert.equal(allowed.length,1);assert.ok(allowed[0].action.startsWith('authentication.'));
+ const apiRead=await api(users[0].token,'audit?target='+users[4].id);assert.equal(apiRead.statusCode,200,apiRead.body);const exact=await api(users[0].token,'audit?request_id='+event.request_id);assert.equal(exact.statusCode,200,exact.body);assert.ok(exact.json().items.some(e=>e.id===event.id));
+ await tx(users[3].token,async c=>{assert.equal((await c.query('SELECT id FROM iam.authentication_events WHERE id=$1',[event.id])).rowCount,0);assert.equal((await c.query('SELECT id FROM iam.audit_view WHERE id=$1',[event.id])).rowCount,0);});
+ assert.equal((await api(users[3].token,'audit')).statusCode,403);
+ await tx(users[0].token,async c=>{await c.query('SAVEPOINT audit_write');await assert.rejects(c.query('DELETE FROM iam.audit_view WHERE id=$1',[event.id]));await c.query('ROLLBACK TO audit_write');});
+ const flags=(await db.query("SELECT relrowsecurity,relforcerowsecurity FROM pg_class WHERE oid='iam.authentication_events'::regclass")).rows[0];assert.ok(flags.relrowsecurity&&flags.relforcerowsecurity);
+ const invoker=(await db.query("SELECT reloptions FROM pg_class WHERE oid='iam.audit_view'::regclass")).rows[0];assert.ok(invoker.reloptions.includes('security_invoker=true'));
+});

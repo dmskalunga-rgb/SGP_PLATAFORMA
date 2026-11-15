@@ -150,11 +150,16 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
   app.get('/api/v1/security/capabilities',{schema:{response:{200:body({actions:{type:'array',items:string}}),...errors}}},safe(async req=>bound(req,async client=>({actions:(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions}))));
   const lists=[['users','security.users.read','IAM_IDENTITY'],['roles','security.roles.read','IAM_ROLE'],['permissions','security.permissions.read','IAM_PERMISSION']] as const;
   for(const [path,permission,list,count] of [
-    ['audit','security.audit.read','SELECT id,actor_id,target_id,action,occurred_at,result,session_id,request_id,correlation_id,policy_version,decision_id,before_state,after_state FROM iam.authorization_events ORDER BY occurred_at DESC,id LIMIT $1 OFFSET $2','SELECT count(*)::int AS total FROM iam.authorization_events'],
+
     ['sessions','security.sessions.read','SELECT id,user_id,created_at,expires_at,idle_expires_at,revoked_at,authentication_strength FROM iam.sessions ORDER BY id LIMIT $1 OFFSET $2','SELECT count(*)::int AS total FROM iam.sessions'],
   ])app.get('/api/v1/security/'+path,{schema:{querystring:{type:'object',additionalProperties:false,properties:{limit:{type:'string',pattern:'^[1-9][0-9]?$|^100$'},offset:{type:'string',pattern:'^[0-9]{1,6}$'}}}}},safe(async req=>bound(req,async client=>{
     const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!actions.includes(permission))throw new AuthError(403,'access_denied');
     const q=req.query as {limit?:string;offset?:string};return {items:(await client.query(list,[Number(q.limit??25),Number(q.offset??0)])).rows,total:(await client.query(count)).rows[0].total};
+  })));
+  app.get('/api/v1/security/audit',{schema:{querystring:{type:'object',additionalProperties:false,properties:{limit:{type:'string',pattern:'^[1-9][0-9]?$|^100$'},offset:{type:'string',pattern:'^[0-9]{1,6}$'},actor:uuid,target:uuid,action:{type:'string',maxLength:100},result:{type:'string',enum:['ALLOW','DENY']},from:timestamp,to:timestamp,request_id:uuid,correlation_id:uuid}}}},safe(async req=>bound(req,async client=>{
+    const c=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!c.includes('security.audit.read'))throw new AuthError(403,'access_denied');
+    const q=req.query as Record<string,string|number>;const filters=['actor','target','action','result','from','to','request_id','correlation_id'].map(k=>q[k]??null);
+    return {items:(await client.query('SELECT id,actor_id,target_id,action,occurred_at,result,reason,request_id,correlation_id,decision_id,policy_version,before_state,after_state FROM iam.audit_view WHERE ($3::uuid IS NULL OR actor_id=$3) AND ($4::uuid IS NULL OR target_id=$4) AND ($5::text IS NULL OR action=$5) AND ($6::text IS NULL OR result=$6) AND ($7::timestamptz IS NULL OR occurred_at>=$7) AND ($8::timestamptz IS NULL OR occurred_at<$8) AND ($9::uuid IS NULL OR request_id=$9) AND ($10::uuid IS NULL OR correlation_id=$10) ORDER BY occurred_at DESC,id LIMIT $1 OFFSET $2',[Number(q.limit??25),Number(q.offset??0),...filters])).rows,total:(await client.query('SELECT count(*)::int AS total FROM iam.audit_view WHERE ($1::uuid IS NULL OR actor_id=$1) AND ($2::uuid IS NULL OR target_id=$2) AND ($3::text IS NULL OR action=$3) AND ($4::text IS NULL OR result=$4) AND ($5::timestamptz IS NULL OR occurred_at>=$5) AND ($6::timestamptz IS NULL OR occurred_at<$6) AND ($7::uuid IS NULL OR request_id=$7) AND ($8::uuid IS NULL OR correlation_id=$8)',filters)).rows[0].total};
   })));
   const queries={
     users:{list:'SELECT id,username,display_name,status FROM iam.users ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.users',one:'SELECT id,username,display_name,status FROM iam.users WHERE id=$1'},
@@ -182,7 +187,53 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
       if(!row)throw new AuthError(404,'not_found');return row;
     }));
   }
+  app.post('/api/v1/security/users',{bodyLimit:4096,schema:{body:body({username,display_name:{type:'string',minLength:1,maxLength:120},password,...scoped,classification_id:uuid}),response:{200:body({id:uuid}),...errors}}},safe(async req=>{
+    transport(req,true);const raw=cookieValue(req,'__Host-sgp_session');if(!raw)throw new AuthError(401,'session_invalid');const proof=csrf(req,raw);
+    const input=req.body as {username:string;display_name:string;password:string;scope_kind:string;scope_id:string|null;classification_id:string};
+    await bound(req,async client=>{const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!actions.includes('security.users.create'))throw new AuthError(403,'access_denied');});
+    if(!passwords.acceptable(input.password))throw new AuthError(400,'password_policy');
+    const hash=await passwords.hash(input.password);
+    try{return (await command(appPool,'SELECT iam.create_identity($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) AS id',[raw,proof,input.username,input.display_name,hash,input.scope_kind,input.scope_id,input.classification_id,...meta(req)]))[0];}
+    catch(e){if(e&&typeof e==='object'&&'code' in e&&e.code==='PT403')throw new AuthError(403,'access_denied');throw e;}
+  }));
+  const administrationQueries:Record<string,{permission:string;list:string;count:string}>={
+    assignments:{permission:'security.users.read',list:'SELECT id,user_id,role_id,scope_kind,scope_id,valid_from,valid_to FROM iam.user_roles WHERE ($3::uuid IS NULL OR user_id=$3) ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.user_roles WHERE ($1::uuid IS NULL OR user_id=$1)'},
+    clearances:{permission:'security.clearances.read',list:'SELECT user_id,classification_id,valid_from,valid_to,authority FROM iam.security_clearances WHERE ($3::uuid IS NULL OR user_id=$3) ORDER BY user_id,classification_id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.security_clearances WHERE ($1::uuid IS NULL OR user_id=$1)'},
+    memberships:{permission:'security.compartments.read',list:'SELECT user_id,compartment_id,valid_from,valid_to FROM iam.user_compartments WHERE ($3::uuid IS NULL OR user_id=$3) ORDER BY user_id,compartment_id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.user_compartments WHERE ($1::uuid IS NULL OR user_id=$1)'},
+    compartments:{permission:'security.compartments.read',list:'SELECT id,code,status,sensitive FROM iam.security_compartments ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.security_compartments'},
+    classifications:{permission:'security.clearances.read',list:'SELECT id,code,label,rank,status FROM iam.security_classifications ORDER BY rank LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.security_classifications'},
+    'role-permissions':{permission:'security.roles.read',list:'SELECT role_id,permission_id FROM iam.role_permissions WHERE ($3::uuid IS NULL OR role_id=$3) ORDER BY role_id,permission_id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.role_permissions WHERE ($1::uuid IS NULL OR role_id=$1)'},
+    approvals:{permission:'',list:"SELECT id,actor_id,target_id,operation,payload,created_at,valid_until,CASE WHEN state='PENDING' AND valid_until<=clock_timestamp() THEN 'EXPIRED' ELSE state END AS status,approver_id,rejection_reason,rejected_by,rejected_at FROM iam.approvals WHERE ($3::uuid IS NULL OR target_id=$3) ORDER BY created_at DESC,id LIMIT $1 OFFSET $2",count:'SELECT count(*)::int AS total FROM iam.approvals WHERE ($1::uuid IS NULL OR target_id=$1)'},
+  };
+  for(const [name,q] of Object.entries(administrationQueries))app.get('/api/v1/security/administration/'+name,{schema:{querystring:{type:'object',additionalProperties:false,properties:{limit:{type:'string',pattern:'^[1-9][0-9]?$|^100$'},offset:{type:'string',pattern:'^[0-9]{1,6}$'},subject_id:uuid}}}},safe(async req=>bound(req,async client=>{
+    const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];
+    if(q.permission&&!actions.includes(q.permission))throw new AuthError(403,'access_denied');
+    if(!q.permission&&!['security.assignments.manage','security.clearances.manage','security.compartments.manage'].some(x=>actions.includes(x)))throw new AuthError(403,'access_denied');
+    const filter=req.query as {limit?:number;offset?:number;subject_id?:string};const hasFilter=q.list.includes('$3');
+    return {items:(await client.query(q.list,hasFilter?[filter.limit??25,filter.offset??0,filter.subject_id??null]:[filter.limit??25,filter.offset??0])).rows,total:(await client.query(q.count,hasFilter?[filter.subject_id??null]:[])).rows[0].total};
+  })));
+  app.get('/api/v1/security/users/:id/detail',{schema:{params:body({id:uuid})}},safe(async req=>{
+    const detail=await bound(req,async(client,ctx)=>{const id=(req.params as {id:string}).id;
+      const decision=await new PostgreSQLAuthorization(client).authorize(String(ctx.user_id),'security.users.read',{type:'IAM_IDENTITY',id},ctx);
+      const identity=(await client.query(queries.users.one,[id])).rows[0];if(decision.decision!=='ALLOW'||!identity)return null;
+      const permitted=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];
+      const assignments=(await client.query('SELECT id,role_id,scope_kind,scope_id,valid_from,valid_to FROM iam.user_roles WHERE user_id=$1 ORDER BY id LIMIT 25',[id])).rows;
+      return {identity,account_state:{status:identity.status},roles:{authorized:permitted.includes('security.users.read'),items:assignments},scopes:{authorized:permitted.includes('security.users.read'),items:assignments.map(a=>({assignment_id:a.id,scope_kind:a.scope_kind,scope_id:a.scope_id}))},clearance:{authorized:permitted.includes('security.clearances.read'),items:(await client.query('SELECT classification_id,valid_from,valid_to FROM iam.security_clearances WHERE user_id=$1 ORDER BY classification_id LIMIT 25',[id])).rows},compartments:{authorized:permitted.includes('security.compartments.read'),items:(await client.query('SELECT compartment_id,valid_from,valid_to FROM iam.user_compartments WHERE user_id=$1 ORDER BY compartment_id LIMIT 25',[id])).rows},sessions:{authorized:permitted.includes('security.sessions.read'),items:(await client.query('SELECT id,created_at,expires_at,revoked_at FROM iam.sessions WHERE user_id=$1 ORDER BY created_at DESC LIMIT 25',[id])).rows},security_events:{authorized:permitted.includes('security.audit.read'),items:(await client.query('SELECT id,action,result,occurred_at,request_id,correlation_id,decision_id FROM iam.audit_view WHERE target_id=$1 ORDER BY occurred_at DESC LIMIT 25',[id])).rows}};
+    });if(!detail)throw new AuthError(404,'not_found');return detail;
+  }));
+  app.get('/api/v1/security/roles/:id/detail',{schema:{params:body({id:uuid})}},safe(async req=>{
+    const detail=await bound(req,async(client,ctx)=>{const id=(req.params as {id:string}).id;
+      const decision=await new PostgreSQLAuthorization(client).authorize(String(ctx.user_id),'security.roles.read',{type:'IAM_ROLE',id},ctx);
+      const role=(await client.query(queries.roles.one,[id])).rows[0];if(decision.decision!=='ALLOW'||!role)return null;
+      return {role,permissions:(await client.query('SELECT permission_id FROM iam.role_permissions WHERE role_id=$1 ORDER BY permission_id LIMIT 100',[id])).rows,affected_assignments:(await client.query('SELECT id,user_id,scope_kind,scope_id,valid_from,valid_to FROM iam.user_roles WHERE role_id=$1 ORDER BY id LIMIT 25',[id])).rows,conflicts:(await client.query('SELECT iam.role_conflicts($1) AS items',[id])).rows[0].items};
+    });if(!detail)throw new AuthError(404,'not_found');return detail;
+  }));
   const mutations:[string,Record<string,unknown>,string,(input:Record<string,unknown>)=>unknown[]][]=[
+    ['role-status',{role_id:uuid,status:{type:'string',enum:['ACTIVE','INACTIVE']}},'SELECT iam.set_role_status($1,$2,$3,$4,$5,$6,$7)',v=>[v.role_id,v.status]],
+    ['clearance-revocations',{target_id:uuid,classification_id:uuid},'SELECT iam.revoke_clearance($1,$2,$3,$4,$5,$6,$7)',v=>[v.target_id,v.classification_id]],
+    ['compartment-revocations',{target_id:uuid,compartment_id:uuid},'SELECT iam.revoke_compartment($1,$2,$3,$4,$5,$6,$7)',v=>[v.target_id,v.compartment_id]],
+    ['approval-executions',{approval_id:uuid},'SELECT iam.execute_approval($1,$2,$3,$4,$5,$6)',v=>[v.approval_id]],
+    ['approval-rejections',{approval_id:uuid,reason:{type:'string',minLength:1,maxLength:500}},'SELECT iam.reject_approval($1,$2,$3,$4,$5,$6,$7)',v=>[v.approval_id,v.reason]],
     ['roles', {code:{type:'string',pattern:'^[A-Z][A-Z0-9_]{2,63}$'},...scoped,classification_id:uuid,compartments:{type:'array',items:uuid,maxItems:32,uniqueItems:true},privileged:{type:'boolean'}},'SELECT iam.create_role($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) AS id',v=>[v.code,v.scope_kind,v.scope_id,v.classification_id,v.compartments,v.privileged]],
     ['role-permissions',{role_id:uuid,permission_id:uuid,enabled:{type:'boolean'}},'SELECT iam.set_role_permission($1,$2,$3,$4,$5,$6,$7,$8)',v=>[v.role_id,v.permission_id,v.enabled]],
     ['approvals',{target_id:uuid,operation:{type:'string',enum:['ROLE_GRANT','CLEARANCE_GRANT','COMPARTMENT_GRANT']},payload:{type:'object',maxProperties:5},idempotency_key:uuid},'SELECT iam.request_approval($1,$2,$3,$4,$5,$6,$7,$8,$9) AS id',v=>[v.target_id,v.operation,v.payload,v.idempotency_key]],
@@ -199,7 +250,8 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
         if(error.code==='PT403'){
           const input=req.body as Record<string,unknown>;
           if(path==='clearances')await command(appPool,'SELECT iam.record_clearance_rejection($1,$2,$3,$4,$5,$6,$7,$8,$9)',[raw,input.target_id,input.classification_id,input.valid_from,input.valid_to,input.approval_id,...meta(req)]);
-          else await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.target_id??null,...meta(req)]);
+          else if(path==='approval-executions'||path==='approval-rejections')await command(appPool,'SELECT iam.record_approval_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.approval_id,...meta(req)]);
+          else await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,({'role-status':'roles','clearance-revocations':'clearances','compartment-revocations':'compartments','approval-executions':'approvals','approval-rejections':'approvals'} as Record<string,string>)[path]??path,input.target_id??null,...meta(req)]);
         }
         throw new AuthError(error.code==='PT401'?401:403,error.code==='PT401'?'session_invalid':'access_denied');
       }

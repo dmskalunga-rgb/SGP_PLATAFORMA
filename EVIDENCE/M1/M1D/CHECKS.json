@@ -1,0 +1,202 @@
+{
+  "milestone": "M1D",
+  "stage": "REMEDIATED_LOCAL_VALIDATED_PENDING_TECHNICAL_COMMIT",
+  "base_commit_link": "[0408117](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/04081170bca5ac1a062cabc89a3888dbe2760fbe)",
+  "M1C_closure_integrity": "PASS",
+  "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
+  "published_migrations_001_to_004_modified": false,
+  "migration_added": "005_iam_administration.sql",
+  "focused_API_M1D_tests": {
+    "pass": 2,
+    "fail": 0
+  },
+  "focused_TLS_browser_M1D": {
+    "pass": 1,
+    "fail": 0
+  },
+  "full_final_local": "HISTORICAL_PASS_PRE_VERIFY001",
+  "remote_CI": "PENDING",
+  "independent_review": "PENDING",
+  "M1D_GATE": "NOT_DECIDED",
+  "M2": "BLOCKED",
+  "test_counts": {
+    "unit": 4,
+    "integration": 40,
+    "M0_browser": 2,
+    "TLS_IAM_browser": 5,
+    "total": 51,
+    "failures": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "lint": "PASS",
+  "typecheck": "PASS",
+  "build": "PASS",
+  "frozen_guard": "PASS_MASTER_PLUS_11",
+  "policy": "PASS_OPERATIONAL_MOCKS_0_AND_TEE_POLICY",
+  "HIGH_001_regression": "PASS",
+  "MEDIUM_001_regression": "PASS",
+  "local_npm_audit": "PASS_ZERO_ALL_SEVERITIES",
+  "local_report_hashes": [
+    {
+      "path": "artifacts/m1d-final-local-regression.log",
+      "sha256": "24919df855f12a1036f6fb7d9b4237f629b99fcb1cfd3857f665eb9e72d020e7"
+    },
+    {
+      "path": "artifacts/auth-browser-results.json",
+      "sha256": "9f13cd7db02a5f632c7b7645e5417353d507e4adf4be21ee5896a1a89204d963"
+    },
+    {
+      "path": "artifacts/m1d-admin-ui.png",
+      "sha256": "08e675d8eb75b083ec54658bc493fc91fc1cd013820a29fb40137ab400ca5630"
+    },
+    {
+      "path": "artifacts/m1d-pipefail-proof.log",
+      "sha256": "cd1bea91b05b295e595fb3cceea46b28dc25e273830644265c37180e20452657"
+    },
+    {
+      "path": "artifacts/m1d-npm-audit.json",
+      "sha256": "8bb6125f092c48ed8041f30ea71403b61f9d5111982d5517d346f14a7273aafb"
+    },
+    {
+      "path": "artifacts/m1d-semgrep.json",
+      "sha256": "180176c5a9fa3c37a1c9855c92ab02ebbe080f9395e0d3c8c0a5614a9ef9b210"
+    },
+    {
+      "path": "artifacts/m1d-gitleaks.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  ],
+  "local_SAST": {
+    "findings": 0,
+    "errors": 0,
+    "files": 19,
+    "report": "artifacts/m1d-semgrep-current.json",
+    "sha256": "65fa6628cb2ec43037590bbd5dd325885bc9406be71ed7e8094ffda3a978895b"
+  },
+  "local_secrets": "PASS_ZERO_FINDINGS",
+  "historical_validation_before_audit_view": {
+    "full_local_tests": {
+      "unit": 4,
+      "integration": 40,
+      "M0_browser": 2,
+      "TLS_IAM_browser": 5,
+      "total": 51,
+      "failures": 0,
+      "skipped": 0,
+      "flaky": 0
+    },
+    "reports": [
+      {
+        "path": "artifacts/m1d-final-local-regression.log",
+        "sha256": "24919df855f12a1036f6fb7d9b4237f629b99fcb1cfd3857f665eb9e72d020e7"
+      },
+      {
+        "path": "artifacts/auth-browser-results.json",
+        "sha256": "9f13cd7db02a5f632c7b7645e5417353d507e4adf4be21ee5896a1a89204d963"
+      },
+      {
+        "path": "artifacts/m1d-admin-ui.png",
+        "sha256": "08e675d8eb75b083ec54658bc493fc91fc1cd013820a29fb40137ab400ca5630"
+      },
+      {
+        "path": "artifacts/m1d-pipefail-proof.log",
+        "sha256": "cd1bea91b05b295e595fb3cceea46b28dc25e273830644265c37180e20452657"
+      },
+      {
+        "path": "artifacts/m1d-npm-audit.json",
+        "sha256": "8bb6125f092c48ed8041f30ea71403b61f9d5111982d5517d346f14a7273aafb"
+      },
+      {
+        "path": "artifacts/m1d-semgrep.json",
+        "sha256": "180176c5a9fa3c37a1c9855c92ab02ebbe080f9395e0d3c8c0a5614a9ef9b210"
+      },
+      {
+        "path": "artifacts/m1d-gitleaks.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      }
+    ]
+  },
+  "current_authority": "SGP-DISPO-MASTER-v1.1-FROZEN-FINAL.md",
+  "current_master_sha256": "92de4f9a489a11051f06e7b8eebe61244348dd93ce1b86101fc5f2dd18812ea1",
+  "post_audit_view_validation": {
+    "M1D_focal_tests": 2,
+    "M1C_affected_tests": 2,
+    "failures": 0,
+    "reason": "Last audit_view and API query change; unaffected prior regression retained",
+    "affected_log": "artifacts/m1d-audit-affected-regression.log"
+  },
+  "test_counts_scope": "Historical full suite; not rerun in this remediation",
+  "VERIFY_001_remediation": {
+    "status": "LOCALLY_REMEDIATED_VALIDATED",
+    "decision": "READY_FOR_TECHNICAL_COMMIT",
+    "focal_tests": {
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    "affected_authorization_final": {
+      "passed": 25,
+      "failed": 0,
+      "skipped": 0
+    },
+    "intermediate_run": {
+      "passed": 24,
+      "failed": 1,
+      "reason": "503 on broad audit query; cause unconfirmed; strict broad query retained and passed on final run"
+    },
+    "evidence_hashes": [
+      {
+        "path": "artifacts/m1d-verify-001-focal.log",
+        "sha256": "5b9ace8fed9d1c776ebd5cb98cba5ddfdac0d0516d06f7c5858117998349dcf4"
+      },
+      {
+        "path": "artifacts/m1d-verify-001-authorization-regression.log",
+        "sha256": "cd528a801de8782ae9f5249ad7967f3a008bf18e861ecc2dc805f22fb6598168"
+      },
+      {
+        "path": "artifacts/m1d-verify-001-authorization-regression-final.log",
+        "sha256": "87a8198cf768098040f0138dfb5c869bf8565fe6c231dd320ce979c06e1a4729"
+      },
+      {
+        "path": "artifacts/m1d-semgrep-current.json",
+        "sha256": "65fa6628cb2ec43037590bbd5dd325885bc9406be71ed7e8094ffda3a978895b"
+      },
+      {
+        "path": "artifacts/m1d-semgrep-pre-verify001.json",
+        "sha256": "52dee93a71d0e092afd75406df453039da421a8c42748fe826f3275a39f05879"
+      },
+      {
+        "path": "artifacts/m1d-verify-001-gitleaks.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      }
+    ],
+    "source_LF_sha256": [
+      {
+        "path": "apps/api/src/auth.ts",
+        "sha256": "e523b1e40b704e5455e580157a125a1d49168d9088cfcfcb8e4cbfc03f8a35ab"
+      },
+      {
+        "path": "migrations/005_iam_administration.sql",
+        "sha256": "a1cafbe65e1b3e516b3e5975a254e1b904971fe8fc5f8ca66976a83ea1533017"
+      },
+      {
+        "path": "tests/integration/authorization.test.mjs",
+        "sha256": "5bda22e24c8639aa8c63353fec35d1fef86c13e3e698b4ba1e3a2f555f351714"
+      }
+    ],
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "build": "PASS",
+    "frozen_guard": "PASS",
+    "policy": "PASS",
+    "secrets": "PASS",
+    "SAST": "PASS",
+    "npm_audit": "Prior zero-vulnerability report retained; dependencies unchanged",
+    "residual_observation": "Intermediate503 not reproduced in final strict regression; review audit latency during CI",
+    "commit_created": false,
+    "push_performed": false,
+    "M1D_GATE": "PENDING_CI_AND_INDEPENDENT_REVIEW",
+    "M2": "BLOCKED"
+  }
+}

@@ -22,3 +22,8 @@ Correcção focal publicada em [0643595](https://github.com/dmskalunga-rgb/SGP_P
 Re-review independente read-only `/root/medium_final_review`, dispatch GPT-6.1 SOL + Alto, fork sem contexto: oito critérios §14 PASS, sem novos findings CRITICAL/HIGH/MEDIUM/LOW. Provas e limites em MEDIUM-001-CI-FAIL-CLOSED.md. O teste falhado controlado usa node:test temporário, não PostgreSQL; regressão PostgreSQL normal passou. O checker protege o formato actual dos dois steps e não é parser geral YAML/Shell.
 
 Esta decisão substitui os estados FAIL anteriores preservados neste histórico: **M1C-ASTRA-HIGH-001 = CLOSED; M1C-SUB-MEDIUM-001 = CLOSED; INDEPENDENT_REVIEW = PASS; M1C_GATE = PASS; M1D = BLOCKED_PENDING_EXPLICIT_AUTHORIZATION; M2 = BLOCKED.** A atestação exacta com SHA documental/CI encontra-se em refs/notes/m1c-gate. STOP antes de M1D/M2.
+
+
+## M1D candidate
+
+Authorized IAM administration extension on M1C closure. DoR/inventory in docs/requirements/M1D-PLAN.md, implemented APIs/OpenAPI and administration UI, incremental migration005. Existing contracts and published migrations preserved. M1D validation and independent review are tracked in EVIDENCE/M1/M1D/CHECKS.json; no final M1D PASS is claimed at this stage. M2 BLOCKED.
