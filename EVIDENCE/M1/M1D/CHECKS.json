@@ -239,6 +239,16 @@
         "id": "M1D-REVIEW-ROLE-STATUS-DENY",
         "severity": "MEDIUM",
         "status": "OPEN_STATIC_FINDING"
+      },
+      {
+        "id": "M1D-VALIDATION-TLS-CHECKER",
+        "severity": "HIGH",
+        "status": "OPEN_REMOTE_FAILURE_CHECKER_APPROVAL_SUCCESS_NOT_OBSERVED_CAUSE_UNCONFIRMED"
+      },
+      {
+        "id": "M1D-VALIDATION-SECRET-SCAN",
+        "severity": "BLOCKING_VALIDATION",
+        "status": "OPEN_PUBLIC_GIT_ID_FALSE_POSITIVE_AND_UNTRIAGED_NOTES_FINDINGS"
       }
     ],
     "new_SHA_CI": "PENDING_PUBLICATION",
@@ -262,12 +272,19 @@
       "change": "Exact Sourcegraph-rule allowlist for verified parent Git object ID only; no path or general rule exclusions",
       "worktree": "PASS_ZERO",
       "published_ancestral_history": "PASS_ZERO_16_COMMITS",
-      "local_all_refs": "24_FINDINGS_IN_LOCAL_GIT_NOTES_NOT_PUBLISHED; NOT_DECLARED_PASS",
+      "local_all_refs": "24_FINDINGS_IN_HISTORICAL_GIT_NOTES; REMOTE_NOTES_REFS_CONFIRMED_PRESENT; TRIAGE_REQUIRED_NOT_PASS",
       "reports": [
         "artifacts/m1d-ci-followup-gitleaks-worktree.json",
         "artifacts/m1d-ci-followup-gitleaks-published-history.json",
         "artifacts/m1d-ci-followup-gitleaks-history.json"
-      ]
+      ],
+      "scope_correction": "Earlier NOT_PUBLISHED wording was incorrect; git ls-remote confirmed refs/notes/m1a-publication, m1b-gate, m1c-gate already remote. Notes and reports preserved unchanged. Workflow checkout does not fetch these notes refs.",
+      "current_remote_scan": "FAIL_SOURCEGRAPH_RULE_ON_ANOTHER_PUBLIC_COMMIT_ID_IN_INTERMEDIATE_CI_LINK; NO_FURTHER_ALLOWLIST_AUTHORIZED",
+      "all_refs_finding_breakdown": {
+        "sourcegraph_access_token": 23,
+        "generic_api_key": 1,
+        "credential_classification": "UNTRIAGED; DO_NOT_ASSUME_ALL_FALSE_POSITIVES"
+      }
     }
   }
 }
