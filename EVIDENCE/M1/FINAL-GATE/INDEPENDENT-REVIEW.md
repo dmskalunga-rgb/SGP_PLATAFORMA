@@ -1,8 +1,8 @@
 # Revisão independente — preparação M1 FINAL GATE e CR-SGP-002
 
-**Revisor:** `/root/m1d_publication_review`, contexto independente READ-ONLY.  
-**Base documental:** `6f2cc119`.  
-**Manifesto revisto:** `EVIDENCE/M1/FINAL-GATE/DOCUMENTARY-MANIFEST.json`.  
+**Revisor:** `/root/m1d_publication_review`, contexto independente READ-ONLY.
+**Base documental:** `6f2cc119`.
+**Manifesto revisto:** `EVIDENCE/M1/FINAL-GATE/DOCUMENTARY-MANIFEST.json`.
 **SHA-256:** `cf0f11b0941f2fe4af03ee8a8a45ae8cde2387724a503c8db3b22aeef102b7bd`.
 
 **Recomendação independente actual: `M1_FINAL_GATE = FAIL / BLOCKED`**, enquanto permanecerem os impedimentos de governação e validação descritos abaixo. Trata-se de recomendação para decisão humana, não aprovação ou revogação de gates.
