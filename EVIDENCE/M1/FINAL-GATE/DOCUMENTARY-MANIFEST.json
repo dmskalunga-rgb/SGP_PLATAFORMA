@@ -1,0 +1,80 @@
+{
+  "purpose": "M1 Final Gate and CR-SGP-002 documentary candidate inventory; not approval",
+  "hash_basis": "exact Git index blob bytes (LF as stored), not platform worktree bytes",
+  "base_ref": "6f2cc119",
+  "files": [
+    {
+      "path": ".gitleaks.toml",
+      "sha256": "1c6f0cd78916de345fb1fe5ce828e2e24e7fd2bd0c07c93dac58fdd74c9adf35",
+      "bytes": 4435
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/CHECKS.json",
+      "sha256": "a7e5657b278d2f1246baabb9ece10b12fb16d27a9a00eb456665f82176c15267",
+      "bytes": 5095
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/CRITICAL-SCENARIOS.json",
+      "sha256": "46b0103f3175fac3827adf34c008f703b709b6462f52f84045aada4ff0d5a0e5",
+      "bytes": 9010
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/CRITICAL-SCENARIOS.md",
+      "sha256": "6090a4093647ef57d2cfe216e376ced5eac1736840be0a1d0488252678c8da31",
+      "bytes": 4220
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/GATE-REPORT.md",
+      "sha256": "957c3b7cd06b2627a71deae31df1b53bba6998b050892971bc833827b595acdc",
+      "bytes": 6515
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/MILESTONE-CHAIN.json",
+      "sha256": "553cc82e382b5910810b835fa9e5e7de19cd43bffa5fe9dd351dd066c2ee8401",
+      "bytes": 1856
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/RISK-503-SCOPE-PROPOSAL.md",
+      "sha256": "515382ff749f70010911965a4d0825b854019397aabb4dbc6352d76e23c73d3c",
+      "bytes": 2407
+    },
+    {
+      "path": "EVIDENCE/M1/FINAL-GATE/SECRET-SCAN-TRIAGE.json",
+      "sha256": "f2060345d7c954e714dacbbcfd1c49d3cd3c0dc9ae4334ddecf714d9856abc41",
+      "bytes": 2110
+    },
+    {
+      "path": "docs/governance/CR-SGP-002-ESTIMATES.md",
+      "sha256": "140e6f9cac6468d344d5547f8df54a4b3ffd8f8e0dabfd54456b3296d1111b40",
+      "bytes": 5451
+    },
+    {
+      "path": "docs/governance/CR-SGP-002-PROPOSAL.md",
+      "sha256": "85303120177cc9c302716c1b0be9d2cb47083baa1a6fdb1a14c0acee59ba1b60",
+      "bytes": 10352
+    },
+    {
+      "path": "docs/requirements/CR-SGP-002-TRACEABILITY.json",
+      "sha256": "aeb01d8e80c2e8f01ef535773f917cf113aebbad137909dcec4f8ec3f5a77288",
+      "bytes": 255182
+    },
+    {
+      "path": "docs/requirements/CR-SGP-002-TRACEABILITY.md",
+      "sha256": "8f867bdf437239156d71e7dca70f9df7c3e0b2034fc43540799701b18a73366b",
+      "bytes": 41228
+    },
+    {
+      "path": "docs/requirements/E2E-SGP-ESS-001-PROPOSAL.md",
+      "sha256": "8562c6ac609bd001e2204136e84415923da2a61b2fe8858b32d4fd9a0baea09b",
+      "bytes": 6583
+    }
+  ],
+  "excluded": [
+    "EVIDENCE/M1/FINAL-GATE/DOCUMENTARY-MANIFEST.json",
+    "EVIDENCE/M1/FINAL-GATE/INDEPENDENT-REVIEW.md"
+  ],
+  "exclusion_reason": "Avoid self/circular hashes; independent reviewer binds this manifest by SHA256; publication validation binds resulting exact commit and CI. Excluded review is separately hashed in final result.",
+  "Master_contracts_migrations_runtime_modified": false,
+  "M1_FINAL_GATE": "PENDING_HUMAN_DECISION",
+  "M2": "BLOCKED"
+}

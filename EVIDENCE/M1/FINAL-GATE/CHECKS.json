@@ -1,0 +1,136 @@
+{
+  "purpose": "Documentary checkpoint validation, not final gate approval",
+  "base_ref": "6f2cc119",
+  "M1D_human_approved_ref": "fd993a4",
+  "master_v11_raw_sha256": "92de4f9a489a11051f06e7b8eebe61244348dd93ce1b86101fc5f2dd18812ea1",
+  "historical_manifest_files_verified": 102,
+  "historical_manifest_mismatches": 0,
+  "protected_files": [
+    {
+      "path": "docs/security/SECURITY-CONTEXT-CONTRACT.md",
+      "git_sha256": "62116341b2b61e2b9354e8bb601c2ae36a74cbab2461ec413898d54a2ae0672e"
+    },
+    {
+      "path": "docs/security/AUTHORIZATION-MODEL.md",
+      "git_sha256": "71261492f42e8ab28912071b99751b19756eabceb01e9e006275215293b8006b"
+    },
+    {
+      "path": "docs/security/RBAC-ABAC-MODEL.md",
+      "git_sha256": "d0261d579f916568b9571318bc8e0d55c818b2e0e1e4826b9f1b4db26d9049b0"
+    },
+    {
+      "path": "docs/security/RLS-DESIGN.md",
+      "git_sha256": "d510f57213675c061185822280e3769751a70d384e02676c030f38ad768d74a2"
+    },
+    {
+      "path": "docs/security/SESSION-MODEL.md",
+      "git_sha256": "f1438f80df97afc26ef647f402aa42b3f92ec2207662ea2c8dd1df65e15c1cc8"
+    },
+    {
+      "path": "docs/security/CLASSIFICATION-MODEL.md",
+      "git_sha256": "65a8d2216d93c71a397418ce99f98c59a3e394e3669f737596d8ea7837a2bbf5"
+    },
+    {
+      "path": "docs/security/SEGREGATION-OF-DUTIES.md",
+      "git_sha256": "0dc89ad5c9fc32324e47c976357942de162a095e6c95bead52b98c4fa495a793"
+    },
+    {
+      "path": "docs/adr/ADR-007-security-context-propagation.md",
+      "git_sha256": "b94df9ef837d21321ceaf9281d3057ea2505d82408d27f90a6d72b866b7f3c97"
+    },
+    {
+      "path": "docs/adr/ADR-008-authorization-decision-model.md",
+      "git_sha256": "5b9d509e9b9cb0f96529e652d5902fce4e2db88562380548cc5025eceff841be"
+    },
+    {
+      "path": "docs/adr/ADR-009-session-architecture.md",
+      "git_sha256": "afd539c8040894b7c4b2e62a81200d5c9a4220ccecdeb39853b1e04afa534426"
+    },
+    {
+      "path": "docs/adr/ADR-010-postgresql-rls-context.md",
+      "git_sha256": "1de668ecce521313010bbf17952241ad75fb71e0691533a94f138e89902ab4fb"
+    },
+    {
+      "path": "SGP-DISPO-MASTER-v1.1-FROZEN-FINAL.md",
+      "git_sha256": "8f75953f8a9450bc29970ba56bfe0a34d954817798f9ffe3661643a7a66ba8be"
+    },
+    {
+      "path": "SGP-DISPO-MASTER-v1.0-FROZEN.md",
+      "git_sha256": "7cde06093c1a3f0d7ef7c463bc7ee08cb4fcac48f4b149d377166c0ff171a667"
+    },
+    {
+      "path": "migrations/001_foundation.sql",
+      "git_sha256": "be0830b122b59e1e29f9dd7f4daf661b8bb00012b74391efe75a67ee04d1b040"
+    },
+    {
+      "path": "migrations/002_identity_sessions.sql",
+      "git_sha256": "49dbda5b106ebd9b5ecc07cd71e4ec0731114d5e93ee8b81fff86a95703e3a72"
+    },
+    {
+      "path": "migrations/003_authorization.sql",
+      "git_sha256": "5ee53366959fcb13a1b2c1d14d0ffe6322fc7bea5dc919c52bc50e01fb73c52a"
+    },
+    {
+      "path": "migrations/004_clearance_temporal_approval_hardening.sql",
+      "git_sha256": "f597e8cc521d30a849680b11c90899f8b5817b7abe6b65195a0db21bcca3f7fa"
+    },
+    {
+      "path": "migrations/005_iam_administration.sql",
+      "git_sha256": "a1cafbe65e1b3e516b3e5975a254e1b904971fe8fc5f8ca66976a83ea1533017"
+    },
+    {
+      "path": "migrations/006_iam_denial_audit.sql",
+      "git_sha256": "d9b2037c3c687f79f500bdd80e705cb0b1095b7c6361bab6230e6764e41e0783"
+    }
+  ],
+  "source_changed_since_M1D_approval": false,
+  "M1A_frozen_guard": "PASS_EXACT_11_FILES_PLUS_HISTORICAL_MASTER",
+  "logical_M1_scenarios": 12,
+  "G08_limit": "Opaque IAM scopes, actual department binding remains M2",
+  "CR_proposal_requirement_count": 298,
+  "CR_proposal_requirement_ids_unique": 298,
+  "operational_implementation_introduced": false,
+  "secret_scan_new": [
+    {
+      "path": "artifacts/m1-final-worktree-current.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "findings": 0,
+      "result": "PASS",
+      "scope": "worktree"
+    },
+    {
+      "path": "artifacts/m1-final-history-current.json",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+      "findings": 0,
+      "result": "PASS",
+      "scope": "full Git history"
+    }
+  ],
+  "historical_CI_runs": [
+    43845885822,
+    43845886517
+  ],
+  "latest_failed_documentary_CI": 43847723778,
+  "new_remote_CI": "PENDING_PUBLICATION_AND_VERIFICATION",
+  "independent_review": "REQUESTED_PENDING_FINAL_RESPONSE",
+  "risk503": "OPEN; accepted for M1D only; M1 Final disposition pending",
+  "gate_recommendation": "FAIL_PENDING_BLOCKERS",
+  "M1_FINAL_GATE": "PENDING_HUMAN_DECISION",
+  "M2": "BLOCKED",
+  "merge": "NOT_AUTHORIZED",
+  "CR_SGP_002": "PROPOSAL_ONLY",
+  "external_ledgers": [
+    {
+      "path": "artifacts/M1-FINAL-NOTES-LEDGER.json",
+      "sha256": "52c1477ec94ea139133d2866295bc51fe46a3ebd8de563cdcc5b3d99e5aadcad"
+    },
+    {
+      "path": "artifacts/M1-FINAL-CI-LEDGER.json",
+      "sha256": "5507903a974d625ba90ba4159e5145cbe198972573b199e11a67880d6388a5bc"
+    },
+    {
+      "path": "artifacts/M1-FINAL-INTEGRITY.json",
+      "sha256": "2d1fc5ddd390afcb12ee4b9abdca9beb8117ea531caa15e77471407a19ac1690"
+    }
+  ]
+}
