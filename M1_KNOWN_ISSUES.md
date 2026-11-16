@@ -47,3 +47,8 @@ Denied execution/rejection now derives action, target and approval reference fro
 ## M1D PR1 controlled remediation checkpoint
 
 Migration006 and typed post-rollback DENY adapters address identity creation and role-status audit findings; published001–005 remain immutable. UI CSRF readiness, maker-checker evidence and TEST teardown are covered by focal validation. See docs/operations/M1D-DENIAL-AUDIT.md, EVIDENCE/M1/M1D/PR1-REMEDIATION.md and CHECKS.json for exact results/hashes and retained failures. The broad audit503 remains an open investigation. New remote CI and independent exact-SHA review are required; no M1D_GATE PASS or M2 authorization is declared.
+
+
+## M1D residual risk disposition - documentary consolidation
+
+M1D-RISK-503-001 is conditionally accepted for M1D closure only, as recorded in EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md. Technical responsible:Kalunga Soares; authority:Kalunga Soares, declared System Owner. Root cause investigation remains OPEN; monitoring/reopening duties and15-day deadline after valid formalization remain binding. This does not authorize gate PASS, merge, production or M2. Current gate dossier/manifest supersede earlier pending-acceptance snapshots without erasing their history.

@@ -90,6 +90,11 @@ description = "Exact public Git notes commit verified against remote notes refs 
 regexTarget = "secret"
 regexes = ['''^f39a17a4eb59fd16d5f41786dcd8039932bdaf6e$''']
 
+[[rules.allowlists]]
+description = "Exact public M1D technical Git commit referenced by risk acceptance; DOCUMENTARY-SCAN-TRIAGE proves both findings"
+regexTarget = "secret"
+regexes = ['''^9e1fe6bd3f8219a1b267eadb8e80458f221b699e$''']
+
 [[rules]]
 id = "generic-api-key"
 [[rules.allowlists]]

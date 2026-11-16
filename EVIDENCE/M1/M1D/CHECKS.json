@@ -1,6 +1,6 @@
 {
   "milestone": "M1D",
-  "stage": "PR1_LOCAL_VALIDATED_TECHNICAL_CANDIDATE_PENDING_PUBLICATION",
+  "stage": "FINAL_DOCUMENTARY_CONSOLIDATION",
   "base_commit_link": "[0408117](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/04081170bca5ac1a062cabc89a3888dbe2760fbe)",
   "M1C_closure_integrity": "PASS",
   "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
@@ -15,9 +15,9 @@
     "fail": 0
   },
   "full_final_local": "HISTORICAL_PASS_PRE_VERIFY001",
-  "remote_CI": "PENDING",
-  "independent_review": "PENDING",
-  "M1D_GATE": "NOT_APPROVED_PENDING_HUMAN_REVIEW",
+  "remote_CI": "TECHNICAL_CANDIDATE_9E1_BOTH_SUCCESS; FINAL_DOCUMENTARY_CI_ATTESTED_SEPARATELY",
+  "independent_review": "TECHNICAL_9E1_READY_FOR_GATE_REVIEW; FINAL_DOCUMENTARY_ATTESTATION_REQUIRED",
+  "M1D_GATE": "PENDING_EXPLICIT_HUMAN_DECISION",
   "M2": "BLOCKED",
   "test_counts": {
     "unit": 4,
@@ -541,5 +541,75 @@
         "sha256": "c3cb9c2a6ba8d681dd8af19b1a5858e99933cbfcef92e3c7c49edadec63c6b9a"
       }
     ]
+  },
+  "final_documentary_consolidation": {
+    "documentary_base": "49ec7d7",
+    "technical_candidate_sha": "9e1fe6bd3f8219a1b267eadb8e80458f221b699e",
+    "technical_CI": [
+      {
+        "run_id": 43805975302,
+        "kind": "direct",
+        "conclusion": "SUCCESS",
+        "tests": 56
+      },
+      {
+        "run_id": 43805979032,
+        "kind": "pull_request_synthetic_merge",
+        "conclusion": "SUCCESS",
+        "tests": 56
+      }
+    ],
+    "technical_test_counts_each": {
+      "unit": 4,
+      "integration": 45,
+      "baseline_browser": 2,
+      "TLS_IAM_browser": 5,
+      "failed": 0,
+      "skipped": 0,
+      "browser_flaky": 0
+    },
+    "documentary_base_CI": {
+      "run_id": 43843545940,
+      "conclusion": "FAILURE",
+      "Foundation_tests": "PASS",
+      "Container_security": "PASS",
+      "Source_security": "FAIL_TWO_PROVEN_FALSE_POSITIVE_GIT_REFERENCES",
+      "triage": "DOCUMENTARY-SCAN-TRIAGE.json"
+    },
+    "risk_acceptance": {
+      "id": "M1D-RISK-503-001",
+      "record": "EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md",
+      "sha256": "786cd452f8508bb6d21fa4c1ce0bc80fd58508a9637795c15563fc2bb891f040",
+      "status": "ACCEPTED_CONDITIONALLY_FOR_M1D_CLOSURE; INVESTIGATION_OPEN",
+      "technical_responsible": "Kalunga Soares",
+      "acceptance_authority": "Kalunga Soares",
+      "declared_capacity": "Proprietario do Sistema",
+      "recorded_formalization_date": "2026-11-16",
+      "investigation_period_calendar_days": 15,
+      "proposed_due_date": "2026-12-01",
+      "due_date_condition": "15 calendar days from valid formalization; proposed date assumes recorded2026-11-16 and remains subject to the condition in the signed record",
+      "production_authorized": false,
+      "M2_authorized": false,
+      "monitoring": [
+        "HTTP503 frequency",
+        "SQLSTATE",
+        "query latency",
+        "timeouts",
+        "locks",
+        "PostgreSQL pool utilization"
+      ],
+      "reopening": "recurrence in required regression/authorized use, relevant audit unavailability, inconsistency, suspected audit loss, authorization bypass or integrity failure"
+    },
+    "technical_findings": "REMEDIATION_VALIDATED_BY_BOTH_TECHNICAL_CI_AND_INDEPENDENT_REVIEW",
+    "functional_sources_changed_from_technical_candidate": false,
+    "published_migrations_001_through_006_changed": false,
+    "FROZEN_changed": false,
+    "manifest": "FINAL-EVIDENCE-MANIFEST.json",
+    "final_documentary_attestation": "DOCUMENTARY-INDEPENDENT-ATTESTATION.md",
+    "post_commit_CI_binding": "Final commit SHA/run outcomes are supplied by immutable CI artefacts and post-publication attestation; this source manifest does not self-reference future CI IDs",
+    "M1D_GATE": "PENDING_EXPLICIT_HUMAN_DECISION",
+    "M2": "BLOCKED",
+    "CR_SGP_002": "NOT_STARTED",
+    "merge_authorized": false
   }
 }
