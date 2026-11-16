@@ -1,0 +1,53 @@
+{
+  "scope": "verified historical gates, not M1 FINAL approval",
+  "milestones": [
+    {
+      "milestone": "m1a-publication",
+      "target_commit": "58834d8edb3c4b07c2fc9b68c0900886e0e8d12c",
+      "gate": "PASS",
+      "note_ref": "refs/notes/m1a-publication",
+      "note_raw_sha256": "0d1cc59bc0d9275c58c6735223f157ef8e78cf43b9866e146beda968800a90d6",
+      "verified_CI_runs": [
+        43019324857
+      ],
+      "CI_jobs_all_success": true
+    },
+    {
+      "milestone": "m1b-gate",
+      "target_commit": "f1b146b6fe128adb37271b08e419b1be1b3007c1",
+      "gate": "PASS",
+      "note_ref": "refs/notes/m1b-gate",
+      "note_raw_sha256": "0baa6da5dfaa3d2b8d438ad2829c9fd8da707d6fe58f3f253f89dc3d7c4d7dcf",
+      "verified_CI_runs": [
+        43026166195
+      ],
+      "CI_jobs_all_success": true
+    },
+    {
+      "milestone": "m1c-gate",
+      "target_commit": "0643595faa20422643aa712c104d302f2f743ba1",
+      "gate": "PASS",
+      "note_ref": "refs/notes/m1c-gate",
+      "note_raw_sha256": "641233e86ab7f6defdc06f51e41cebb2d65cd1cb86a7bd9f2f1413a975272f2d",
+      "verified_CI_runs": [
+        43205905235,
+        43206752397
+      ],
+      "CI_jobs_all_success": true
+    },
+    {
+      "milestone": "M1D",
+      "approved_commit": "fd993a4e08d994d357b471f4c56674b0cf979a5f",
+      "decision_record": "EVIDENCE/M1/M1D/M1D-GATE-DECISION-2026-11-16.md",
+      "record_git_sha256": "e1bdc8db2c334f362636da4c5bb899f531e785501b8c6f63ab446a441838330e",
+      "gate": "PASS_HUMAN_CONDITIONED_M1D_ONLY",
+      "CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "risk": "M1D-RISK-503-001; original scope not automatically extended"
+    }
+  ],
+  "raw_note_ledger_sha256": "52c1477ec94ea139133d2866295bc51fe46a3ebd8de563cdcc5b3d99e5aadcad",
+  "CI_ledger_sha256": "5507903a974d625ba90ba4159e5145cbe198972573b199e11a67880d6388a5bc"
+}

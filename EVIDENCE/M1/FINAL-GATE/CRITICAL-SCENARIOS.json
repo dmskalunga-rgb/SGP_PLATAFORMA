@@ -1,0 +1,210 @@
+{
+  "master_clause": "45/M1-GATE",
+  "logical_scenarios": 12,
+  "distinct_test_count_claim": false,
+  "scenarios": [
+    {
+      "scenario_id": "M1-G01",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "login",
+      "status": "PASS",
+      "test_path": "tests/integration/authentication.test.mjs",
+      "test_line": 46,
+      "test_name": "real login persists hash-only session, protected context, cookie flags; logout is idempotent and replay fails",
+      "test_source_git_sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "assertions": "HTTP200; persisted hash-only session, secure cookie and protected current identity",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G02",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "invalid login",
+      "status": "PASS",
+      "test_path": "tests/integration/authentication.test.mjs",
+      "test_line": 55,
+      "test_name": "wrong/unknown/disabled/locked have same public failure and malformed input/Origin/CSRF are rejected",
+      "test_source_git_sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "assertions": "HTTP401 for wrong/unknown/disabled/locked; same public failure; invalid Origin/CSRF rejected",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G03",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "lockout",
+      "status": "PASS",
+      "test_path": "tests/integration/authentication.test.mjs",
+      "test_line": 66,
+      "test_name": "five failures lock without extending lock, valid credential denied; authorized unlock then succeeds",
+      "test_source_git_sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "assertions": "five failures -> LOCKED; valid password still denied; authorized unlock restores access; audited",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G04",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "logout",
+      "status": "PASS",
+      "test_path": "tests/integration/authentication.test.mjs",
+      "test_line": 46,
+      "test_name": "real login persists hash-only session, protected context, cookie flags; logout is idempotent and replay fails",
+      "test_source_git_sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "assertions": "logout204; replay/current session401; idempotent logout",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G05",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "session revocation",
+      "status": "PASS",
+      "test_path": "tests/integration/authentication.test.mjs",
+      "test_line": 75,
+      "test_name": "absolute/idle expiry, revoke-one/all, concurrency, rotation and context reuse never accept an old session",
+      "test_source_git_sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2",
+      "assertions": "revoke-one/all and rotation invalidate old sessions; live remaining session verified",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G06",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "permission deny",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 104,
+      "test_name": "M1C lists and counts share RLS pagination; direct API ignores no frontend permission claims",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "unauthorized typed command403; forged actor fields rejected; no frontend authority",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G07",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "permission allow",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 109,
+      "test_name": "M1C typed role/permission/grant commands and immediate entitlement revocation E2E",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "authorized typed role/permission/grant returns200; API/SQL matrix confirms new access and immediate denial after revocation",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G08",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "cross-department deny",
+      "status": "PASS_M1_CONTRACT_SCOPE",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 71,
+      "test_name": "M1C matrix: same scope, cross scope, rank, all compartments and explicit metadata agree in API and RLS",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "distinct IAM scopes: SQL decisionDENY, zero protected rows, API404; real department binding remains M2",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": "RAM/1 lines9-17: technical IAM_SCOPE isolation, not M2 department CRUD"
+    },
+    {
+      "scenario_id": "M1-G09",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "classification deny",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 286,
+      "test_name": "M1C every classification threshold is parametrized; inactive employment and revoked subject fail closed",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "all rank thresholds: insufficient classification denies, matching rank allows; inactive employment fails closed",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G10",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "RLS deny",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 176,
+      "test_name": "M1C real RLS USING / WITH CHECK gates INSERT, UPDATE new state and independent DELETE",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "direct PostgreSQL USING/WITH CHECK deny unauthorized rows/new state; FORCE/runtime boundaries also exercised",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G11",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "RLS allow",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 71,
+      "test_name": "M1C matrix: same scope, cross scope, rank, all compartments and explicit metadata agree in API and RLS",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "same-scope authorized SQL decisionALLOW, expected row, API200; shared matrix helper asserts both",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    },
+    {
+      "scenario_id": "M1-G12",
+      "master_clause": "45/M1-GATE",
+      "canonical_scenario": "privilege escalation attempt",
+      "status": "PASS",
+      "test_path": "tests/integration/authorization.test.mjs",
+      "test_line": 152,
+      "test_name": "M1C delegation is explicit and scoped; self escalation, own role edits, cross-scope and expired authority deny",
+      "test_source_git_sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8",
+      "assertions": "own-role/self entitlement, undelegated and cross-scope elevation denied; expired delegation denied",
+      "observed_CI_runs": [
+        43845885822,
+        43845886517
+      ],
+      "scope_limit": null
+    }
+  ],
+  "integration_log_hashes": [
+    {
+      "path": "artifacts\\M1D-FD993-DIRECT-CI\\m0-tests-fd993a4e08d994d357b471f4c56674b0cf979a5f\\integration-tests.log",
+      "sha256": "925a51f558da58220764d9848b51ab7740fee2bba7caaec43408773cc02c1a1d"
+    },
+    {
+      "path": "artifacts\\M1D-FD993-PR-CI\\m0-tests-1c4918faeb0c80f30d67be20cca6ef44ea8bcf6d\\integration-tests.log",
+      "sha256": "4532ab2a38d029e3d1ecde67c2a123b8299b0f7c351ba7e27e329a54d2d8a80b"
+    }
+  ],
+  "department_boundary": "No real departments created or claimed; M2 must bind organization IDs to existing scope refs without widening authority."
+}

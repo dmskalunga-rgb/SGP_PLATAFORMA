@@ -1,0 +1,38 @@
+{
+  "scope": "documentary commit49ec7d7; unchanged evaluated technical candidate",
+  "failed_run_id": 43843545940,
+  "original_report_sha256": "f26b236e9f6c81cea8bcead5c5178353239959eefde0a987a966d7fb9b27c418",
+  "findings": [
+    {
+      "rule": "sourcegraph-access-token",
+      "file": "EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md",
+      "line": 7,
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "public_git_object": "9e1fe6bd3f8219a1b267eadb8e80458f221b699e",
+      "object_type": "commit",
+      "ancestor_of_documentary_head": true,
+      "context": "evaluated technical candidate reference, not authentication material",
+      "public_evidence_runs": [
+        43805975302,
+        43805979032
+      ]
+    },
+    {
+      "rule": "sourcegraph-access-token",
+      "file": "EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md",
+      "line": 55,
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "public_git_object": "9e1fe6bd3f8219a1b267eadb8e80458f221b699e",
+      "object_type": "commit",
+      "ancestor_of_documentary_head": true,
+      "context": "evaluated technical candidate reference, not authentication material",
+      "public_evidence_runs": [
+        43805975302,
+        43805979032
+      ]
+    }
+  ],
+  "correction": "single exact value in Sourcegraph secret allowlist; default rules and directory coverage unchanged",
+  "original_report_root": "artifacts/M1D-49EC-CI",
+  "original_report_basename": "gitleaks-worktree.json"
+}

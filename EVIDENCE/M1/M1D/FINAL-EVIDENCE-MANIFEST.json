@@ -1,0 +1,459 @@
+{
+  "schema_version": 1,
+  "purpose": "M1D final documentary evidence inventory; not a gate approval",
+  "technical_candidate_sha": "9e1fe6bd3f8219a1b267eadb8e80458f221b699e",
+  "documentary_base": "49ec7d7",
+  "versioned_files": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "4b098abebfc975c81808e00c23965143dfd589d08af63270fc5e4ff5b660c70a"
+    },
+    {
+      "path": ".gitleaks.toml",
+      "sha256": "b0a2698f7022be06ccf5ba92e5c1c458192b7547ded8019491f3787f9eaab774"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/APPROVAL-TESTS.md",
+      "sha256": "126c708391c4aeb13036db7bdc912c859705b0a19d69865e0906199fec125698"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/ASSIGNMENT-TESTS.md",
+      "sha256": "276c1e9a7340ac3ecfdc2d066ec1bf15e02aa08cd2bcea91e346d1fb95cd082d"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/AUDIT-VIEWER-TESTS.md",
+      "sha256": "40b946c5d74442ff37837d7fb12f7add812f1f27d9802dfdfd24c40d24045a22"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/CHECKS.json",
+      "sha256": "783f2630a56c1a73cdeede676283ed7cd022250859c9097f16a0a48154b19956"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/CI.md",
+      "sha256": "97e91d161612281e5ba1e606af45b781862c09f012ffaaa114c7a3a3bbf387a9"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/CLEARANCE-ADMIN-TESTS.md",
+      "sha256": "5e2f6a97afccfdbde5b9e9a8e5c8b1edd87ba794a43d82d2e9d079eff4a63f38"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/COMMANDS.md",
+      "sha256": "5357478e62125c25ea5b329760df25f7308aaa67555512c174cf1fd145c44879"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/COMPARTMENT-ADMIN-TESTS.md",
+      "sha256": "8899a531debe5146646eb0cb510b2e5f81a4a4b896f027e71022c5c2619bcea5"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/DOCUMENTARY-SCAN-TRIAGE.json",
+      "sha256": "dc27ac274b13a2122892f3ca5951751b1fa185664242acf7e47deb02b24c3db4"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/E2E.md",
+      "sha256": "caefdd994a617967e2bd4b09829e4347b1bb29054f4c26f9c264c947b9881fda"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/GITLEAKS-HISTORICAL-TRIAGE.json",
+      "sha256": "ef10cb464a4f07bb05785a5ff457d86b4344841eb7fcb63d45f61230e906430e"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/INDEPENDENT-REVIEW-f839ad5.md",
+      "sha256": "a3bafb234db9f803ceae3a6c3cac73537e76aeb7436e75354186e82d083e2c8c"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/M1D-GATE.md",
+      "sha256": "666970196b0f71d845c55a7408ba033b277bf44daa6170caf4f6d82c807add5e"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md",
+      "sha256": "786cd452f8508bb6d21fa4c1ce0bc80fd58508a9637795c15563fc2bb891f040"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/PR1-REMEDIATION.md",
+      "sha256": "7c6a3116577b266d250a77103e3776815023341d0d46002cf06e879da0172880"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/PR1-REVIEW-PRELIMINARY.md",
+      "sha256": "9ada40b0d449882144688d1616430be275e7d1d103ad6e4d81fa00d3cdef0536"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/PRIVILEGE-ESCALATION.md",
+      "sha256": "ca984e063738f85cf863857351ec38b548de3223e32e7bee5e418cd794961726"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/ROLE-ADMIN-TESTS.md",
+      "sha256": "13c86321b0e76e73ec8261ec50d3ba81fb83a3abc220ffce5fb4bfafd617b53e"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/SESSION-ADMIN-TESTS.md",
+      "sha256": "d776a65aff59bd4429947aad7b5e29c28d98808e24b13a47afff4d2e5205930a"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/USER-ADMIN-TESTS.md",
+      "sha256": "89878eaf374dbf44d7f0ef24bf418ae190d22c2cc3404c0de7078212467d617b"
+    },
+    {
+      "path": "EVIDENCE/M1/M1D/VERIFY-001-AUDIT-REMEDIATION.md",
+      "sha256": "d02521d3aef185206d0d430a125a30d33472c36de92279a7a1ddf807c3cc3dca"
+    },
+    {
+      "path": "M1_KNOWN_ISSUES.md",
+      "sha256": "726066088b6609d4420d6546894f3f4ab827204db0d0c66216f20341e39f4239"
+    },
+    {
+      "path": "README.md",
+      "sha256": "ba8ee3217a13e77e6d60c91aa845ba9f8a852900395be4432c2d18d087a0afed"
+    },
+    {
+      "path": "SGP-DISPO-MASTER-v1.0-FROZEN.md",
+      "sha256": "7cde06093c1a3f0d7ef7c463bc7ee08cb4fcac48f4b149d377166c0ff171a667"
+    },
+    {
+      "path": "SGP-DISPO-MASTER-v1.1-FROZEN-FINAL.md",
+      "sha256": "8f75953f8a9450bc29970ba56bfe0a34d954817798f9ffe3661643a7a66ba8be"
+    },
+    {
+      "path": "apps/api/package.json",
+      "sha256": "575d56c7a81f6f55d9a57205c6bdbffd7b560cb2bae6621c09fa4ac15cfcfb9e"
+    },
+    {
+      "path": "apps/api/src/app.ts",
+      "sha256": "7cb772c2a190c1545ea299d2d8e2b8cda41c6baa17c1edd242477a283fa073f7"
+    },
+    {
+      "path": "apps/api/src/auth.ts",
+      "sha256": "440d9cb084de09ea8728588c4cb401c021d42b6cb05ac6a6144fa6b8cb6269d8"
+    },
+    {
+      "path": "apps/api/src/authorization.ts",
+      "sha256": "250392e7880bebf9f63fcde8de40ae6f6a1df78cd9d22b12b783ae476fc5a797"
+    },
+    {
+      "path": "apps/api/src/config.ts",
+      "sha256": "75b4709ce787b380d841d4523b9b120f88ea48040113b019ad32929c169290f8"
+    },
+    {
+      "path": "apps/api/src/index.ts",
+      "sha256": "87ffeabe072e45a86b132a8002f3563bf18af542b6514a72f885b6d618510927"
+    },
+    {
+      "path": "apps/api/src/password.ts",
+      "sha256": "ecb4e09cf697809761f1f9e54a07880f434ef2d983e9e2b81c0c808c31e9d131"
+    },
+    {
+      "path": "apps/api/tsconfig.json",
+      "sha256": "440f5a7f2975dda82bc6354e5f9e0c5895ed7590d59c8f18dfc1e2482c5a106b"
+    },
+    {
+      "path": "apps/web/index.html",
+      "sha256": "473c47426f77357c953e571bbbdb582ca2e0f74d4e77ee6c9d0356729338250f"
+    },
+    {
+      "path": "apps/web/package.json",
+      "sha256": "7399a9b96dd788c5a532d277708c8ecfde678022106c76ebc9b0e5a30593e179"
+    },
+    {
+      "path": "apps/web/src/Administration.tsx",
+      "sha256": "f0b02d6603784e70b186a9e68b7ec6919d372fc22267b7e4bc0efb660c7b64ad"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "sha256": "81932074818b9a55203cbd51eb563419cd4eb515aa3cf617cab9b82f71e47226"
+    },
+    {
+      "path": "apps/web/src/AuthPages.tsx",
+      "sha256": "be87816ca366f225f1a80c02a9671891889108aaca9002c06fef22318d31c8d5"
+    },
+    {
+      "path": "apps/web/src/auth.css",
+      "sha256": "af51a1d050f6a62426800297ffefd31042c9b6a12362a6ac985ada5dfe3bc013"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "sha256": "82a5f1f5f429f554435f5060ed503e4ec08117377eefeee1cd561cd382754e16"
+    },
+    {
+      "path": "apps/web/src/vite-env.d.ts",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "sha256": "7958d63b7f67b306d0ec5ef400e6e2191f16d714c5264b8f02565d6b6726d427"
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "sha256": "6687c3b6cfbad134e7b29440649a453a641ea96667fd4fc73524deec7988afe7"
+    },
+    {
+      "path": "docs/adr/ADR-007-security-context-propagation.md",
+      "sha256": "b94df9ef837d21321ceaf9281d3057ea2505d82408d27f90a6d72b866b7f3c97"
+    },
+    {
+      "path": "docs/adr/ADR-008-authorization-decision-model.md",
+      "sha256": "5b9d509e9b9cb0f96529e652d5902fce4e2db88562380548cc5025eceff841be"
+    },
+    {
+      "path": "docs/adr/ADR-009-session-architecture.md",
+      "sha256": "afd539c8040894b7c4b2e62a81200d5c9a4220ccecdeb39853b1e04afa534426"
+    },
+    {
+      "path": "docs/adr/ADR-010-postgresql-rls-context.md",
+      "sha256": "1de668ecce521313010bbf17952241ad75fb71e0691533a94f138e89902ab4fb"
+    },
+    {
+      "path": "docs/governance/MASTER-AUTHORITY.md",
+      "sha256": "e74fcc685383840986875640664859df050d8838555403489826637f28b4d2e3"
+    },
+    {
+      "path": "docs/requirements/M1D-PLAN.md",
+      "sha256": "75b77140874114d615e8d0497bd7a389774483209983d1a258d56469b9d3c123"
+    },
+    {
+      "path": "docs/security/AUTHORIZATION-MODEL.md",
+      "sha256": "71261492f42e8ab28912071b99751b19756eabceb01e9e006275215293b8006b"
+    },
+    {
+      "path": "docs/security/CLASSIFICATION-MODEL.md",
+      "sha256": "65a8d2216d93c71a397418ce99f98c59a3e394e3669f737596d8ea7837a2bbf5"
+    },
+    {
+      "path": "docs/security/RBAC-ABAC-MODEL.md",
+      "sha256": "d0261d579f916568b9571318bc8e0d55c818b2e0e1e4826b9f1b4db26d9049b0"
+    },
+    {
+      "path": "docs/security/RLS-DESIGN.md",
+      "sha256": "d510f57213675c061185822280e3769751a70d384e02676c030f38ad768d74a2"
+    },
+    {
+      "path": "docs/security/SECURITY-CONTEXT-CONTRACT.md",
+      "sha256": "62116341b2b61e2b9354e8bb601c2ae36a74cbab2461ec413898d54a2ae0672e"
+    },
+    {
+      "path": "docs/security/SEGREGATION-OF-DUTIES.md",
+      "sha256": "0dc89ad5c9fc32324e47c976357942de162a095e6c95bead52b98c4fa495a793"
+    },
+    {
+      "path": "docs/security/SESSION-MODEL.md",
+      "sha256": "f1438f80df97afc26ef647f402aa42b3f92ec2207662ea2c8dd1df65e15c1cc8"
+    },
+    {
+      "path": "infrastructure/docker/api.Dockerfile",
+      "sha256": "36487bcbe8dae5c1711055c238a4ce56c597c9c3cc8e7b352192128d02e53049"
+    },
+    {
+      "path": "infrastructure/docker/postgres.Dockerfile",
+      "sha256": "49df9a2f022e467b376afde3c0675d55091756f582026d524636be32f43432c0"
+    },
+    {
+      "path": "infrastructure/docker/web.Dockerfile",
+      "sha256": "9557602ca8447f6a93a34ae3311be6a982eaac623e17b0e696867ae63e879136"
+    },
+    {
+      "path": "infrastructure/nginx/19-create-config-dir.sh",
+      "sha256": "4c08c17ac7a2d08e6f34f6b72c65f3d475faac9ef216293c4870d963e19d4e7c"
+    },
+    {
+      "path": "infrastructure/nginx/auth-tls.conf.template",
+      "sha256": "2eaf45f3c505c43acef361ed3ed906a3714ad2974502c0271c1342c02fce3667"
+    },
+    {
+      "path": "infrastructure/nginx/default.conf.template",
+      "sha256": "c207015d1a18797b255e2ccb3bfc7131047174dafa128304c8e06be3028a5990"
+    },
+    {
+      "path": "infrastructure/nginx/nginx.conf",
+      "sha256": "15db969ec81d46f78357db7d6bf103d4049d632d7f22536e05101fc12daa7064"
+    },
+    {
+      "path": "migrations/001_foundation.sql",
+      "sha256": "be0830b122b59e1e29f9dd7f4daf661b8bb00012b74391efe75a67ee04d1b040"
+    },
+    {
+      "path": "migrations/002_identity_sessions.sql",
+      "sha256": "49dbda5b106ebd9b5ecc07cd71e4ec0731114d5e93ee8b81fff86a95703e3a72"
+    },
+    {
+      "path": "migrations/003_authorization.sql",
+      "sha256": "5ee53366959fcb13a1b2c1d14d0ffe6322fc7bea5dc919c52bc50e01fb73c52a"
+    },
+    {
+      "path": "migrations/004_clearance_temporal_approval_hardening.sql",
+      "sha256": "f597e8cc521d30a849680b11c90899f8b5817b7abe6b65195a0db21bcca3f7fa"
+    },
+    {
+      "path": "migrations/005_iam_administration.sql",
+      "sha256": "a1cafbe65e1b3e516b3e5975a254e1b904971fe8fc5f8ca66976a83ea1533017"
+    },
+    {
+      "path": "migrations/006_iam_denial_audit.sql",
+      "sha256": "d9b2037c3c687f79f500bdd80e705cb0b1095b7c6361bab6230e6764e41e0783"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "363ade4d0cf2eb61ec37b33674ee1a7b356b65b903c8311d0679b1e5bd7274b1"
+    },
+    {
+      "path": "package.json",
+      "sha256": "e4d4d168df1021db7be4550f571f1c1c748c4ccc0c79fb809504e87f0cb877bd"
+    },
+    {
+      "path": "scripts/auth-browser-api.mjs",
+      "sha256": "ae01dd5a87c11788dcea38d42ef89a459fb0a9c04a4037381573a8b75666d63f"
+    },
+    {
+      "path": "scripts/bootstrap-identity.mjs",
+      "sha256": "557dfa3c9e336733936525a1c41ee0e1923cac1f2895fca954c8f6dd700c8ae3"
+    },
+    {
+      "path": "scripts/calibrate-argon2.mjs",
+      "sha256": "49f862a724486e5282d2ff2fa92861d92d515f84b734cf3a6a62006f9a631283"
+    },
+    {
+      "path": "scripts/check-ci-pipelines.mjs",
+      "sha256": "72ecd1809de00bb96ed87709e15a00a7eaa0c0855f19aab0e3fd370cb99faa36"
+    },
+    {
+      "path": "scripts/check-frozen.mjs",
+      "sha256": "bf6a8b036239e015e2821f7f9539fbc0a419361a754fad89901bba88f6723007"
+    },
+    {
+      "path": "scripts/check-policy.mjs",
+      "sha256": "281a0e13a63295c190707c6f6a6421660ebf17d49583575b29ce1bb34c88f331"
+    },
+    {
+      "path": "scripts/ci-database.sh",
+      "sha256": "48a53658b8fe3957cd6df333efb0aff8184bffd61330730b79c9c82eb495fe37"
+    },
+    {
+      "path": "scripts/cleanup-auth-browser.mjs",
+      "sha256": "e2cdb63a9c138f9c4c55de1dc3d274d9f36fdef70740641cb6b9ad80cb3db447"
+    },
+    {
+      "path": "scripts/container-smoke.sh",
+      "sha256": "76559ab9664d189c38d7553b0c0115bf92cc0ccfb3f017ecad6bcd35435cf170"
+    },
+    {
+      "path": "scripts/local-tests.ps1",
+      "sha256": "6e4c7cd9daefe61d32e854a3f82133f037fbe791ffadacfe0d94638ffd042e84"
+    },
+    {
+      "path": "scripts/migrate.mjs",
+      "sha256": "9615123d4ed27c49ef5c11cd9bf3c729eaa6d7b9f2c59cf5d0e3e8962a087743"
+    },
+    {
+      "path": "scripts/prepare-auth-browser.mjs",
+      "sha256": "aeb39720a0c15e047bca0d0bb85c9bb2a1377e982a19270580532a1fcbda058d"
+    },
+    {
+      "path": "scripts/prove-pipefail.sh",
+      "sha256": "9470b388c3a40cce9c64f07179dd29df68f3dbbcfc9da64b5f7739803511e288"
+    },
+    {
+      "path": "scripts/provision-auth-test.mjs",
+      "sha256": "73a6958e601fe3367ee67f3100ba5d68603288401dad7ee514392a3afa24f24e"
+    },
+    {
+      "path": "scripts/provision-test-runtime.mjs",
+      "sha256": "13b8cf69c308169f73b00d73db5b2c100440762863694a81157f0fdd7639ad90"
+    },
+    {
+      "path": "scripts/run-m1c-test.mjs",
+      "sha256": "cc50fae606e9cc018c53ea7f076f90400a23a5a03eef4d5e1e8cdebe560b60de"
+    },
+    {
+      "path": "scripts/start-m1c-test.ps1",
+      "sha256": "f4d6f0d210b80eb2beeae9054ed63b19859d3a881d6ebf8554847d3804735673"
+    },
+    {
+      "path": "scripts/summarize-auth-browser.mjs",
+      "sha256": "ba85e8e7cf6b236f5aaec4cd8574b29efc42af41e34983b1a6980df8227ae1e8"
+    },
+    {
+      "path": "tests/auth-browser/identity.spec.mjs",
+      "sha256": "2ec1746df661427c988089fa03432a6caa0915e75fe0c801b83ce9afa458c506"
+    },
+    {
+      "path": "tests/auth-browser/m1d.spec.mjs",
+      "sha256": "f4f74c569ccd414530cb1758498e34ba9da1859728a9db8920c73396c9f4258f"
+    },
+    {
+      "path": "tests/frontend/baseline.spec.mjs",
+      "sha256": "121e1d77233964bd1a6e20a9504a4cde85b7c413d63f02de154b7d3986d6cbb3"
+    },
+    {
+      "path": "tests/helpers.mjs",
+      "sha256": "61fa6eeba7fea8127e7e69558cf5fb11b4d1ce698e08748504fdf865936e4b5b"
+    },
+    {
+      "path": "tests/integration/authentication.test.mjs",
+      "sha256": "324dcb5569d4392ed6daed27752487484a055dc0651e0667a439477f2e5faef2"
+    },
+    {
+      "path": "tests/integration/authorization.test.mjs",
+      "sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8"
+    },
+    {
+      "path": "tests/integration/database.test.mjs",
+      "sha256": "de58040d0eee8bf8a1d75814ba367154a34aa0ecff4470a800d9930eb777133a"
+    },
+    {
+      "path": "tests/integration/health.test.mjs",
+      "sha256": "583fd5ff7fa233ef34ac14610f240bd56413401ec6d1f7d73398033086a245a2"
+    },
+    {
+      "path": "tests/unit/config.test.mjs",
+      "sha256": "29ecbf8e14214a86e4bd8ab07ab95766d5c0e6ab53727b7e56e3bc7152c5bdb8"
+    },
+    {
+      "path": "tests/unit/frozen.test.mjs",
+      "sha256": "907678d46bf1094811f72fdd9c4fd81854550ced16d23e93d748ad2a4aaa87b6"
+    },
+    {
+      "path": "tests/unit/password.test.mjs",
+      "sha256": "f8c74281deef7f70ac7d8c22fecdf0baa00c86fcdf4cb1945bc41e1268a1e91f"
+    }
+  ],
+  "persisted_external_evidence": [
+    {
+      "path": "artifacts/M1D-9E1-REMOTE-HASHES.json",
+      "sha256": "a43174742e06ecedaab68c91d67feafd781ff6550e88e6734b029b79e1623ffa",
+      "role": "persisted technical evidence for evaluated candidate; documentary acceptance recorded separately"
+    },
+    {
+      "path": "artifacts/M1D-9E1-DELIVERY-HASHES.json",
+      "sha256": "747bb1713058bf492f5fb4a4e4132f022f1278623b407a7d810bf65c39877478",
+      "role": "persisted technical evidence for evaluated candidate; documentary acceptance recorded separately"
+    },
+    {
+      "path": "artifacts/M1D-9E1-INDEPENDENT-REVIEW.md",
+      "sha256": "40b100f47da859f30009e939a0c6d47b988f0039680e79261633896be63ae491",
+      "role": "persisted technical evidence for evaluated candidate; documentary acceptance recorded separately"
+    },
+    {
+      "path": "artifacts/M1D-9E1-REMOTE-SUMMARY.json",
+      "sha256": "577696dfe411ae18addde3cb65cab66b6d4b988dd7382f4c32069a8f0b8ad319",
+      "role": "persisted technical evidence for evaluated candidate; documentary acceptance recorded separately"
+    },
+    {
+      "path": "artifacts/M1D-9E1-TEST-RESOURCE-RELEASE.json",
+      "sha256": "5150d5899c24c61dd8225cb192aebbedd782a4c282fd77dbe2f7b3ddfaab2cc1",
+      "role": "persisted technical evidence for evaluated candidate; documentary acceptance recorded separately"
+    }
+  ],
+  "remote_evidence_bundle_verified_files": 60,
+  "technical_CI_runs": [
+    43805975302,
+    43805979032
+  ],
+  "risk_acceptance_record": "EVIDENCE/M1/M1D/M1D-RISK-503-001-ACCEPTANCE.md",
+  "excluded_from_own_inventory": [
+    "EVIDENCE/M1/M1D/FINAL-EVIDENCE-MANIFEST.json",
+    "EVIDENCE/M1/M1D/DOCUMENTARY-INDEPENDENT-ATTESTATION.md"
+  ],
+  "self_reference_policy": "The manifest excludes itself and its independent attestation to avoid a hash cycle. The attestation binds this manifest SHA256; post-commit CI/review bind the published final candidate.",
+  "gate_state": "PENDING_EXPLICIT_HUMAN_DECISION",
+  "M2": "BLOCKED",
+  "versioned_file_hash_basis": "SHA256 of exact Git index blob bytes for the reviewed candidate; stable across checkout CRLF/LF conversion",
+  "external_file_hash_basis": "SHA256 of persisted raw artefact bytes; not subjected to Git checkout conversion",
+  "historical_manifest_policy": "Existing historical manifests/hashes remain unchanged and retain their original interpretation"
+}

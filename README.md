@@ -1,6 +1,10 @@
-# SGP-DISPO — M0 foundation
+# SGP-DISPO
 
-Authority: `SGP-DISPO-MASTER-v1.0-FROZEN.md` (unchanged). Only M0 and remediation M0-R1 are authorised. M1 is blocked. The current gate decision is recorded in MILESTONE_REPORT.md; this baseline is not the complete institutional system.
+Canonical authority: `SGP-DISPO-MASTER-v1.1-FROZEN-FINAL.md`, adopted by commit0408117. See `docs/governance/MASTER-AUTHORITY.md` and approved CR-SGP-001. The v1.0 Master is preserved as historical evidence.
+
+M0/M1A/M1B/M1C approved foundations remain preserved. M1D IAM administration is authorized and currently a Draft PR candidate with technical validation complete and documentary gate consolidation in progress; it is not formally gate-approved until exact-SHA CI and independent review pass. M2 is BLOCKED and requires separate human authorization. This repository is an existing implementation: resume, extend, migrate forward and preserve passed gates.
+
+The administration surface uses real API/PostgreSQL authorization, RLS, delegation, SoD and atomic audit. Read `docs/operations/M1D-IAM-ADMINISTRATION.md` for actual operations and constraints. Current evidence is in `EVIDENCE/M1/M1D/`; no production-readiness claim is made.
 
 ## Local checks
 

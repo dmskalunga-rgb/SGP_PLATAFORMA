@@ -24,3 +24,18 @@ Correcção focal publicada em [0643595](https://github.com/dmskalunga-rgb/SGP_P
 Re-review independente read-only `/root/medium_final_review`, dispatch GPT-6.1 SOL + Alto, fork sem contexto: oito critérios §14 PASS, sem novos findings CRITICAL/HIGH/MEDIUM/LOW. Provas e limites em MEDIUM-001-CI-FAIL-CLOSED.md. O teste falhado controlado usa node:test temporário, não PostgreSQL; regressão PostgreSQL normal passou. O checker protege o formato actual dos dois steps e não é parser geral YAML/Shell.
 
 Esta decisão substitui os estados FAIL anteriores preservados neste histórico: **M1C-ASTRA-HIGH-001 = CLOSED; M1C-SUB-MEDIUM-001 = CLOSED; INDEPENDENT_REVIEW = PASS; M1C_GATE = PASS; M1D = BLOCKED_PENDING_EXPLICIT_AUTHORIZATION; M2 = BLOCKED.** A atestação exacta com SHA documental/CI encontra-se em refs/notes/m1c-gate. STOP antes de M1D/M2.
+
+
+## M1D candidate
+
+Authorized IAM administration extension on M1C closure. DoR/inventory in docs/requirements/M1D-PLAN.md, implemented APIs/OpenAPI and administration UI, incremental migration005. Existing contracts and published migrations preserved. M1D validation and independent review are tracked in EVIDENCE/M1/M1D/CHECKS.json; no final M1D PASS is claimed at this stage. M2 BLOCKED.
+
+
+## M1D-VERIFY-001 local remediation
+
+Denied execution/rejection now derives action, target and approval reference from the stored approval, and actor/session/correlation from binding, using the existing immutable writer. Migration005 only; 001–004 preserved. Focal2/2 and affected authorization regression25/25 PASS; historical51-test proof was not rerun. Authentication audit_view authorized/unauthorized SQL and API, FORCE RLS and write denial verified. Intermediate broad audit query503 is retained in evidence; final strict broad and exact-event assertions passed without timeout changes. See EVIDENCE/M1/M1D/VERIFY-001-AUDIT-REMEDIATION.md and CHECKS.json. No publication or final M1D gate approval is claimed; M2 BLOCKED.
+
+
+## M1D PR1 controlled remediation checkpoint
+
+Migration006 and typed post-rollback DENY adapters address identity creation and role-status audit findings; published001–005 remain immutable. UI CSRF readiness, maker-checker evidence and TEST teardown are covered by focal validation. See docs/operations/M1D-DENIAL-AUDIT.md, EVIDENCE/M1/M1D/PR1-REMEDIATION.md and CHECKS.json for exact results/hashes and retained failures. The broad audit503 remains an open investigation. New remote CI and independent exact-SHA review are required; no M1D_GATE PASS or M2 authorization is declared.

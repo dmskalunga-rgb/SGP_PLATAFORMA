@@ -4,7 +4,7 @@ test('browser renders baseline using the live API and real PostgreSQL without fa
   await page.goto('/');
   await expect(page.getByRole('heading',{name:'SGP-DISPO',exact:true})).toBeVisible();
   await expect(page.getByRole('status')).toHaveText('Serviço disponível.');
-  await expect(page.getByText('Ainda não existem módulos operacionais disponíveis nesta fundação.')).toBeVisible();
+  await expect(page.getByText('Administração de identidade e segurança disponível após autenticação.')).toBeVisible();
   expect((await page.request.get('/health/ready')).status()).toBe(200);
   expect(errors).toEqual([]);await expect(page.getByRole('button')).toHaveCount(0);
 });

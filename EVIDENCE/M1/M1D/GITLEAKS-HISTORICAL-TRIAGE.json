@@ -1,0 +1,420 @@
+{
+  "scope": "24 preserved all-refs findings; notes refs already public; no notes rewritten",
+  "original_report_sha256": "2950c7e871d09b3867fdc4eaab2efe30df30c5a8b92c3f19b9dbe0688e0c23b0",
+  "findings": [
+    {
+      "id": "NOTES-01",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 4,
+      "field": "\"base_sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/eb24736e5d857a3c82ffa6123d1905a3dddc04de"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-02",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 5,
+      "field": "\"technical_sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-03",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 6,
+      "field": "\"closure_sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/7ee4db8c987c4a73e6330be1441ec228ae3f8e0c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-04",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 10,
+      "field": "\"sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-05",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 20,
+      "field": "\"sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/7ee4db8c987c4a73e6330be1441ec228ae3f8e0c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-06",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 33,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-07",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 38,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-08",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 43,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/0643595faa20422643aa712c104d302f2f743ba1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-09",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 50,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/7ee4db8c987c4a73e6330be1441ec228ae3f8e0c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-10",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 55,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/7ee4db8c987c4a73e6330be1441ec228ae3f8e0c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-11",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "b4200e3e43f589d4f03003b5a7a3fff6caa3e648",
+      "notes_target": "0643595faa20422643aa712c104d302f2f743ba1",
+      "line": 60,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/7ee4db8c987c4a73e6330be1441ec228ae3f8e0c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-12",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 6,
+      "field": "\"base_commit\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/cca2b2b4ce9605b9344099b59d17ea70fac63160"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-13",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 7,
+      "field": "\"technical_commit_sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-14",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 8,
+      "field": "\"documentation_closure_sha\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/2aaf4a3f39ee9f152eb12450226f4a39b9c10699"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-15",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 19,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-16",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 24,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-17",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 29,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/161e246614fb3da8cc3c950f9ed5cf0c42cc301e"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-18",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 43,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/2aaf4a3f39ee9f152eb12450226f4a39b9c10699"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-19",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 48,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/2aaf4a3f39ee9f152eb12450226f4a39b9c10699"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-20",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "5c7e079951f749efb320b08547901d1d52d387d5",
+      "notes_target": "161e246614fb3da8cc3c950f9ed5cf0c42cc301e",
+      "line": 53,
+      "field": "\"name\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/2aaf4a3f39ee9f152eb12450226f4a39b9c10699"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1c-gate"
+      ]
+    },
+    {
+      "id": "NOTES-21",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "f39a17a4eb59fd16d5f41786dcd8039932bdaf6e",
+      "notes_target": "f1b146b6fe128adb37271b08e419b1be1b3007c1",
+      "line": 4,
+      "field": "\"Base Commit\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/58834d8edb3c4b07c2fc9b68c0900886e0e8d12c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1b-gate"
+      ]
+    },
+    {
+      "id": "NOTES-22",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "f39a17a4eb59fd16d5f41786dcd8039932bdaf6e",
+      "notes_target": "f1b146b6fe128adb37271b08e419b1be1b3007c1",
+      "line": 5,
+      "field": "\"Final Commit\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/f1b146b6fe128adb37271b08e419b1be1b3007c1"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1b-gate"
+      ]
+    },
+    {
+      "id": "NOTES-23",
+      "rule": "generic-api-key",
+      "notes_commit": "f39a17a4eb59fd16d5f41786dcd8039932bdaf6e",
+      "notes_target": "f1b146b6fe128adb37271b08e419b1be1b3007c1",
+      "line": 262,
+      "field": "\"api.cdx.json\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "json_field_path": [
+          "CI report hashes",
+          "api.cdx.json"
+        ],
+        "value_type": "64-hex SHA256 report digest",
+        "digest_sha256": "2150f39dbd8a409878df7c5232ac385b574326bc4f38e134d22f5cd98b791e0b"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1b-gate"
+      ]
+    },
+    {
+      "id": "NOTES-24",
+      "rule": "sourcegraph-access-token",
+      "notes_commit": "add35fcec2c9cf66e9204aa6021973892fbe82ea",
+      "notes_target": "58834d8edb3c4b07c2fc9b68c0900886e0e8d12c",
+      "line": 4,
+      "field": "\"M1A Final Commit SHA\"",
+      "classification": "PROVEN_FALSE_POSITIVE",
+      "proof": {
+        "object_type": "commit",
+        "ancestor_of_public_candidate": true,
+        "public_commit_url": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/58834d8edb3c4b07c2fc9b68c0900886e0e8d12c"
+      },
+      "notes_public_reachability": [
+        "refs/notes/m1a-publication"
+      ]
+    }
+  ],
+  "true_positive": 0,
+  "proven_false_positive": 24,
+  "inconclusive": 0
+}

@@ -1,6 +1,6 @@
 {
   "milestone": "M1C",
-  "stage": "LOCAL_VALIDATED_PENDING_PUBLICATION_CI_ASTRA",
+  "stage": "FINAL_GATE_PASS",
   "repository": "https://github.com/dmskalunga-rgb/SGP_PLATAFORMA",
   "branch": "main",
   "base_commit_link": "[f1b146b](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/f1b146b6fe128adb37271b08e419b1be1b3007c1)",
@@ -173,11 +173,11 @@
       "path": "artifacts/m1c-history-triage.json"
     }
   ],
-  "remote_CI": "PENDING",
-  "ASTRA_review": "PENDING",
+  "remote_CI": "PASS",
+  "ASTRA_review": "UNAVAILABLE_SUBSTITUTE_INDEPENDENT_REVIEW_PASS",
   "final_attestation": "refs/notes/m1c-gate attached to verified commit; see CI.md",
-  "M1C_GATE": "PENDING_REMOTE_CI_AND_INDEPENDENT_REVIEW",
-  "M1D": "BLOCKED",
+  "M1C_GATE": "PASS",
+  "M1D": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
   "M2": "BLOCKED",
   "H1_remediation_candidate": {
     "finding": "M1C-ASTRA-HIGH-001",
@@ -267,5 +267,21 @@
     "M1C_GATE": "PASS",
     "M1D": "BLOCKED_PENDING_EXPLICIT_AUTHORIZATION",
     "M2": "BLOCKED"
-  }
+  },
+  "historical_candidate_state": {
+    "stage": "LOCAL_VALIDATED_PENDING_PUBLICATION_CI_ASTRA",
+    "remote_CI": "PENDING",
+    "ASTRA_review": "PENDING",
+    "M1C_GATE": "PENDING_REMOTE_CI_AND_INDEPENDENT_REVIEW",
+    "M1D": "BLOCKED"
+  },
+  "independent_review": "PASS",
+  "M1C-ASTRA-HIGH-001": "CLOSED",
+  "M1C-SUB-MEDIUM-001": "CLOSED",
+  "total_tests": 48,
+  "failed": 0,
+  "skipped": 0,
+  "security_scans": "PASS",
+  "container_scans": "PASS",
+  "SBOM": "PASS"
 }

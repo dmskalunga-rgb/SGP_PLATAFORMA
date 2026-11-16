@@ -19,3 +19,95 @@ id = "sourcegraph-access-token"
 description = "Exact initial public Git commit identifier, independently verified by git rev-parse and GitHub"
 regexTarget = "secret"
 regexes = ['''^8f4919c6949119ae1523c4c37a1feac7d831f10d$''']
+
+[[rules.allowlists]]
+description = "Exact published M1D Git commit ID verified by git rev-parse and GitHub PR1; not a credential"
+regexTarget = "secret"
+regexes = ['''^f839ad5d5500df9fd602512d1ce187c64fa692e6$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^0643595faa20422643aa712c104d302f2f743ba1$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^161e246614fb3da8cc3c950f9ed5cf0c42cc301e$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^2aaf4a3f39ee9f152eb12450226f4a39b9c10699$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^58834d8edb3c4b07c2fc9b68c0900886e0e8d12c$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^7ee4db8c987c4a73e6330be1441ec228ae3f8e0c$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^cca2b2b4ce9605b9344099b59d17ea70fac63160$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^e4800368acbb8ea2a64bc1e829acc15030ee6557$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^eb24736e5d857a3c82ffa6123d1905a3dddc04de$''']
+
+[[rules.allowlists]]
+description = "Exact public Git commit object verified in M1D historical triage"
+regexTarget = "secret"
+regexes = ['''^f1b146b6fe128adb37271b08e419b1be1b3007c1$''']
+
+[[rules.allowlists]]
+description = "Exact public Git notes commit verified against remote notes refs in M1D triage"
+regexTarget = "secret"
+regexes = ['''^5c7e079951f749efb320b08547901d1d52d387d5$''']
+
+[[rules.allowlists]]
+description = "Exact public Git notes commit verified against remote notes refs in M1D triage"
+regexTarget = "secret"
+regexes = ['''^add35fcec2c9cf66e9204aa6021973892fbe82ea$''']
+
+[[rules.allowlists]]
+description = "Exact public Git notes commit verified against remote notes refs in M1D triage"
+regexTarget = "secret"
+regexes = ['''^b4200e3e43f589d4f03003b5a7a3fff6caa3e648$''']
+
+[[rules.allowlists]]
+description = "Exact public Git notes commit verified against remote notes refs in M1D triage"
+regexTarget = "secret"
+regexes = ['''^f39a17a4eb59fd16d5f41786dcd8039932bdaf6e$''']
+
+[[rules.allowlists]]
+description = "Exact public M1D technical Git commit referenced by risk acceptance; DOCUMENTARY-SCAN-TRIAGE proves both findings"
+regexTarget = "secret"
+regexes = ['''^9e1fe6bd3f8219a1b267eadb8e80458f221b699e$''']
+
+[[rules.allowlists]]
+description = "Exact published governance Git commit; M1 FINAL-GATE SECRET-SCAN-TRIAGE proves metadata false positive"
+regexTarget = "secret"
+regexes = ['''^8ccabad82c9678ef01729bd71866e2d4c675b798$''']
+
+[[rules.allowlists]]
+description = "Exact published governance Git commit; M1 FINAL-GATE SECRET-SCAN-TRIAGE proves metadata false positive"
+regexTarget = "secret"
+regexes = ['''^fd993a4e08d994d357b471f4c56674b0cf979a5f$''']
+
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "Exact api.cdx.json SHA256 report digest in published M1B gate notes; proven metadata in M1D triage"
+regexTarget = "secret"
+regexes = ['''^481A9D547A544A73B7F6C1909A0E0B60BA9B64B56E50E67C98DF0CFB1401E389$''']
