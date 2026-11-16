@@ -27,3 +27,8 @@ Esta decisão substitui os estados FAIL anteriores preservados neste histórico:
 ## M1D candidate
 
 Authorized IAM administration extension on M1C closure. DoR/inventory in docs/requirements/M1D-PLAN.md, implemented APIs/OpenAPI and administration UI, incremental migration005. Existing contracts and published migrations preserved. M1D validation and independent review are tracked in EVIDENCE/M1/M1D/CHECKS.json; no final M1D PASS is claimed at this stage. M2 BLOCKED.
+
+
+## M1D PR1 remediation checkpoint
+
+Resume from existing Draft PR1. Migration006 extends immutable001-005; denied identity creation and role-state operations reuse the official audit writer. UI CSRF initialization and TEST lifecycle are corrected and tested. Exact local results, retained failures, Gitleaks triage, hashes and pending publication/review are recorded in EVIDENCE/M1/M1D/PR1-REMEDIATION.md and CHECKS.json. Broad audit503 remains an open investigation. No M1D_GATE PASS, merge, production deployment or M2 authorization.

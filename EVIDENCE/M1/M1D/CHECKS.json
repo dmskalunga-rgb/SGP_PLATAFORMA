@@ -1,6 +1,6 @@
 {
   "milestone": "M1D",
-  "stage": "PR1_BASELINE_CORRECTION_LOCAL_PASS_PENDING_NEW_SHA_CI_REVIEW",
+  "stage": "PR1_LOCAL_VALIDATED_TECHNICAL_CANDIDATE_PENDING_PUBLICATION",
   "base_commit_link": "[0408117](https://github.com/dmskalunga-rgb/SGP_PLATAFORMA/commit/04081170bca5ac1a062cabc89a3888dbe2760fbe)",
   "M1C_closure_integrity": "PASS",
   "master_sha256": "7CDE06093C1A3F0D7EF7C463BC7EE08CB4FCAC48F4B149D377166C0FF171A667",
@@ -17,7 +17,7 @@
   "full_final_local": "HISTORICAL_PASS_PRE_VERIFY001",
   "remote_CI": "PENDING",
   "independent_review": "PENDING",
-  "M1D_GATE": "NOT_DECIDED",
+  "M1D_GATE": "NOT_APPROVED_PENDING_HUMAN_REVIEW",
   "M2": "BLOCKED",
   "test_counts": {
     "unit": 4,
@@ -286,5 +286,260 @@
         "credential_classification": "UNTRIAGED; DO_NOT_ASSUME_ALL_FALSE_POSITIVES"
       }
     }
+  },
+  "PR1_controlled_remediation": {
+    "published_migrations_001_to_005_modified": false,
+    "migration_added": "006_iam_denial_audit.sql",
+    "gate": "NOT_APPROVED",
+    "M2": "BLOCKED",
+    "focal_audit": {
+      "pass": 3,
+      "fail": 0,
+      "skipped": 0
+    },
+    "affected_authorization_final": {
+      "pass": 28,
+      "fail": 0,
+      "skipped": 0
+    },
+    "initial_expanded": {
+      "pass": 24,
+      "fail": 4,
+      "causes": [
+        "broad audit503, cause unconfirmed",
+        "three new tests reused fixture deliberately disabled by earlier M1C; corrected to active unprivileged fixture"
+      ]
+    },
+    "migration_regression": {
+      "pass": 2,
+      "fail": 0
+    },
+    "TLS_cycles_1_2": "BUSINESS_ASSERTIONS_PASSED_BUT_FATAL_TEARDOWN; NOT_FINAL_LIFECYCLE_PASS",
+    "TLS_cycles_3_4": "PASS_NO_FATAL_TEARDOWN_BEFORE_EXPLICIT_ZERO_CONNECTION_PROOF",
+    "lifecycle": {
+      "failure_control": {
+        "expected_test_exit": 1,
+        "business_suite_PASS_claim": false,
+        "cleanup": "PASS_ACK_ZERO_CONNECTIONS_DROP_WITHOUT_FORCE_DB_ABSENT"
+      },
+      "final_success": "PASS_SAME_LIFECYCLE_CHECKS",
+      "post_run_resources": {
+        "test_browser_databases": 0,
+        "test_browser_connections": 0,
+        "fixture_file_exists": false,
+        "close_ack_exists": false
+      }
+    },
+    "TLS_cause": "Reproduced real POST403 invalid_csrf before session response delivery; approval PENDING; no maker-checker relaxation",
+    "TLS_historical_HTTP_limit": "Original CI logs did not retain HTTP body; do not invent historical HTTP response",
+    "audit_503": {
+      "status": "OPEN_INVESTIGATION",
+      "recurrence": "initial expanded regression broad audit503",
+      "request_id": "b715840c-d2b0-49b9-a850-b8ea47eb1690",
+      "SQLSTATE_at_recurrence": "UNKNOWN; diagnostics added afterwards",
+      "final_strict_regression": "PASS; no timeout or retry changes"
+    },
+    "local_controls": {
+      "build": "PASS",
+      "lint": "PASS",
+      "typecheck": "PASS",
+      "frozen": "PASS",
+      "policy": "PASS_OPERATIONAL_MOCKS_ZERO",
+      "SAST": "PASS_ZERO_FINDINGS_ZERO_ERRORS",
+      "npm_audit": "PASS_ZERO_ALL_SEVERITIES",
+      "SCA": "PASS_ZERO_REPORTED_HIGH_CRITICAL_SCOPE",
+      "secret_worktree": "PASS_ZERO_PRE_STAGE; FINAL_STAGED_SCAN_RECEIPT_IN_PUBLICATION_EVIDENCE",
+      "secret_all_refs_including_notes": "PASS_ZERO"
+    },
+    "Gitleaks_triage": {
+      "total_original": 24,
+      "proven_false_positive": 24,
+      "true_positive": 0,
+      "inconclusive": 0,
+      "proof": "GITLEAKS-HISTORICAL-TRIAGE.json",
+      "allowlists": "exact verified values only, specific rules, no new path exclusions"
+    },
+    "findings": [
+      {
+        "id": "M1D-REVIEW-IDENTITY-DENY",
+        "status": "LOCALLY_CORRECTED_VALIDATED_PENDING_REMOTE_REVIEW"
+      },
+      {
+        "id": "M1D-REVIEW-ROLE-STATUS-DENY",
+        "status": "LOCALLY_CORRECTED_VALIDATED_PENDING_REMOTE_REVIEW"
+      },
+      {
+        "id": "M1D-VALIDATION-TLS-CHECKER",
+        "status": "LOCALLY_CORRECTED_REPRODUCED_PENDING_REMOTE_REVIEW"
+      },
+      {
+        "id": "M1D-VALIDATION-SECRET-SCAN",
+        "status": "TRIAGED_EXACT_EXCEPTIONS_VALIDATED_PENDING_FINAL_SCAN"
+      },
+      {
+        "id": "M1D-TEST-LIFECYCLE",
+        "status": "LOCALLY_VALIDATED_SUCCESS_AND_CONTROLLED_FAILURE"
+      }
+    ],
+    "independent_review": "PRELIMINARY_NO_NEW_CRITICAL_HIGH_MEDIUM; FINAL_EXACT_SHA_PENDING",
+    "remote_CI": "PENDING_NEW_TECHNICAL_COMMIT",
+    "expected_complete_remote_test_count": 56,
+    "expected_count_is_not_a_local_full_suite_claim": true,
+    "report_hashes": [
+      {
+        "path": "artifacts/m1d-pr1-remediation-focal.log",
+        "sha256": "c67cff32d3c11b9c45b0f4523e97c20cf893288d4fcc53fea7839d1b27d36196"
+      },
+      {
+        "path": "artifacts/m1d-pr1-authorization-regression.log",
+        "sha256": "55197ef653935deb4bdb3812a96f42d637ded9725bad7c44972dc821b75bcc19"
+      },
+      {
+        "path": "artifacts/m1d-pr1-authorization-diagnostic-regression.log",
+        "sha256": "27373c3539ff614e1c85f03abdc779bcd868ff94ee87aa84974ce34b3c63e104"
+      },
+      {
+        "path": "artifacts/m1d-pr1-authority-diagnostics.jsonl",
+        "sha256": "abe27fe02ab8c6e85507b8460f56cd5dbd2dfc118b769fe83dfbe670d4cd5ff5"
+      },
+      {
+        "path": "artifacts/m1d-pr1-migration-regression.log",
+        "sha256": "8efa8cfcef762d1029c6101ab145e1b859ef1a7fb5018f4608188af493cd8f58"
+      },
+      {
+        "path": "artifacts/m1d-pr1-tls-cycle1.log",
+        "sha256": "c5cbc7303fe007be699a0a57ec930f08ea44ea71f43d0404380afe68a893e1c3"
+      },
+      {
+        "path": "artifacts/m1d-pr1-tls-cycle2.log",
+        "sha256": "d9c8562e8eb730e74bc6a10dba5af1065572e05eaf2e4cd6a4189baff9342b18"
+      },
+      {
+        "path": "artifacts/m1d-pr1-tls-cycle3.log",
+        "sha256": "120fba4b9c385bdb8722edfe57a3538fd034aec2450b6b972fdd297c58c4236b"
+      },
+      {
+        "path": "artifacts/m1d-pr1-tls-cycle4.log",
+        "sha256": "1902d6af6d143ad73a0fa5c8bd5cf132b3a2e9e70c0d177dced8f45a72176ed7"
+      },
+      {
+        "path": "artifacts/m1d-lifecycle-failure-control.log",
+        "sha256": "7cd2c66664c10475c862b2f8555d2724767d469160b962568509603d595e9ca7"
+      },
+      {
+        "path": "artifacts/m1d-lifecycle-failure-control.json",
+        "sha256": "eecade411e49aaaf204cca2d7d8001fc3505a7ce008c190679f5fc058acd818d"
+      },
+      {
+        "path": "artifacts/m1d-lifecycle-final-success.log",
+        "sha256": "fc1886dfffecdb1b43bc062fa134a2283979a6794f0482c84dc014b8d2d1d9cf"
+      },
+      {
+        "path": "artifacts/m1d-lifecycle-final-success.json",
+        "sha256": "d131364481aee5dc04a67a71def805872f52b24b46dcf97ab4288cef9935e37a"
+      },
+      {
+        "path": "artifacts/m1d-lifecycle-final-resource-check.json",
+        "sha256": "8c332e98feb6223ecf4dd3c0942b3b165ef4a59f01bd89a74621269fa464e929"
+      },
+      {
+        "path": "artifacts/m1d-pr1-build.log",
+        "sha256": "16ae3b2558f8e3952e8866d8559a9861f21eddc0aec9d9a824d0dc3c865cfb07"
+      },
+      {
+        "path": "artifacts/m1d-pr1-lint.log",
+        "sha256": "715aa3c63e218925a764f5e2804c3e5e10956a033cc6a6bd86424b3a3adcb965"
+      },
+      {
+        "path": "artifacts/m1d-pr1-typecheck.log",
+        "sha256": "85c9147bbf7347b4cee1718d4cd434ecdd990fa27ad84219569899f2fdefa69f"
+      },
+      {
+        "path": "artifacts/m1d-pr1-frozen.log",
+        "sha256": "3aefaffcc683cd107da1c62363f7dded0c08a53a6d09dee3459622ba3e969240"
+      },
+      {
+        "path": "artifacts/m1d-pr1-policy.log",
+        "sha256": "db469a8c3d1874e805adccf3cae3db32f672bd7f1bfa23bc433cb2f94065c056"
+      },
+      {
+        "path": "artifacts/m1d-pr1-semgrep.json",
+        "sha256": "87064a08f53c631f4f01f90f10d4778a1e2737a7335487aeccb28537c4c4f20b"
+      },
+      {
+        "path": "artifacts/m1d-pr1-npm-audit.json",
+        "sha256": "8bb6125f092c48ed8041f30ea71403b61f9d5111982d5517d346f14a7273aafb"
+      },
+      {
+        "path": "artifacts/m1d-pr1-gitleaks-all-refs.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "artifacts/m1d-pr1-gitleaks-worktree.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      },
+      {
+        "path": "artifacts/m1d-tls-diagnosis/result.json",
+        "sha256": "61500ef6ba580440540ddb9d53a4af251e3c3f8cef0818c9298cc2a350d9820c"
+      },
+      {
+        "path": "artifacts/m1d-tls-diagnosis/session-gate-reproduction.log",
+        "sha256": "097297b5a955484657de7749517ae707255269cafe627ab86b65d8db9917893c"
+      },
+      {
+        "path": "artifacts/m1d-pr1-trivy-sca.json",
+        "sha256": "194f0c5918f4098f9ef135409d6f38ac34b40e606bb1d2f5c1fceabe6896af81"
+      },
+      {
+        "path": "artifacts/m1d-pr1-dependencies.cdx.json",
+        "sha256": "d01186cf1530c29ec813339106ceefd3528623ae359c90856e0a1149b9daabd1"
+      },
+      {
+        "path": "artifacts/m1d-pr1-sca-initial-attempt.json",
+        "sha256": "c4d231dd40631446d9ca6bfac863c5ce8ab4d6ef2a2297f4200b2c1c0940fc8d"
+      }
+    ],
+    "source_LF_sha256": [
+      {
+        "path": "migrations/006_iam_denial_audit.sql",
+        "sha256": "d9b2037c3c687f79f500bdd80e705cb0b1095b7c6361bab6230e6764e41e0783"
+      },
+      {
+        "path": "apps/api/src/app.ts",
+        "sha256": "7cb772c2a190c1545ea299d2d8e2b8cda41c6baa17c1edd242477a283fa073f7"
+      },
+      {
+        "path": "apps/api/src/auth.ts",
+        "sha256": "440d9cb084de09ea8728588c4cb401c021d42b6cb05ac6a6144fa6b8cb6269d8"
+      },
+      {
+        "path": "apps/web/src/Administration.tsx",
+        "sha256": "f0b02d6603784e70b186a9e68b7ec6919d372fc22267b7e4bc0efb660c7b64ad"
+      },
+      {
+        "path": "scripts/auth-browser-api.mjs",
+        "sha256": "ae01dd5a87c11788dcea38d42ef89a459fb0a9c04a4037381573a8b75666d63f"
+      },
+      {
+        "path": "scripts/cleanup-auth-browser.mjs",
+        "sha256": "e2cdb63a9c138f9c4c55de1dc3d274d9f36fdef70740641cb6b9ad80cb3db447"
+      },
+      {
+        "path": "tests/integration/authorization.test.mjs",
+        "sha256": "05b16ac2584ce745fef096741778357bd63a1aee802197df6afba6feea8120d8"
+      },
+      {
+        "path": "tests/integration/database.test.mjs",
+        "sha256": "de58040d0eee8bf8a1d75814ba367154a34aa0ecff4470a800d9930eb777133a"
+      },
+      {
+        "path": "tests/auth-browser/m1d.spec.mjs",
+        "sha256": "f4f74c569ccd414530cb1758498e34ba9da1859728a9db8920c73396c9f4258f"
+      },
+      {
+        "path": ".gitleaks.toml",
+        "sha256": "c3cb9c2a6ba8d681dd8af19b1a5858e99933cbfcef92e3c7c49edadec63c6b9a"
+      }
+    ]
   }
 }

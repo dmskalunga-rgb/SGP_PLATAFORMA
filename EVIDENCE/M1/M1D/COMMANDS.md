@@ -10,3 +10,14 @@
 
 
 Resumption under Master v1.1: last audit_view change validated by 2 focused M1D and 2 affected M1C tests, all PASS. The original 51-test run remains historical evidence for unchanged paths. Automatic approval was retried through the normal approval route; no bypass. First authorized attempt found PostgreSQL TEST stopped; it was started and tests then passed. Unified audit uses security_invoker view with underlying RLS; authentication records have NULL policy/decision IDs where the original event did not define them.
+
+
+## PR1 controlled remediation and lifecycle checkpoint
+
+- Read-only preflight: c90752e on codex/m1d-iam-administration; empty stage; preserved local remediation; PR1 Draft and main unchanged.
+- Focal: node scripts/run-m1c-test.mjs --test --test-concurrency=1 --test-name-pattern="M1D PR1 remediation" tests/integration/authorization.test.mjs =>3PASS.
+- Expanded authorization first run24/28; retained broad503 and disabled-fixture401 failures. Corrected new-test fixture only; SGP_TEST_DIAGNOSTICS=1 expanded authorization =>28/28PASS.
+- Real TLS session delivery ordering experiment reproduced403invalid_csrf; no mock response or relaxed timeout. Existing M1D browser scenario now asserts disabled actions until real session response, HTTP200/CONSUMED/checker/audit thereafter.
+- TEST lifecycle controlled failure deliberately exits1 after real login; separate cleanup proof confirms app.close acknowledgement,0 connections, DROP without FORCE and database absence. Subsequent M1D success and final SQL/resource check pass without fatal teardown. Earlier cycles with teardown errors are historical, not final lifecycle PASS.
+- Migration tests2/2PASS; build/lint/typecheck/frozen/policyPASS; production dependency SBOM generated; current security results and report hashes in CHECKS.
+- Published001-005, Masters and FROZEN contracts unchanged. Exact-SHA CI and independent final review remain required before gate review. No self-approval or merge.

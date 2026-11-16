@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-import {readFile} from 'node:fs/promises';
+import {readFile,writeFile} from 'node:fs/promises';
 import {randomBytes,randomUUID} from 'node:crypto';
 import pg from 'pg';
 const fixture=JSON.parse(await readFile('.test-secrets/auth-browser.json','utf8'));
@@ -13,6 +13,7 @@ test('M1D governed browser administration, approval inbox, new-user access, enti
  test.setTimeout(120000);
  const contexts=await Promise.all([0,1,2].map(()=>browser.newContext({ignoreHTTPSErrors:true})));
  const [admin,checker,user]=await Promise.all(contexts.map(c=>c.newPage()));const errors=[];for(const p of [admin,checker,user])p.on('pageerror',e=>errors.push(e.message));
+ const checkerEvidence={};
  const person={username:'test_m1d_'+randomUUID().slice(0,8),password:randomBytes(24).toString('base64url'),display_name:'TEST browser M1D user'};
  try{
   const db=new pg.Client({connectionString:fixture.connections.owner});await db.connect();let classification,permission,compartment;
@@ -28,11 +29,38 @@ test('M1D governed browser administration, approval inbox, new-user access, enti
   f=await form(admin,'Conceder compartimento');await f.getByLabel('Utilizador',{exact:true}).fill(target);await f.getByLabel('Compartimento',{exact:true}).fill(compartment);await f.getByLabel('Início (hora local)').fill('2026-01-01T00:00');await submit(admin,f,'Conceder compartimento');
   f=await form(admin,'Pedir alteração privilegiada');await f.getByLabel('Utilizador',{exact:true}).fill(target);await f.getByLabel('Classificação',{exact:true}).fill(classification);await f.getByLabel('Início (hora local)').fill('2026-01-01T00:00');await f.getByRole('button',{name:'Pedir aprovação'}).click();await expect(admin.getByRole('status').filter({hasText:'Operação concluída'})).toBeVisible();
   await admin.getByRole('button',{name:'Aprovações',exact:true}).click();let row=admin.locator('tr').filter({hasText:target});await expect(row).toHaveCount(1);await row.getByRole('button',{name:'Aprovar',exact:true}).click();await expect(admin.getByRole('alert')).toContainText('não autorizada');
-  await login(checker,fixture.people[1]);await checker.goto('/security/approvals');row=checker.locator('tr').filter({hasText:target});await expect(row).toHaveCount(1);await row.getByRole('button',{name:'Aprovar',exact:true}).click();await expect(checker.getByRole('status').filter({hasText:'Operação concluída'})).toBeVisible();await expect(checker.getByRole('button',{name:'Aprovar',exact:true})).toHaveCount(0);
+  await login(checker,fixture.people[1]);
+  // Control delivery order only: every response still comes from the real API.
+  // A populated approval list must never enable mutation before session/CSRF.
+  let releaseSession;const sessionGate=new Promise(resolve=>{releaseSession=resolve;});
+  await checker.route('**/api/v1/auth/session',async route=>{await sessionGate;await route.continue();});
+  await checker.goto('/security/approvals');row=checker.locator('tr').filter({hasText:target});await expect(row).toHaveCount(1);
+  await expect(row.getByRole('button',{name:'Aprovar',exact:true})).toBeDisabled();await expect(row.getByRole('button',{name:'Rejeitar',exact:true})).toBeDisabled();
+  const state=new pg.Client({connectionString:fixture.connections.owner});await state.connect();
+  try{
+   const before=(await state.query('SELECT id,state,actor_id,target_id,operation,policy_version,valid_until,maker_session_id FROM iam.approvals WHERE target_id=$1',[target])).rows[0];checkerEvidence.before=before;expect(before.state).toBe('PENDING');
+   checkerEvidence.authority={
+    policy:(await state.query('SELECT version,clock_timestamp() AS checked_at FROM iam.security_policy_state')).rows[0],
+    target:(await state.query("SELECT scope_kind,scope_id,classification_id,compartments_complete FROM iam.resource_security WHERE resource_type='IAM_IDENTITY' AND resource_id=$1",[target])).rows[0],
+    grants:(await state.query('SELECT user_id,role_id,scope_kind,scope_id,valid_from,valid_to FROM iam.user_roles WHERE user_id=ANY($1::uuid[])',[fixture.people.map(p=>p.id)])).rows,
+    clearances:(await state.query('SELECT user_id,classification_id,valid_from,valid_to FROM iam.security_clearances WHERE user_id=ANY($1::uuid[])',[fixture.people.map(p=>p.id)])).rows,
+    compartments:(await state.query('SELECT user_id,compartment_id,valid_from,valid_to FROM iam.user_compartments WHERE user_id=ANY($1::uuid[])',[fixture.people.map(p=>p.id)])).rows,
+    sessions:(await state.query('SELECT user_id,revoked_at,expires_at,idle_expires_at FROM iam.sessions WHERE user_id=ANY($1::uuid[])',[fixture.people.map(p=>p.id)])).rows,
+   };expect(checkerEvidence.authority.policy.version).toBe(before.policy_version);
+   const sessionResponse=checker.waitForResponse(r=>r.url().endsWith('/api/v1/auth/session'));releaseSession();await sessionResponse;
+   await expect(row.getByRole('button',{name:'Aprovar',exact:true})).toBeEnabled();
+   const operation=checker.waitForResponse(r=>r.url().endsWith('/api/v1/security/approval-executions')&&r.request().method()==='POST');
+   await row.getByRole('button',{name:'Aprovar',exact:true}).click();const response=await operation;const result=await response.json();
+   checkerEvidence.http={status:response.status(),error:result.error??null,request_id:result.request_id??null};
+   checkerEvidence.after=(await state.query('SELECT state,approver_id FROM iam.approvals WHERE id=$1',[before.id])).rows[0];
+   checkerEvidence.audit=(await state.query("SELECT actor_id,session_id,request_id,correlation_id,result,reason FROM iam.authorization_events WHERE after_state->>'approval_id'=$1 ORDER BY occurred_at DESC LIMIT 1",[before.id])).rows[0];
+   expect(response.status(),JSON.stringify(checkerEvidence)).toBe(200);expect(checkerEvidence.after.state).toBe('CONSUMED');expect(checkerEvidence.after.approver_id).toBe(fixture.people[1].id);expect(checkerEvidence.audit.result).toBe('ALLOW');
+  }finally{releaseSession();await state.end();}
+  await expect(checker.getByRole('status').filter({hasText:'Operação concluída'})).toBeVisible();await expect(checker.getByRole('button',{name:'Aprovar',exact:true})).toHaveCount(0);
   await login(user,person);await user.goto('/security/roles');await expect(user.getByRole('cell',{name:'TEST_BROWSER_READER',exact:true})).toBeVisible();expect((await user.request.get(origin+'/api/v1/security/users')).status()).toBe(403);
   await admin.getByRole('button',{name:'Atribuições',exact:true}).click();await admin.getByLabel('Filtrar por utilizador').fill(target);const assignments=await(await admin.request.get(origin+'/api/v1/security/administration/assignments?subject_id='+target)).json();
   f=await form(admin,'Revogar atribuição');await f.getByLabel('Atribuição',{exact:true}).fill(assignments.items[0].id);await submit(admin,f,'Revogar atribuição');await user.reload();await expect(user.getByRole('alert')).toContainText('não autorizada');
   f=await form(admin,'Revogar sessões');await f.getByLabel('Utilizador alvo').fill(target);await f.getByLabel('Operação',{exact:true}).selectOption('REVOKE_ALL');await submit(admin,f,'Revogar sessões');expect((await user.request.get(origin+'/api/v1/auth/session')).status()).toBe(401);
   await admin.getByRole('button',{name:'Auditoria',exact:true}).click();await admin.getByLabel('target',{exact:true}).fill(target);await admin.getByRole('button',{name:'Filtrar auditoria'}).click();await expect(admin.locator('tbody tr').first()).toBeVisible();await admin.screenshot({path:'artifacts/m1d-admin-ui.png'});expect(errors).toEqual([]);
- }finally{await Promise.allSettled(contexts.map(context=>context.close()));}
+ }finally{await writeFile('artifacts/m1d-tls-checker.json',JSON.stringify(checkerEvidence,null,2));await Promise.allSettled(contexts.map(context=>context.close()));}
 });

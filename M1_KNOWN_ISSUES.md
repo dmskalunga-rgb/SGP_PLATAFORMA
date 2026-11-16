@@ -42,3 +42,8 @@ Authorized IAM administration extension on M1C closure. DoR/inventory in docs/re
 ## M1D-VERIFY-001 local remediation
 
 Denied execution/rejection now derives action, target and approval reference from the stored approval, and actor/session/correlation from binding, using the existing immutable writer. Migration005 only; 001–004 preserved. Focal2/2 and affected authorization regression25/25 PASS; historical51-test proof was not rerun. Authentication audit_view authorized/unauthorized SQL and API, FORCE RLS and write denial verified. Intermediate broad audit query503 is retained in evidence; final strict broad and exact-event assertions passed without timeout changes. See EVIDENCE/M1/M1D/VERIFY-001-AUDIT-REMEDIATION.md and CHECKS.json. No publication or final M1D gate approval is claimed; M2 BLOCKED.
+
+
+## M1D PR1 controlled remediation checkpoint
+
+Migration006 and typed post-rollback DENY adapters address identity creation and role-status audit findings; published001–005 remain immutable. UI CSRF readiness, maker-checker evidence and TEST teardown are covered by focal validation. See docs/operations/M1D-DENIAL-AUDIT.md, EVIDENCE/M1/M1D/PR1-REMEDIATION.md and CHECKS.json for exact results/hashes and retained failures. The broad audit503 remains an open investigation. New remote CI and independent exact-SHA review are required; no M1D_GATE PASS or M2 authorization is declared.

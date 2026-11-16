@@ -6,6 +6,7 @@ import {migrate} from '../../scripts/migrate.mjs';
 import {createApp} from '../../apps/api/dist/app.js';
 import {PasswordService,baselinePasswordPolicy} from '../../apps/api/dist/password.js';
 import {csrfFor} from '../../apps/api/dist/auth.js';
+import {appendFileSync} from 'node:fs';
 
 const fresh=()=>randomBytes(32).toString('base64url');
 const origin='https://127.0.0.1:4175',meta=()=>['127.0.0.1',randomUUID(),randomUUID()];
@@ -61,7 +62,8 @@ before(async()=>{
   const id=(await db.query('INSERT INTO iam.roles(code) VALUES($1) RETURNING id',['TEST_RESOURCE_'+n])).rows[0].id;resources.push(id);
   await db.query("INSERT INTO iam.resource_security VALUES('IAM_ROLE',$1,'SCOPED',$2,NULL,$3,$4,'PASSWORD')",[id,scope,classes[level].id,complete]);for(const comp of comps)await db.query("INSERT INTO iam.resource_compartments VALUES('IAM_ROLE',$1,$2)",[id,comp]);
  }
- app=await createApp({databaseUrl:urls.app,host:'127.0.0.1',port:3100,logging:false,trustedProxyIPs:['127.0.0.1'],auth:{databaseUrl:urls.auth,origin,passwordPolicy:baselinePasswordPolicy,poolSize:1}});
+ const diagnostics=process.env.SGP_TEST_DIAGNOSTICS==='1'?{logging:true,logStream:{write:message=>{const r=JSON.parse(message);if(r.event==='authentication_request_failed')appendFileSync('artifacts/m1d-pr1-authority-diagnostics.jsonl',JSON.stringify({request_id:r.request_id,status:r.status,authority_error_code:r.authority_error_code})+'\n');}}}:{logging:false};
+ app=await createApp({databaseUrl:urls.app,host:'127.0.0.1',port:3100,...diagnostics,trustedProxyIPs:['127.0.0.1'],auth:{databaseUrl:urls.auth,origin,passwordPolicy:baselinePasswordPolicy,poolSize:1}});
  for(const u of users)u.token=await login(u);
 });
 after(async()=>{if(app)await app.close();if(pool)await pool.end();if(db)await db.end();if(root){if(database)await root.query(`DROP DATABASE ${database} WITH(FORCE)`);await root.end();}});
@@ -442,4 +444,78 @@ test('M1D-VERIFY-001 authentication audit_view SQL read is authorized, RLS filte
  await tx(users[0].token,async c=>{await c.query('SAVEPOINT audit_write');await assert.rejects(c.query('DELETE FROM iam.audit_view WHERE id=$1',[event.id]));await c.query('ROLLBACK TO audit_write');});
  const flags=(await db.query("SELECT relrowsecurity,relforcerowsecurity FROM pg_class WHERE oid='iam.authentication_events'::regclass")).rows[0];assert.ok(flags.relrowsecurity&&flags.relforcerowsecurity);
  const invoker=(await db.query("SELECT reloptions FROM pg_class WHERE oid='iam.audit_view'::regclass")).rows[0];assert.ok(invoker.reloptions.includes('security_invoker=true'));
+});
+
+test('M1D PR1 remediation: denied identity creation persists sanitized audit and enforces audit RLS',async()=>{
+ const payload=()=>({username:'test_denied_'+randomUUID().slice(0,8),display_name:'TEST denied creation',password:fresh(),scope_kind:'SCOPED',scope_id:scopes[0],classification_id:classes[0].id});
+ async function verify(person,input,reason){
+  const response=await api(person.token,'users',input);assert.equal(response.statusCode,403,response.body);
+  const e=(await db.query('SELECT * FROM iam.authorization_events WHERE request_id=$1',[response.json().request_id])).rows;assert.equal(e.length,1);const event=e[0];
+  assert.equal(event.actor_id,person.id);assert.ok(event.session_id&&event.occurred_at&&event.decision_id&&event.policy_version);assert.equal(event.correlation_id,response.json().request_id);
+  assert.equal(event.action,'security.users.create');assert.equal(event.resource_type,'IAM_IDENTITY');assert.equal(event.resource_id,null);assert.equal(event.target_id,null);assert.equal(event.result,'DENY');assert.equal(event.reason,reason);
+  assert.equal(event.before_state,null);assert.equal(event.after_state.resource_exists,false);assert.equal(event.after_state.requested_scope_id,input.scope_id);assert.equal(event.after_state.requested_classification_id,input.classification_id);
+  const serialized=JSON.stringify(event);for(const secret of [input.password,input.username,input.display_name,'password_hash','$argon2id$'])assert.ok(!serialized.includes(secret));
+  assert.equal((await db.query('SELECT id FROM iam.users WHERE username=$1',[input.username])).rowCount,0);return event;
+ }
+ const denied=await verify(users[3],payload(),'PERMISSION_DENIED');
+ const visible=await api(users[0].token,'audit?request_id='+denied.request_id);assert.equal(visible.statusCode,200,visible.body);assert.ok(visible.json().items.some(e=>e.id===denied.id));
+ assert.equal((await tx(users[0].token,async c=>(await c.query('SELECT id FROM iam.audit_view WHERE id=$1',[denied.id])).rowCount)),1);
+ assert.equal((await api(users[3].token,'audit?request_id='+denied.request_id)).statusCode,403);
+ assert.equal((await tx(users[3].token,async c=>(await c.query('SELECT id FROM iam.audit_view WHERE id=$1',[denied.id])).rowCount)),0);
+ const cross=await verify(users[0],{...payload(),scope_id:scopes[1]},'SCOPE_DENIED');
+ assert.equal((await tx(users[0].token,async c=>(await c.query('SELECT id FROM iam.authorization_events WHERE id=$1',[cross.id])).rowCount)),0,'audit permission must match requested scope');
+ const pid=(await db.query("SELECT id FROM iam.permissions WHERE code='security.users.create'")).rows[0].id;
+ const saved=(await db.query("DELETE FROM iam.delegation_authority WHERE user_id=$1 AND permission_id=$2 AND scope_kind='SCOPED' AND scope_id=$3 RETURNING *",[users[0].id,pid,scopes[0]])).rows;assert.ok(saved.length);
+ try{await verify(users[0],payload(),'DELEGATION_DENIED');}finally{await db.query('INSERT INTO iam.delegation_authority SELECT * FROM jsonb_populate_recordset(NULL::iam.delegation_authority,$1::jsonb)',[JSON.stringify(saved)]);}
+ const allowed=payload();const created=await api(users[0].token,'users',allowed);assert.equal(created.statusCode,200,created.body);const id=created.json().id;
+ assert.equal((await db.query('SELECT status FROM iam.users WHERE id=$1',[id])).rows[0].status,'INACTIVE');
+ assert.equal((await db.query("SELECT result FROM iam.authorization_events WHERE target_id=$1 AND action='security.users.create'",[id])).rows[0].result,'ALLOW');
+ const runtime=new pg.Client({connectionString:urls.app});await runtime.connect();
+ try{
+  const input=payload(),hash=await(await PasswordService.create()).hash(input.password);
+  await assert.rejects(runtime.query('SELECT iam.create_identity($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[users[3].token,csrfFor(users[3].token),input.username,input.display_name,hash,input.scope_kind,input.scope_id,input.classification_id,...meta()]),e=>e.code==='PT403');
+  assert.equal((await db.query('SELECT id FROM iam.users WHERE username=$1',[input.username])).rowCount,0);
+  await assert.rejects(runtime.query('INSERT INTO iam.authorization_events DEFAULT VALUES'));
+  await assert.rejects(runtime.query('UPDATE iam.authorization_events SET result=$1 WHERE id=$2',['ALLOW',denied.id]));
+  assert.equal((await runtime.query('SELECT id FROM iam.audit_view WHERE id=$1',[denied.id])).rowCount,0,'no binding cannot read creation denials');
+ }finally{await runtime.end();}
+ for(const fn of ['iam.record_identity_creation_rejection(text,text,uuid,uuid,inet,uuid,uuid)','iam.record_role_status_rejection(text,uuid,text,inet,uuid,uuid)'])assert.equal((await db.query("SELECT has_function_privilege('auth_runtime',$1,'EXECUTE') AS allowed",[fn])).rows[0].allowed,false);
+ const flags=(await db.query("SELECT relrowsecurity,relforcerowsecurity FROM pg_class WHERE oid='iam.authorization_events'::regclass")).rows[0];assert.ok(flags.relrowsecurity&&flags.relforcerowsecurity);
+});
+
+test('M1D PR1 remediation: role-status denial preserves real role, state, SoD and self-protection',async()=>{
+ async function denied(person,id,status,reason){
+  const before=(await db.query('SELECT status,version FROM iam.roles WHERE id=$1',[id])).rows[0];const response=await api(person.token,'role-status',{role_id:id,status});assert.equal(response.statusCode,403,response.body);
+  const event=(await db.query('SELECT * FROM iam.authorization_events WHERE request_id=$1',[response.json().request_id])).rows[0];assert.ok(event);
+  assert.equal(event.action,'security.roles.manage');assert.equal(event.resource_type,'IAM_ROLE');assert.equal(event.resource_id,before?id:null);assert.equal(event.target_id,null);assert.equal(event.actor_id,person.id);assert.ok(event.session_id&&event.occurred_at&&event.decision_id);assert.equal(event.correlation_id,response.json().request_id);assert.equal(event.result,'DENY');
+  if(reason)assert.equal(event.reason,reason);assert.deepEqual(event.before_state,before?{status:before.status}:null);assert.equal(event.after_state.role_id,before?id:null);assert.equal(event.after_state.requested_role_id,id);assert.equal(event.after_state.requested_status,status);
+  assert.deepEqual((await db.query('SELECT status,version FROM iam.roles WHERE id=$1',[id])).rows[0],before);return event;
+ }
+ const event=await denied(users[3],resources[0],'INACTIVE','PERMISSION_DENIED');
+ const read=await api(users[0].token,'audit?request_id='+event.request_id);assert.equal(read.statusCode,200,read.body);assert.ok(read.json().items.some(e=>e.id===event.id));
+ assert.equal((await tx(users[3].token,async c=>(await c.query('SELECT id FROM iam.audit_view WHERE id=$1',[event.id])).rowCount)),0);
+ const admin=(await db.query("SELECT id FROM iam.roles WHERE code='SECURITY_BOOTSTRAP_OPERATOR'")).rows[0].id;
+ await denied(users[0],admin,'INACTIVE','SELF_PROTECTION_DENIED');
+ const extra=(await db.query("INSERT INTO iam.roles(code,status,privileged) VALUES($1,'INACTIVE',true) RETURNING id",['TEST_SELF_ELEVATION_'+randomUUID().slice(0,8)])).rows[0].id;
+ await db.query("INSERT INTO iam.resource_security VALUES('IAM_ROLE',$1,'SCOPED',$2,NULL,$3,true,'PASSWORD')",[extra,scopes[0],classes[0].id]);
+ const assignment=(await db.query("INSERT INTO iam.user_roles(user_id,role_id,scope_kind,scope_id,valid_from) VALUES($1,$2,'SCOPED',$3,$4) RETURNING id",[users[0].id,extra,scopes[0],time])).rows[0].id;
+ try{
+  await denied(users[0],extra,'ACTIVE','SELF_PROTECTION_DENIED');
+  await db.query("UPDATE iam.roles SET status='ACTIVE' WHERE id=$1",[extra]);
+  await db.query("INSERT INTO iam.incompatible_roles(left_id,right_id) VALUES(least($1::uuid,$2::uuid),greatest($1::uuid,$2::uuid))",[admin,extra]);
+  try{await denied(users[0],resources[0],'INACTIVE','SOD_DENIED');}finally{await db.query('DELETE FROM iam.incompatible_roles WHERE left_id=least($1::uuid,$2::uuid) AND right_id=greatest($1::uuid,$2::uuid)',[admin,extra]);}
+ }finally{await db.query('DELETE FROM iam.user_roles WHERE id=$1',[assignment]);}
+ const missing=await denied(users[0],randomUUID(),'ACTIVE');assert.equal(missing.after_state.role_found,false);
+});
+
+test('M1D PR1 remediation: audit append failure returns503 without identity or role effects',async()=>{
+ const input={username:'test_audit_fail_'+randomUUID().slice(0,8),display_name:'TEST audit failure',password:fresh(),scope_kind:'SCOPED',scope_id:scopes[0],classification_id:classes[0].id};
+ const before=(await db.query('SELECT status,version FROM iam.roles WHERE id=$1',[resources[0]])).rows[0];const policy=(await db.query('SELECT version FROM iam.security_policy_state')).rows[0].version;
+ await db.query("CREATE FUNCTION public.test_m1d_denial_audit_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'TEST audit append unavailable'; END $$");
+ await db.query("CREATE TRIGGER test_m1d_denial_audit_failure BEFORE INSERT ON iam.authorization_events FOR EACH ROW WHEN (NEW.action IN('security.users.create','security.roles.manage')) EXECUTE FUNCTION public.test_m1d_denial_audit_failure()");
+ try{
+  for(const person of [users[3],users[0]]){const response=await api(person.token,'users',input);assert.equal(response.statusCode,503,response.body);assert.equal((await db.query('SELECT id FROM iam.users WHERE username=$1',[input.username])).rowCount,0);assert.equal((await db.query('SELECT id FROM iam.authorization_events WHERE request_id=$1',[response.json().request_id])).rowCount,0);}
+  const role=await api(users[3].token,'role-status',{role_id:resources[0],status:'INACTIVE'});assert.equal(role.statusCode,503,role.body);
+  assert.deepEqual((await db.query('SELECT status,version FROM iam.roles WHERE id=$1',[resources[0]])).rows[0],before);assert.equal((await db.query('SELECT version FROM iam.security_policy_state')).rows[0].version,policy);
+ }finally{await db.query('DROP TRIGGER test_m1d_denial_audit_failure ON iam.authorization_events');await db.query('DROP FUNCTION public.test_m1d_denial_audit_failure()');}
 });

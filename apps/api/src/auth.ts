@@ -63,7 +63,8 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
   const safe = (run:(req:FastifyRequest,reply:FastifyReply)=>Promise<unknown>) => async(req:FastifyRequest,reply:FastifyReply) => {
     try {return await run(req,reply);} catch(error) {
       const status=error instanceof AuthError?error.statusCode:error instanceof HashCapacityError?429:503;
-      req.log.warn({event:'authentication_request_failed',request_id:req.id,correlation_id:req.id,status},'Authentication request failed');
+      const authorityCode=error&&typeof error==='object'&&'code' in error&&typeof error.code==='string'&&/^[A-Z0-9]{5}$/.test(error.code)?error.code:'UNCLASSIFIED';
+      req.log.warn({event:'authentication_request_failed',request_id:req.id,correlation_id:req.id,status,authority_error_code:authorityCode},'Authentication request failed');
       return reply.status(status).send({error:error instanceof AuthError?error.publicCode:status===429?'try_later':'authority_unavailable',request_id:req.id});
     }
   };
@@ -190,11 +191,18 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
   app.post('/api/v1/security/users',{bodyLimit:4096,schema:{body:body({username,display_name:{type:'string',minLength:1,maxLength:120},password,...scoped,classification_id:uuid}),response:{200:body({id:uuid}),...errors}}},safe(async req=>{
     transport(req,true);const raw=cookieValue(req,'__Host-sgp_session');if(!raw)throw new AuthError(401,'session_invalid');const proof=csrf(req,raw);
     const input=req.body as {username:string;display_name:string;password:string;scope_kind:string;scope_id:string|null;classification_id:string};
-    await bound(req,async client=>{const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!actions.includes('security.users.create'))throw new AuthError(403,'access_denied');});
-    if(!passwords.acceptable(input.password))throw new AuthError(400,'password_policy');
-    const hash=await passwords.hash(input.password);
-    try{return (await command(appPool,'SELECT iam.create_identity($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) AS id',[raw,proof,input.username,input.display_name,hash,input.scope_kind,input.scope_id,input.classification_id,...meta(req)]))[0];}
-    catch(e){if(e&&typeof e==='object'&&'code' in e&&e.code==='PT403')throw new AuthError(403,'access_denied');throw e;}
+    try{
+      await bound(req,async client=>{const actions=(await client.query('SELECT iam.capabilities() AS actions')).rows[0].actions as string[];if(!actions.includes('security.users.create'))throw new AuthError(403,'access_denied');});
+      if(!passwords.acceptable(input.password))throw new AuthError(400,'password_policy');
+      const hash=await passwords.hash(input.password);
+      return (await command(appPool,'SELECT iam.create_identity($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) AS id',[raw,proof,input.username,input.display_name,hash,input.scope_kind,input.scope_id,input.classification_id,...meta(req)]))[0];
+    }catch(e){
+      if((e instanceof AuthError&&e.statusCode===403&&e.publicCode==='access_denied')||(e&&typeof e==='object'&&'code' in e&&e.code==='PT403')){
+        await command(appPool,'SELECT iam.record_identity_creation_rejection($1,$2,$3,$4,$5,$6,$7)',[raw,input.scope_kind,input.scope_id,input.classification_id,...meta(req)]);
+        throw new AuthError(403,'access_denied');
+      }
+      throw e;
+    }
   }));
   const administrationQueries:Record<string,{permission:string;list:string;count:string}>={
     assignments:{permission:'security.users.read',list:'SELECT id,user_id,role_id,scope_kind,scope_id,valid_from,valid_to FROM iam.user_roles WHERE ($3::uuid IS NULL OR user_id=$3) ORDER BY id LIMIT $1 OFFSET $2',count:'SELECT count(*)::int AS total FROM iam.user_roles WHERE ($1::uuid IS NULL OR user_id=$1)'},
@@ -251,6 +259,7 @@ export async function registerAuth(app: FastifyInstance, appPool: pg.Pool, confi
           const input=req.body as Record<string,unknown>;
           if(path==='clearances')await command(appPool,'SELECT iam.record_clearance_rejection($1,$2,$3,$4,$5,$6,$7,$8,$9)',[raw,input.target_id,input.classification_id,input.valid_from,input.valid_to,input.approval_id,...meta(req)]);
           else if(path==='approval-executions'||path==='approval-rejections')await command(appPool,'SELECT iam.record_approval_rejection($1,$2,$3,$4,$5,$6)',[raw,path,input.approval_id,...meta(req)]);
+          else if(path==='role-status')await command(appPool,'SELECT iam.record_role_status_rejection($1,$2,$3,$4,$5,$6)',[raw,input.role_id,input.status,...meta(req)]);
           else await command(appPool,'SELECT iam.record_rejection($1,$2,$3,$4,$5,$6)',[raw,({'role-status':'roles','clearance-revocations':'clearances','compartment-revocations':'compartments','approval-executions':'approvals','approval-rejections':'approvals'} as Record<string,string>)[path]??path,input.target_id??null,...meta(req)]);
         }
         throw new AuthError(error.code==='PT401'?401:403,error.code==='PT401'?'session_invalid':'access_denied');
